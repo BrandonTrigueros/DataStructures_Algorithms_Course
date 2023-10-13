@@ -52,32 +52,43 @@ void ArbolHMIHD::ponerRaiz(int etiqueta) {
 }
 
 int ArbolHMIHD::agregarHijo(int etiquetaAgregar, int etiquetaPadre, int posicion) {
-  if (this->raizArbol == nullptr) {
-    return -1;
-  }
-  nodoArbol* nodo = this->raizArbol;
-  nodoArbol* nodoHijo = nodo->hijoMasIzq;
-  while (nodoHijo != nullptr) {
-    if (nodoHijo->etiqueta == etiquetaPadre) {
-      nodoArbol* nodoNuevo = new nodoArbol();
-      nodoNuevo->etiqueta = etiquetaAgregar;
-      nodoNuevo->hijoMasIzq = nullptr;
-      nodoNuevo->hermanoDer = nullptr;
-      if (posicion == 1) {
-        nodoNuevo->hermanoDer = nodoHijo->hijoMasIzq;
-        nodoHijo->hijoMasIzq = nodoNuevo;
-      } else {
-        nodoArbol* nodoHermano = nodoHijo->hijoMasIzq;
-        while (nodoHermano->hermanoDer != nullptr) {
-          nodoHermano = nodoHermano->hermanoDer;
-        }
-        nodoHermano->hermanoDer = nodoNuevo;
-      }
-      return 1;
-    }
-    nodoHijo = nodoHijo->hermanoDer;
-  }
-  return -1;
+
+}
+
+void ArbolHMIHD::borrarHoja(int etiqueta) {
+ 
+}
+
+void ArbolHMIHD::modificarEtiqueta(int etiqueta, int nuevaEtiqueta) {
+ 
+}
+
+int ArbolHMIHD::raiz() {
+  return this->raizArbol->etiqueta;
+}
+
+int ArbolHMIHD::padre(int etiqueta) {
+ 
+}
+
+int ArbolHMIHD::hijoMasIzquierdo(int etiqueta) {
+ 
+}
+
+int ArbolHMIHD::hermanoDerecho(int etiqueta) {
+ 
+}
+
+int ArbolHMIHD::etiqueta(nodoArbol* nodo) {
+  return nodo->etiqueta;
+}
+
+int ArbolHMIHD::numNodos() {
+  return this->contadorNodos;
+}
+
+int ArbolHMIHD::numHijos(int etiqueta) {
+ 
 }
 
 ArbolHMIHD::ArbolHMIHD() {
