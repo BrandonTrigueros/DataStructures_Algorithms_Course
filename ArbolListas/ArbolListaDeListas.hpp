@@ -31,8 +31,8 @@ class ArbolListaDeListas {
   bool Vacio();
   ListaPrincipal* AgregarHijo(ListaPrincipal* nodo, int64_t numHijo,
       int64_t etiqueta);
-  void BorrarNodoHijo(ListaPrincipal* nodo);
-  void PonerRaiz(ListaPrincipal* raiz);
+  void BorrarHoja(ListaPrincipal* nodo);
+  void PonerRaiz(int64_t etiqueta);
   ListaPrincipal* HijoMasIzq(ListaPrincipal* nodo);
   ListaPrincipal* HermanoDer(ListaPrincipal* nodo);
   void ModificarEtiqueta(ListaPrincipal* nodo, int64_t etiqueta);
