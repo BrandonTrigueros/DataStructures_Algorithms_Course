@@ -1,5 +1,7 @@
 #include "ArbolListaDeListas.hpp"
+#include <clocale>
 #include <cstdint>
+#include <iostream>
 #include <iomanip>
 struct ListaPrincipal;
 
@@ -23,17 +25,61 @@ bool ArbolListaDeListas::Vacio() {
   return true;
 }
 
-ListaPrincipal* ArbolListaDeListas::AgregarHijo(ListaPrincipal* nodo,
-    int64_t numHijo) {
+ListaPrincipal* ArbolListaDeListas::HijoMasIzq(ListaPrincipal* nodo) {
+  return nodo->primero->hijo ; 
+}
+
+ListaPrincipal* ArbolListaDeListas::HermanoDer(ListaPrincipal* nodo) { 
   return nullptr;
 }
 
-void ArbolListaDeListas::BorrarNodoHijo() {
+ListaPrincipal* ArbolListaDeListas::AgregarHijo(ListaPrincipal* nodo,
+    int64_t numHijo, int64_t etiqueta) {
+  ListaPrincipal* agregar = new ListaPrincipal();
+  
+  agregar->etiqueta = etiqueta; 
+  agregar->sigM = this->raiz->sigM;
+  this->raiz->sigM = agregar;
+ 
+  ListaPunteros* puntAux;
+  puntAux = nodo->primero;
+  int64_t contador = 1;
+  while (puntAux != nullptr && contador+1 < numHijo) {
+    puntAux = puntAux->sigP;
+    ++contador;
+  }
+  
+  ListaPunteros* puntAg = new ListaPunteros();
+  if (puntAux == nullptr || puntAux->sigP == nullptr) {
+    puntAux = puntAg;
+    puntAg->sigP = nullptr;
+    puntAg->hijo = agregar;
+  } else {
+    puntAg->sigP = puntAux->sigP;
+    puntAux->sigP = puntAg; 
+    puntAg->hijo = agregar;
+  }
+  return agregar;
+}
 
+void ArbolListaDeListas::BorrarNodoHijo(ListaPrincipal* nodo) {
+  ListaPrincipal* nodoPadre = Padre(nodo);
+  ListaPunteros* punteroEliminar = nodoPadre->primero;
+  ListaPunteros* anterior = punteroEliminar;
+  while (punteroEliminar->hijo != nodo) {
+    anterior = punteroEliminar; 
+    punteroEliminar = punteroEliminar->sigP;
+  }
+  anterior->sigP = punteroEliminar->sigP;
+  delete punteroEliminar;
 }
 
 void ArbolListaDeListas::PonerRaiz(ListaPrincipal* raiz) {
-  this->raiz = raiz; 
+  ListaPrincipal* agregar = new ListaPrincipal();
+  agregar->primero = nullptr;
+  agregar->etiqueta = raiz->etiqueta;
+  agregar->sigM = nullptr;
+  this->raiz = agregar; 
 }
 
 void ArbolListaDeListas::ModificarEtiqueta(ListaPrincipal* nodo,
