@@ -11,10 +11,26 @@ struct ListaPrincipal;
 
 void ArbolListaDeListas::Iniciar() { this->raiz = nullptr; }
 
-void ArbolListaDeListas::Destruir() { delete this;}
+void ArbolListaDeListas::Destruir() {
+  this->Vaciar();
+  delete this;
+}
 
-void ArbolListaDeListas::Vaciar() { }
-
+void ArbolListaDeListas::Vaciar() { 
+  ListaPrincipal* principal = this->raiz;
+  this->raiz = nullptr;
+  while (principal != nullptr) {
+    ListaPunteros* hijos = principal->primero;
+    while (hijos != nullptr) {
+      ListaPunteros* eliminar = hijos;
+      hijos = hijos->sigP;
+      delete eliminar;
+    }
+    ListaPrincipal* prinEliminar = principal;
+    principal = principal->sigM;  
+    delete prinEliminar;
+  }
+}
 bool ArbolListaDeListas::Vacio() {
   if (this->raiz) {
     return false;
