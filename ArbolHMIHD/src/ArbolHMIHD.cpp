@@ -183,7 +183,7 @@ ArbolHMIHD::ArbolHMIHD() { }
 
 ArbolHMIHD::~ArbolHMIHD() { }
 
-void ArbolHMIHD::imprimir() {
+void ArbolHMIHD::Imprimir() {
   if (this->Vacio()) {
     std::cout << "El árbol está vacío." << std::endl;
     return;

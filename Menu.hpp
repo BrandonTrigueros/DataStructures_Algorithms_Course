@@ -60,12 +60,14 @@ class Menu {
   Menu();
   ~Menu();
 
+  void run();
+  void runCola();
+  void runArbol();
+
   int mostrarPrincipal();
   int mostrarOperadoresArbol();
   int mostrarOperadoresCola();
   void mostrarCreditos();
   void mostrarColaActual();
   void mostrarArbolActual();
-
-  void run();
 };

@@ -2,23 +2,17 @@
 #include <algorithm>
 #include <clocale>
 #include <cstdint>
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 #include <iterator>
 #include <ostream>
 struct ListaPrincipal;
 
-void  ArbolListaDeListas::Iniciar() {
-  this->raiz = nullptr;
-}
+void ArbolListaDeListas::Iniciar() { this->raiz = nullptr; }
 
-void ArbolListaDeListas::Destruir() {
-  delete this;
-}
+void ArbolListaDeListas::Destruir() { delete this; }
 
-void ArbolListaDeListas::Vaciar() {
-
-}
+void ArbolListaDeListas::Vaciar() { }
 
 bool ArbolListaDeListas::Vacio() {
   if (this->raiz) {
@@ -28,12 +22,12 @@ bool ArbolListaDeListas::Vacio() {
 }
 
 ListaPrincipal* ArbolListaDeListas::HijoMasIzq(ListaPrincipal* nodo) {
-  return nodo->primero->hijo ; 
+  return nodo->primero->hijo;
 }
 
-ListaPrincipal* ArbolListaDeListas::HermanoDer(ListaPrincipal* nodo) { 
+ListaPrincipal* ArbolListaDeListas::HermanoDer(ListaPrincipal* nodo) {
   ListaPrincipal* nodoPadre = Padre(nodo);
-  ListaPunteros* puntHijos = nodoPadre->primero; 
+  ListaPunteros* puntHijos = nodoPadre->primero;
   while (puntHijos != nullptr) {
     if (puntHijos->sigP != nullptr && puntHijos->hijo == nodo) {
       return puntHijos->sigP->hijo;
@@ -43,14 +37,14 @@ ListaPrincipal* ArbolListaDeListas::HermanoDer(ListaPrincipal* nodo) {
   return nullptr;
 }
 
-ListaPrincipal* ArbolListaDeListas::AgregarHijo(ListaPrincipal* nodo,
-    int64_t numHijo, int64_t etiqueta) {
+ListaPrincipal* ArbolListaDeListas::AgregarHijo(
+    ListaPrincipal* nodo, int64_t numHijo, int64_t etiqueta) {
   ListaPrincipal* agregar = new ListaPrincipal();
-  
-  agregar->etiqueta = etiqueta; 
+
+  agregar->etiqueta = etiqueta;
   agregar->sigM = this->raiz->sigM;
   this->raiz->sigM = agregar;
- 
+
   ListaPunteros* puntAux;
   puntAux = nodo->primero;
   int64_t contador = 1;
@@ -60,7 +54,7 @@ ListaPrincipal* ArbolListaDeListas::AgregarHijo(ListaPrincipal* nodo,
     }
     ++contador;
   }
-  
+
   ListaPunteros* puntAg = new ListaPunteros();
   if (puntAux == nullptr) {
     nodo->primero = puntAg;
@@ -68,7 +62,7 @@ ListaPrincipal* ArbolListaDeListas::AgregarHijo(ListaPrincipal* nodo,
     puntAg->hijo = agregar;
   } else {
     puntAg->sigP = puntAux->sigP;
-    puntAux->sigP = puntAg; 
+    puntAux->sigP = puntAg;
     puntAg->hijo = agregar;
   }
   return agregar;
@@ -81,12 +75,12 @@ void ArbolListaDeListas::BorrarHoja(ListaPrincipal* nodo) {
     delete aux;
     return;
   }
-  
+
   ListaPrincipal* nodoPadre = Padre(nodo);
   ListaPunteros* punteroEliminar = nodoPadre->primero;
   ListaPunteros* anterior = punteroEliminar;
   while (punteroEliminar->hijo != nodo) {
-    anterior = punteroEliminar; 
+    anterior = punteroEliminar;
     punteroEliminar = punteroEliminar->sigP;
   }
   if (anterior == punteroEliminar) {
@@ -101,11 +95,10 @@ void ArbolListaDeListas::BorrarHoja(ListaPrincipal* nodo) {
   ListaPrincipal* ant = raiz;
   while (raiz != nullptr) {
     if (raiz != ant && raiz == nodo) {
-      ant->sigM = raiz->sigM; 
+      ant->sigM = raiz->sigM;
       delete raiz;
       return;
-    }
-    else if (raiz == ant && raiz == nodo) {
+    } else if (raiz == ant && raiz == nodo) {
       delete raiz;
     }
     ant = raiz;
@@ -118,17 +111,15 @@ void ArbolListaDeListas::PonerRaiz(int64_t etiqueta) {
   agregar->etiqueta = etiqueta;
   agregar->primero = nullptr;
   agregar->sigM = nullptr;
-  this->raiz = agregar; 
+  this->raiz = agregar;
 }
 
-void ArbolListaDeListas::ModificarEtiqueta(ListaPrincipal* nodo,
-    int64_t etiqueta) {
+void ArbolListaDeListas::ModificarEtiqueta(
+    ListaPrincipal* nodo, int64_t etiqueta) {
   nodo->etiqueta = etiqueta;
 }
 
-ListaPrincipal* ArbolListaDeListas::Raiz() {
-  return this->raiz;
-}
+ListaPrincipal* ArbolListaDeListas::Raiz() { return this->raiz; }
 
 ListaPrincipal* ArbolListaDeListas::Padre(ListaPrincipal* nodo) {
   ListaPrincipal* nodoAux = this->raiz;
@@ -142,11 +133,11 @@ ListaPrincipal* ArbolListaDeListas::Padre(ListaPrincipal* nodo) {
     }
     nodoAux = nodoAux->sigM;
   }
-  return nullptr; 
+  return nullptr;
 }
 
 int64_t ArbolListaDeListas::Etiqueta(ListaPrincipal* nodo) {
-  return nodo->etiqueta; 
+  return nodo->etiqueta;
 }
 
 int64_t ArbolListaDeListas::NumHijos(ListaPrincipal* nodo) {
@@ -178,4 +169,22 @@ int64_t ArbolListaDeListas::NumNodos() {
     nodoAux = nodoAux->sigM;
   }
   return numNodos;
+}
+
+void ArbolListaDeListas::Imprimir() {
+  if (this->Vacio()) {
+    std::cout << "El árbol está vacío." << std::endl;
+    return;
+  }
+  ListaPrincipal* nodo = this->raiz;
+  while (nodo != nullptr) {
+    std::cout << nodo->etiqueta << " -> ";
+    ListaPunteros* hijo = nodo->primero;
+    while (hijo != nullptr) {
+      std::cout << hijo->hijo->etiqueta << "-";
+      hijo = hijo->sigP;
+    }
+    std::cout << std::endl;
+    nodo = nodo->sigM;
+  }
 }

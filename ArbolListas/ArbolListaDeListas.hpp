@@ -41,6 +41,8 @@ class ArbolListaDeListas {
   int64_t NumHijos(ListaPrincipal* nodo);
   bool EsHoja(ListaPrincipal* nodo);
   int64_t NumNodos();
+
+  void Imprimir();
 };
 
 #define ARBOL ArbolListaDeListas

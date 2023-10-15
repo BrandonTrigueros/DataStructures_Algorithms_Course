@@ -45,7 +45,7 @@ class ArbolHMIHD {
   nodoArbol* BuscarEtiqueta(int64_t etiqueta);
   nodoArbol* crearNodo(int64_t etiqueta);
 
-  void imprimir();
+  void Imprimir();
 };
 
 #define ARBOL ArbolHMIHD
