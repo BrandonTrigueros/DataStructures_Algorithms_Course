@@ -1,94 +1,200 @@
 #include "ArbolHMIHD.hpp"
 
-void ArbolHMIHD::crear() {
+void ArbolHMIHD::Iniciar() {
   this->raizArbol = nullptr;
 }
 
-void ArbolHMIHD::destruir() {
-  if (!vacio()) {
+void ArbolHMIHD::Destruir() {
+  if (!Vacio()) {
     nodoArbol* nodo = this->raizArbol;
-    destruirPostOrden(nodo);
+    DestruirPostOrden(nodo);
   }
 }
 
-void ArbolHMIHD::destruirPostOrden(nodoArbol* nodo) {
+void ArbolHMIHD::DestruirPostOrden(nodoArbol* nodo) {
   nodoArbol* nodoHijo = nodo->hijoMasIzq;
   while (nodoHijo != nullptr) {
-    destruirPostOrden(nodoHijo);
+    DestruirPostOrden(nodoHijo);
     nodoHijo = nodoHijo->hermanoDer;
   }
   delete nodo;
 }
 
-void ArbolHMIHD::vaciar() {
-  if (!vacio()) {
+void ArbolHMIHD::Vaciar() {
+  if (!Vacio()) {
     nodoArbol* nodo = this->raizArbol;
     nodoArbol* nodoHijo = nodo->hijoMasIzq;
     while (nodoHijo != nullptr) {
-      destruirPostOrden(nodoHijo);
+      DestruirPostOrden(nodoHijo);
       nodoHijo = nodoHijo->hermanoDer;
     }
     this->raizArbol = nullptr;
   }
 }
 
-bool ArbolHMIHD::vacio() {
+bool ArbolHMIHD::Vacio() {
   if (this->raizArbol == nullptr) {
     return true;
   }
   return false;
 }
 
-void ArbolHMIHD::ponerRaiz(int etiqueta) {
-  if (this->raizArbol == nullptr) {
-    nodoArbol* nodo = new nodoArbol();
-    nodo->etiqueta = etiqueta;
-    nodo->hijoMasIzq = nullptr;
-    nodo->hermanoDer = nullptr;
-    this->raizArbol = nodo;
+void ArbolHMIHD::PonerRaiz(int64_t etiqueta) {
+  nodoArbol* nodo = new nodoArbol();
+  nodo->etiqueta = etiqueta;
+  nodo->hijoMasIzq = nullptr;
+  nodo->hermanoDer = nullptr;
+  this->raizArbol = nodo;
+}
+
+nodoArbol* ArbolHMIHD::AgregarHijo(nodoArbol* nodo, int64_t numHijo, int64_t etiqueta) {
+  nodoArbol* nuevoNodohijo = crearNodo(etiqueta);
+  nodoArbol* nodoHijo = nodo->hijoMasIzq;
+  if(nodoHijo == nullptr && numHijo == 1){
+    nodo->hijoMasIzq = nuevoNodohijo;
+  }else if(numHijo == 1){
+      nodoArbol* nodoHijoAux = nodoHijo;
+      nodo->hijoMasIzq = nuevoNodohijo;
+      nodo->hijoMasIzq->hermanoDer = nodoHijoAux;
   } else {
-    this->raizArbol->etiqueta = etiqueta;
+    for (int64_t iteradorNodos = 2; iteradorNodos < numHijo; iteradorNodos++)
+    {
+      nodoHijo = nodoHijo->hermanoDer;
+    }
+    if (nodoHijo->hermanoDer == nullptr)
+    {
+      nodoHijo->hermanoDer = nuevoNodohijo;
+    } else {
+      nodoArbol* nodoHijoAux = nodoHijo->hermanoDer;
+      nodoHijo->hermanoDer = nuevoNodohijo;
+      nodoHijo->hermanoDer->hermanoDer = nodoHijoAux;
+    }
+  }
+  this->contadorNodos++;
+  return nuevoNodohijo;
+}
+
+void ArbolHMIHD::BorrarHoja(nodoArbol* nodo) {
+  if (nodo == Raiz()) {
+    raizArbol = nullptr;
+    return;
+  }
+  std::queue<nodoArbol*> cola;
+  cola.push(Raiz());
+  while (!cola.empty()) {
+    nodoArbol* nodoActual = cola.front();
+    cola.pop();
+    nodoArbol* nodoHijo = nodoActual->hijoMasIzq;
+    if (nodoHijo == nodo)
+    {
+      nodoActual->hijoMasIzq = nodoHijo->hermanoDer;
+      delete nodoHijo;
+      this->contadorNodos--;
+      return;
+    }
+    while (nodoHijo != nullptr) {
+      cola.push(nodoHijo);
+      nodoArbol* nodoAnterior = nodoHijo;
+      nodoHijo = nodoHijo->hermanoDer;
+      if (nodoHijo == nodo)
+      {
+        nodoAnterior->hermanoDer = nodoHijo->hermanoDer;
+        delete nodoHijo;
+        this->contadorNodos--;
+        return;
+      }
+    }
   }
 }
 
-int ArbolHMIHD::agregarHijo(int etiquetaAgregar, int etiquetaPadre, int posicion) {
-
+void ArbolHMIHD::ModificarEtiqueta(nodoArbol* nodo, int64_t etiqueta) {
+  nodo->etiqueta = etiqueta;
 }
 
-void ArbolHMIHD::borrarHoja(int etiqueta) {
- 
+nodoArbol* ArbolHMIHD::Raiz() {
+  return this->raizArbol;
 }
 
-void ArbolHMIHD::modificarEtiqueta(int etiqueta, int nuevaEtiqueta) {
- 
+nodoArbol* ArbolHMIHD::Padre(nodoArbol* nodo) {
+  std::queue<nodoArbol*> cola;
+  cola.push(Raiz());
+  while (!cola.empty()) {
+    nodoArbol* nodoActual = cola.front();
+    cola.pop();
+    nodoArbol* nodoHijo = nodoActual->hijoMasIzq;
+    while (nodoHijo != nullptr) {
+      cola.push(nodoHijo);
+      if (nodoHijo == nodo)
+      {
+        return nodoActual;
+      }
+      nodoHijo = nodoHijo->hermanoDer;
+    }
+  }
+  return nullptr;
 }
 
-int ArbolHMIHD::raiz() {
-  return this->raizArbol->etiqueta;
+nodoArbol* ArbolHMIHD::HijoMasIzq(nodoArbol* nodo) {
+  return nodo->hijoMasIzq;
 }
 
-int ArbolHMIHD::padre(int etiqueta) {
- 
+nodoArbol* ArbolHMIHD::HermanoDer(nodoArbol* nodo) {
+  return nodo->hermanoDer;
 }
 
-int ArbolHMIHD::hijoMasIzquierdo(int etiqueta) {
- 
-}
-
-int ArbolHMIHD::hermanoDerecho(int etiqueta) {
- 
-}
-
-int ArbolHMIHD::etiqueta(nodoArbol* nodo) {
+int64_t ArbolHMIHD::Etiqueta(nodoArbol* nodo) {
   return nodo->etiqueta;
 }
 
-int ArbolHMIHD::numNodos() {
+int64_t ArbolHMIHD::NumHijos(nodoArbol* nodo) {
+  int64_t numeroHijos = 0;
+  nodoArbol* nodoHijo = nodo->hijoMasIzq;
+  while (nodoHijo != nullptr) {
+    numeroHijos++;
+    nodoHijo = nodoHijo->hermanoDer;
+  }
+  return numeroHijos;
+}
+
+
+bool ArbolHMIHD::EsHoja(nodoArbol* nodo) {
+  if (nodo->hijoMasIzq == nullptr) {
+    return true;
+  }
+  return false;
+}
+
+int64_t ArbolHMIHD::NumNodos() {
   return this->contadorNodos;
 }
 
-int ArbolHMIHD::numHijos(int etiqueta) {
- 
+nodoArbol* ArbolHMIHD::BuscarEtiqueta(int64_t etiqueta) {
+  bool nodoEncontrado = false;
+  std::queue<nodoArbol*> cola;
+  cola.push(Raiz());
+  while (!cola.empty() && !nodoEncontrado) {
+    nodoArbol* nodoActual = cola.front();
+    cola.pop();
+    if (nodoActual->etiqueta == etiqueta)
+    {
+      nodoEncontrado = true;
+      return nodoActual;
+    }
+    
+    nodoArbol* nodoHijo = nodoActual->hijoMasIzq;
+    while (nodoHijo != nullptr && !nodoEncontrado) {
+      cola.push(nodoHijo);
+      nodoHijo = nodoHijo->hermanoDer;
+    }
+  }
+  return nullptr;
+}
+
+nodoArbol* ArbolHMIHD::crearNodo(int64_t etiqueta) {
+  nodoArbol* nodo = new nodoArbol();
+  nodo->etiqueta = etiqueta;
+  nodo->hijoMasIzq = nullptr;
+  nodo->hermanoDer = nullptr;
 }
 
 ArbolHMIHD::ArbolHMIHD() {
@@ -96,6 +202,6 @@ ArbolHMIHD::ArbolHMIHD() {
 }
 
 ArbolHMIHD::~ArbolHMIHD() {
-  destruir();
+
 }
 

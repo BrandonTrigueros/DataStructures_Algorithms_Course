@@ -1,37 +1,45 @@
+#include <cstdint>
+#include <queue>
+
 // Modelo Arbol implementado en la estructura de datos
 // Arbol Hijo mas izquierdo hermano derecho
 // donde cada nodo tiene dos punteros uno al hijo mas izquierdo y otro al hermano derecho
 #ifndef ARBOLHMIHD_HPP
-
-class ArbolHMIHD
-{
-  private:
-    struct nodoArbol {
-      int etiqueta;
+struct nodoArbol {
+      int64_t etiqueta;
       nodoArbol* hijoMasIzq;
       nodoArbol* hermanoDer;
     };
+class ArbolHMIHD
+{
+  private:
     nodoArbol* raizArbol;
     int contadorNodos;
   public:
     ArbolHMIHD();
     ~ArbolHMIHD();
-    void crear();
-    void destruir();
-    void destruirPostOrden(nodoArbol* nodo);
-    void vaciar();
-    bool vacio();
-    void ponerRaiz(int etiqueta);
-    int agregarHijo(int etiquetaAgregar, int etiquetaPadre, int posicion);
-    void borrarHoja(int etiqueta);
-    void modificarEtiqueta(int etiqueta, int nuevaEtiqueta);
-    int raiz();
-    int padre(int etiqueta);
-    int hijoMasIzquierdo(int etiqueta);
-    int hermanoDerecho(int etiqueta);
-    int etiqueta(nodoArbol* nodo);
-    int numNodos();
-    int numHijos(int etiqueta);
+
+    void Iniciar();
+    void Destruir();
+    void DestruirPostOrden(nodoArbol* nodo);
+    void Vaciar();
+    bool Vacio();
+    nodoArbol* AgregarHijo(nodoArbol* nodo, int64_t numHijo,
+        int64_t etiqueta);
+    void BorrarHoja(nodoArbol* nodo);
+    void PonerRaiz(int64_t etiqueta);
+    nodoArbol* HijoMasIzq(nodoArbol* nodo);
+    nodoArbol* HermanoDer(nodoArbol* nodo);
+    void ModificarEtiqueta(nodoArbol* nodo, int64_t etiqueta);
+    nodoArbol* Raiz();
+    nodoArbol* Padre(nodoArbol* nodo);
+    int64_t Etiqueta(nodoArbol* nodo);
+    int64_t NumHijos(nodoArbol* nodo);
+    bool EsHoja(nodoArbol* nodo);
+    int64_t NumNodos();
+
+    nodoArbol* BuscarEtiqueta(int64_t etiqueta);
+    nodoArbol* crearNodo(int64_t etiqueta);
 };
 
 #endif // ARBOLHMIHD_HPP

@@ -77,7 +77,7 @@ ListaPrincipal* ArbolListaDeListas::AgregarHijo(ListaPrincipal* nodo,
 void ArbolListaDeListas::BorrarHoja(ListaPrincipal* nodo) {
   if (this->raiz == nodo) {
     ListaPrincipal* aux = this->raiz;
-    this->raiz = nullptr; 
+    this->raiz = nullptr;
     delete aux;
     return;
   }
