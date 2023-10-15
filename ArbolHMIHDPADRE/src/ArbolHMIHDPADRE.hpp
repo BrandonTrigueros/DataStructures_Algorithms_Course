@@ -1,11 +1,13 @@
 
+
 // Modelo Arbol implementado en la estructura de datos
 // Arbol Hijo mas izquierdo hermano derecho
 // donde cada nodo tiene dos punteros uno al hijo mas izquierdo y otro al hermano derecho
-#ifndef ARBOLHMIHD_HPP
+#ifndef ARBOLHMIHDPADRE_HPP
 
 #include <cstdint>
 #include <queue>
+
 
 struct nodoArbol {
       int64_t etiqueta;
@@ -44,4 +46,4 @@ class ArbolHMIHD
     nodoArbol* crearNodo(int64_t etiqueta);
 };
 
-#endif // ARBOLHMIHD_HPP
+#endif // ARBOLHMIHDPADRE_HPP
