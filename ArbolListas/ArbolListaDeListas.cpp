@@ -13,7 +13,6 @@ void ArbolListaDeListas::Iniciar() { this->raiz = nullptr; }
 
 void ArbolListaDeListas::Destruir() {
   this->Vaciar();
-  delete this;
 }
 
 void ArbolListaDeListas::Vaciar() { 
