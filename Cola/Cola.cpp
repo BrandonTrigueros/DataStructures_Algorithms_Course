@@ -1,21 +1,17 @@
 #include "Cola.hpp"
 
 void Cola::iniciar() {
-  Cola* cola = new Cola();
-  *this = *cola;
+  this->frenteCola = this->finalCola = nullptr;
 }
 
 void Cola::destruir() {
-  if (this->vacia()) {
-    delete this;
-  }
   queueNode* it = this->frenteCola;
   while (it->next != nullptr) {
     queueNode* toDelete = it;
     it = it->next;
     delete toDelete;
   }
-  delete this;
+  this->frenteCola = this->finalCola = nullptr;
 }
 
 void Cola::vaciar() {

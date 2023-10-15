@@ -6,19 +6,45 @@
 #include <iostream>
 #include <iterator>
 #include <ostream>
+#include <type_traits>
 struct ListaPrincipal;
 
 void ArbolListaDeListas::Iniciar() { this->raiz = nullptr; }
 
-void ArbolListaDeListas::Destruir() { delete this; }
+void ArbolListaDeListas::Destruir() {
+  this->Vaciar();
+}
 
-void ArbolListaDeListas::Vaciar() { }
-
+void ArbolListaDeListas::Vaciar() { 
+  ListaPrincipal* principal = this->raiz;
+  this->raiz = nullptr;
+  while (principal != nullptr) {
+    ListaPunteros* hijos = principal->primero;
+    while (hijos != nullptr) {
+      ListaPunteros* eliminar = hijos;
+      hijos = hijos->sigP;
+      delete eliminar;
+    }
+    ListaPrincipal* prinEliminar = principal;
+    principal = principal->sigM;  
+    delete prinEliminar;
+  }
+}
 bool ArbolListaDeListas::Vacio() {
   if (this->raiz) {
     return false;
   }
   return true;
+}
+ListaPrincipal* ArbolListaDeListas::BuscarEtiqueta(int64_t etiqueta) {
+  ListaPrincipal* iterator = this->raiz;
+  while (iterator != nullptr) {
+    if (iterator->etiqueta == etiqueta) {
+      return iterator;
+    }
+    iterator = iterator->sigM;
+  }
+  return nullptr;
 }
 
 ListaPrincipal* ArbolListaDeListas::HijoMasIzq(ListaPrincipal* nodo) {
