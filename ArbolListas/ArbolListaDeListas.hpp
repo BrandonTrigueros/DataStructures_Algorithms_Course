@@ -1,16 +1,16 @@
 #include <cstdint>
 
-#ifndef ARBOL_DE_LISTAS 
-#define ARBOL_DE_LISTAS 
+#ifndef ARBOL_DE_LISTAS
+#define ARBOL_DE_LISTAS
 
 struct ListaPrincipal;
 
-struct ListaPunteros{
+struct ListaPunteros {
   ListaPunteros* sigP;
   ListaPrincipal* hijo;
 };
 
-struct ListaPrincipal{
+struct ListaPrincipal {
   int64_t etiqueta;
   ListaPrincipal* sigM;
   ListaPunteros* primero;
@@ -18,19 +18,18 @@ struct ListaPrincipal{
 
 class ArbolListaDeListas {
 
-
   ListaPrincipal* raiz;
 
  public:
-  ArbolListaDeListas(){};
-  ~ArbolListaDeListas(){};
-  
+  ArbolListaDeListas() {};
+  ~ArbolListaDeListas() {};
+
   void Iniciar();
   void Destruir();
   void Vaciar();
   bool Vacio();
-  ListaPrincipal* AgregarHijo(ListaPrincipal* nodo, int64_t numHijo,
-      int64_t etiqueta);
+  ListaPrincipal* AgregarHijo(
+      ListaPrincipal* nodo, int64_t numHijo, int64_t etiqueta);
   void BorrarHoja(ListaPrincipal* nodo);
   void PonerRaiz(int64_t etiqueta);
   ListaPrincipal* HijoMasIzq(ListaPrincipal* nodo);
@@ -43,5 +42,7 @@ class ArbolListaDeListas {
   bool EsHoja(ListaPrincipal* nodo);
   int64_t NumNodos();
 };
+
+#define ARBOL ArbolListaDeListas
 
 #endif

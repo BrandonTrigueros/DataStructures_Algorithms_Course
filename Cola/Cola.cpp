@@ -5,7 +5,7 @@ void Cola::iniciar() {
   *this = *cola;
 }
 
-void Cola::destruir(){
+void Cola::destruir() {
   if (this->vacia()) {
     delete this;
   }
@@ -18,7 +18,7 @@ void Cola::destruir(){
   delete this;
 }
 
-void Cola::vaciar(){
+void Cola::vaciar() {
   queueNode* it = this->frenteCola;
   while (it->next != nullptr) {
     queueNode* toDelete = it;
@@ -28,14 +28,14 @@ void Cola::vaciar(){
   this->frenteCola = this->finalCola = nullptr;
 }
 
-bool Cola::vacia(){
+bool Cola::vacia() {
   if (this->frenteCola == nullptr) {
     return true;
   }
   return false;
 }
 
-void Cola::encolar(int e){
+void Cola::encolar(int e) {
   queueNode* toQueue = new queueNode();
   toQueue->next = nullptr;
   toQueue->val = e;
@@ -49,9 +49,9 @@ void Cola::encolar(int e){
   }
 }
 
-int Cola::desencolar(){
+Cola::queueNode* Cola::desencolar() {
   queueNode* toDelete = this->frenteCola;
-  int toReturn = toDelete->val;
+  Cola::queueNode* toReturn = toDelete;
 
   if (this->finalCola == this->frenteCola) {
     this->finalCola = nullptr;
@@ -64,13 +64,9 @@ int Cola::desencolar(){
   return toReturn;
 }
 
-int Cola::frente(){
-  return this->frenteCola->val;
-}
+Cola::queueNode* Cola::frente() { return this->frenteCola; }
 
-int Cola::ultimo(){
-  return this->finalCola->val;
-}
+Cola::queueNode* Cola::ultimo() { return this->finalCola; }
 
 int Cola::numElem() {
   int numElem = 0;
@@ -81,10 +77,24 @@ int Cola::numElem() {
   queueNode* it = this->frenteCola;
   ++numElem;
 
-  while (it->next != nullptr) { 
-    ++numElem; 
-    it = it->next; 
+  while (it->next != nullptr) {
+    ++numElem;
+    it = it->next;
   }
   return numElem;
 }
 
+void Cola::imprimir() {
+  if (this->vacia()) {
+    std::cout << "La cola está vacía." << std::endl;
+    return;
+  }
+
+  queueNode* it = this->frenteCola;
+  std::cout << "Cola: ";
+  while (it->next != nullptr) {
+    std::cout << it->val << " - ";
+    it = it->next;
+  }
+  std::cout << it->val << std::endl;
+}

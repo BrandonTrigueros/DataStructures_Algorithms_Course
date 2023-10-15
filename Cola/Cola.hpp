@@ -1,6 +1,7 @@
+#include <iostream>
+
 class Cola {
  private:
-
   struct queueNode {
     int val;
     queueNode* next;
@@ -11,16 +12,18 @@ class Cola {
 
  public:
   Cola(queueNode* frenteCola = nullptr, queueNode* finalCola = nullptr)
-  :frenteCola(frenteCola), finalCola(finalCola){};
-  ~Cola(){};
+      : frenteCola(frenteCola)
+      , finalCola(finalCola) {};
+  ~Cola() {};
 
   void iniciar();
   void destruir();
   void vaciar();
   bool vacia();
   void encolar(int e);
-  int desencolar();
-  int frente();
-  int ultimo();
+  queueNode* desencolar();
+  queueNode* frente();
+  queueNode* ultimo();
   int numElem();
+  void imprimir();
 };

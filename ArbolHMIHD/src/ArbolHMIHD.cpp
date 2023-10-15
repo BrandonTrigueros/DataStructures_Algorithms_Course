@@ -1,8 +1,6 @@
 #include "ArbolHMIHD.hpp"
 
-void ArbolHMIHD::Iniciar() {
-  this->raizArbol = nullptr;
-}
+void ArbolHMIHD::Iniciar() { this->raizArbol = nullptr; }
 
 void ArbolHMIHD::Destruir() {
   if (!Vacio()) {
@@ -47,22 +45,21 @@ void ArbolHMIHD::PonerRaiz(int64_t etiqueta) {
   this->raizArbol = nodo;
 }
 
-nodoArbol* ArbolHMIHD::AgregarHijo(nodoArbol* nodo, int64_t numHijo, int64_t etiqueta) {
+nodoArbol* ArbolHMIHD::AgregarHijo(
+    nodoArbol* nodo, int64_t numHijo, int64_t etiqueta) {
   nodoArbol* nuevoNodohijo = crearNodo(etiqueta);
   nodoArbol* nodoHijo = nodo->hijoMasIzq;
-  if(nodoHijo == nullptr && numHijo == 1){
+  if (nodoHijo == nullptr && numHijo == 1) {
     nodo->hijoMasIzq = nuevoNodohijo;
-  }else if(numHijo == 1){
-      nodoArbol* nodoHijoAux = nodoHijo;
-      nodo->hijoMasIzq = nuevoNodohijo;
-      nodo->hijoMasIzq->hermanoDer = nodoHijoAux;
+  } else if (numHijo == 1) {
+    nodoArbol* nodoHijoAux = nodoHijo;
+    nodo->hijoMasIzq = nuevoNodohijo;
+    nodo->hijoMasIzq->hermanoDer = nodoHijoAux;
   } else {
-    for (int64_t iteradorNodos = 2; iteradorNodos < numHijo; iteradorNodos++)
-    {
+    for (int64_t iteradorNodos = 2; iteradorNodos < numHijo; iteradorNodos++) {
       nodoHijo = nodoHijo->hermanoDer;
     }
-    if (nodoHijo->hermanoDer == nullptr)
-    {
+    if (nodoHijo->hermanoDer == nullptr) {
       nodoHijo->hermanoDer = nuevoNodohijo;
     } else {
       nodoArbol* nodoHijoAux = nodoHijo->hermanoDer;
@@ -85,8 +82,7 @@ void ArbolHMIHD::BorrarHoja(nodoArbol* nodo) {
     nodoArbol* nodoActual = cola.front();
     cola.pop();
     nodoArbol* nodoHijo = nodoActual->hijoMasIzq;
-    if (nodoHijo == nodo)
-    {
+    if (nodoHijo == nodo) {
       nodoActual->hijoMasIzq = nodoHijo->hermanoDer;
       delete nodoHijo;
       this->contadorNodos--;
@@ -96,8 +92,7 @@ void ArbolHMIHD::BorrarHoja(nodoArbol* nodo) {
       cola.push(nodoHijo);
       nodoArbol* nodoAnterior = nodoHijo;
       nodoHijo = nodoHijo->hermanoDer;
-      if (nodoHijo == nodo)
-      {
+      if (nodoHijo == nodo) {
         nodoAnterior->hermanoDer = nodoHijo->hermanoDer;
         delete nodoHijo;
         this->contadorNodos--;
@@ -111,9 +106,7 @@ void ArbolHMIHD::ModificarEtiqueta(nodoArbol* nodo, int64_t etiqueta) {
   nodo->etiqueta = etiqueta;
 }
 
-nodoArbol* ArbolHMIHD::Raiz() {
-  return this->raizArbol;
-}
+nodoArbol* ArbolHMIHD::Raiz() { return this->raizArbol; }
 
 nodoArbol* ArbolHMIHD::Padre(nodoArbol* nodo) {
   std::queue<nodoArbol*> cola;
@@ -124,8 +117,7 @@ nodoArbol* ArbolHMIHD::Padre(nodoArbol* nodo) {
     nodoArbol* nodoHijo = nodoActual->hijoMasIzq;
     while (nodoHijo != nullptr) {
       cola.push(nodoHijo);
-      if (nodoHijo == nodo)
-      {
+      if (nodoHijo == nodo) {
         return nodoActual;
       }
       nodoHijo = nodoHijo->hermanoDer;
@@ -134,17 +126,11 @@ nodoArbol* ArbolHMIHD::Padre(nodoArbol* nodo) {
   return nullptr;
 }
 
-nodoArbol* ArbolHMIHD::HijoMasIzq(nodoArbol* nodo) {
-  return nodo->hijoMasIzq;
-}
+nodoArbol* ArbolHMIHD::HijoMasIzq(nodoArbol* nodo) { return nodo->hijoMasIzq; }
 
-nodoArbol* ArbolHMIHD::HermanoDer(nodoArbol* nodo) {
-  return nodo->hermanoDer;
-}
+nodoArbol* ArbolHMIHD::HermanoDer(nodoArbol* nodo) { return nodo->hermanoDer; }
 
-int64_t ArbolHMIHD::Etiqueta(nodoArbol* nodo) {
-  return nodo->etiqueta;
-}
+int64_t ArbolHMIHD::Etiqueta(nodoArbol* nodo) { return nodo->etiqueta; }
 
 int64_t ArbolHMIHD::NumHijos(nodoArbol* nodo) {
   int64_t numeroHijos = 0;
@@ -156,7 +142,6 @@ int64_t ArbolHMIHD::NumHijos(nodoArbol* nodo) {
   return numeroHijos;
 }
 
-
 bool ArbolHMIHD::EsHoja(nodoArbol* nodo) {
   if (nodo->hijoMasIzq == nullptr) {
     return true;
@@ -164,9 +149,7 @@ bool ArbolHMIHD::EsHoja(nodoArbol* nodo) {
   return false;
 }
 
-int64_t ArbolHMIHD::NumNodos() {
-  return this->contadorNodos;
-}
+int64_t ArbolHMIHD::NumNodos() { return this->contadorNodos; }
 
 nodoArbol* ArbolHMIHD::BuscarEtiqueta(int64_t etiqueta) {
   bool nodoEncontrado = false;
@@ -175,12 +158,11 @@ nodoArbol* ArbolHMIHD::BuscarEtiqueta(int64_t etiqueta) {
   while (!cola.empty() && !nodoEncontrado) {
     nodoArbol* nodoActual = cola.front();
     cola.pop();
-    if (nodoActual->etiqueta == etiqueta)
-    {
+    if (nodoActual->etiqueta == etiqueta) {
       nodoEncontrado = true;
       return nodoActual;
     }
-    
+
     nodoArbol* nodoHijo = nodoActual->hijoMasIzq;
     while (nodoHijo != nullptr && !nodoEncontrado) {
       cola.push(nodoHijo);
@@ -197,11 +179,37 @@ nodoArbol* ArbolHMIHD::crearNodo(int64_t etiqueta) {
   nodo->hermanoDer = nullptr;
 }
 
-ArbolHMIHD::ArbolHMIHD() {
-  
+ArbolHMIHD::ArbolHMIHD() { }
+
+ArbolHMIHD::~ArbolHMIHD() { }
+
+void ArbolHMIHD::imprimir() {
+  if (this->Vacio()) {
+    std::cout << "El árbol está vacío." << std::endl;
+    return;
+  }
+  std::queue<nodoArbol*> cola;
+  cola.push(Raiz());
+  int nodosEnNivelActual = 1;
+  int nodosEnNivelSiguiente = 0;
+
+  while (!cola.empty()) {
+    nodoArbol* nodoActual = cola.front();
+    cola.pop();
+    std::cout << "[HMI: " << nodoActual->hijoMasIzq->etiqueta << "|"
+              << nodoActual->etiqueta
+              << "|HD: " << nodoActual->hermanoDer->etiqueta << "] ";
+    nodoArbol* nodoHijo = nodoActual->hijoMasIzq;
+
+    while (nodoHijo != nullptr) {
+      cola.push(nodoHijo);
+      nodoHijo = nodoHijo->hermanoDer;
+      nodosEnNivelSiguiente++;
+    }
+    if (--nodosEnNivelActual == 0) {
+      std::cout << std::endl;
+      nodosEnNivelActual = nodosEnNivelSiguiente;
+      nodosEnNivelSiguiente = 0;
+    }
+  }
 }
-
-ArbolHMIHD::~ArbolHMIHD() {
-
-}
-
