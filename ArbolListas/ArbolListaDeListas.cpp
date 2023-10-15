@@ -6,11 +6,12 @@
 #include <iostream>
 #include <iterator>
 #include <ostream>
+#include <type_traits>
 struct ListaPrincipal;
 
 void ArbolListaDeListas::Iniciar() { this->raiz = nullptr; }
 
-void ArbolListaDeListas::Destruir() { delete this; }
+void ArbolListaDeListas::Destruir() { delete this;}
 
 void ArbolListaDeListas::Vaciar() { }
 
@@ -19,6 +20,16 @@ bool ArbolListaDeListas::Vacio() {
     return false;
   }
   return true;
+}
+ListaPrincipal* ArbolListaDeListas::BuscarEtiqueta(int64_t etiqueta) {
+  ListaPrincipal* iterator = this->raiz;
+  while (iterator != nullptr) {
+    if (iterator->etiqueta == etiqueta) {
+      return iterator;
+    }
+    iterator = iterator->sigM;
+  }
+  return nullptr;
 }
 
 ListaPrincipal* ArbolListaDeListas::HijoMasIzq(ListaPrincipal* nodo) {

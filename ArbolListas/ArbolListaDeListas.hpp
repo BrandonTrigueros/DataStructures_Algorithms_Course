@@ -35,6 +35,7 @@ class ArbolListaDeListas {
   ListaPrincipal* HijoMasIzq(ListaPrincipal* nodo);
   ListaPrincipal* HermanoDer(ListaPrincipal* nodo);
   void ModificarEtiqueta(ListaPrincipal* nodo, int64_t etiqueta);
+  ListaPrincipal* BuscarEtiqueta(int64_t etiqueta);
   ListaPrincipal* Raiz();
   ListaPrincipal* Padre(ListaPrincipal* nodo);
   int64_t Etiqueta(ListaPrincipal* nodo);
