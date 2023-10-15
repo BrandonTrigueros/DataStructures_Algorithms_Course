@@ -1,6 +1,6 @@
 #include "ArbolHMIHD.hpp"
 
-void ArbolHMIHD::Iniciar() { this->raizArbol = nullptr; }
+void ArbolHMIHD::Iniciar() { this->raizArbol = nullptr; this->contadorNodos = 0;}
 
 void ArbolHMIHD::Destruir() {
   if (!Vacio()) {
@@ -12,22 +12,16 @@ void ArbolHMIHD::Destruir() {
 void ArbolHMIHD::DestruirPostOrden(nodoArbol* nodo) {
   nodoArbol* nodoHijo = nodo->hijoMasIzq;
   while (nodoHijo != nullptr) {
+    nodoArbol* nodoHermanoDerecho = nodoHijo->hermanoDer;
     DestruirPostOrden(nodoHijo);
-    nodoHijo = nodoHijo->hermanoDer;
+    nodoHijo = nodoHermanoDerecho;
   }
   delete nodo;
 }
 
 void ArbolHMIHD::Vaciar() {
-  if (!Vacio()) {
-    nodoArbol* nodo = this->raizArbol;
-    nodoArbol* nodoHijo = nodo->hijoMasIzq;
-    while (nodoHijo != nullptr) {
-      DestruirPostOrden(nodoHijo);
-      nodoHijo = nodoHijo->hermanoDer;
-    }
-    this->raizArbol = nullptr;
-  }
+  Destruir();
+  Iniciar();
 }
 
 bool ArbolHMIHD::Vacio() {
@@ -43,6 +37,7 @@ void ArbolHMIHD::PonerRaiz(int64_t etiqueta) {
   nodo->hijoMasIzq = nullptr;
   nodo->hermanoDer = nullptr;
   this->raizArbol = nodo;
+  this->contadorNodos++;
 }
 
 nodoArbol* ArbolHMIHD::AgregarHijo(

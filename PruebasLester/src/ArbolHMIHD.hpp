@@ -1,4 +1,3 @@
-
 // Modelo Arbol implementado en la estructura de datos
 // Arbol Hijo mas izquierdo hermano derecho
 // donde cada nodo tiene dos punteros uno al hijo mas izquierdo y otro al
