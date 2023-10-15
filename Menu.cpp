@@ -91,7 +91,153 @@ void Menu::runCola() {
   } while (opcion != 10);
 }
 
-void Menu::runArbol() { }
+void Menu::runArbol() {
+  int opcion;
+  do {
+    this->mostrarArbolActual();
+    opcion = mostrarOperadoresArbol();
+    switch (opcion) {
+    case 1:
+      this->arbol->Iniciar();
+      break;
+    case 2:
+      this->arbol->Destruir();
+      break;
+    case 3:
+      this->arbol->Vaciar();
+      break;
+    case 4:
+      if (this->arbol->Vacio()) {
+        std::cout << "El árbol está vacío." << std::endl;
+      } else {
+        std::cout << "El árbol no está vacío." << std::endl;
+      }
+      break;
+    case 5: {
+      int n;
+      int p;
+      int e;
+      std::cout << "Ingrese el número a agregar: " << std::endl;
+      std::cin >> e;
+      std::cout << "Ingrese el nodo al que agregar el hijo: " << std::endl;
+      std::cin >> n;
+      std::cout << "Ingrese la posición del hijo: " << std::endl;
+      std::cin >> p;
+      this->arbol->AgregarHijo(this->arbol->BuscarEtiqueta(n), p, e);
+      std::cout << "Hijo agregado." << std::endl;
+      break;
+    }
+    case 6:
+      int e;
+      std::cout << "Ingrese el número de la hoja a borrar: \n";
+      this->arbol->BorrarHoja(this->arbol->BuscarEtiqueta(e));
+      std::cout << "Hoja borrada." << std::endl;
+      break;
+    case 7: {
+      int e;
+      std::cout << "Ingrese el número a poner como raíz: ";
+      std::cin >> e;
+      this->arbol->PonerRaiz(e);
+      std::cout << "Raíz puesta." << std::endl;
+      break;
+    }
+    case 8:
+      int e;
+      std::cout
+          << "Ingrese el nodo del cuál desea obtener el hijo más izquierdo:";
+      std::cin >> e;
+      if (this->arbol->HijoMasIzq(this->arbol->BuscarEtiqueta(e)) != nullptr) {
+        std::cout
+            << "Hijo más izquierdo: "
+            << this->arbol->HijoMasIzq(this->arbol->BuscarEtiqueta(e))->etiqueta
+            << std::endl;
+      } else {
+        std::cout << "El nodo ingresado no tiene hijos." << std::endl;
+      }
+      break;
+    case 9:
+      int e;
+      std::cout << "Ingrese el nodo del cuál desea obtener el hermano derecho:";
+      std::cin >> e;
+      if (this->arbol->HermanoDer(this->arbol->BuscarEtiqueta(e)) != nullptr) {
+        std::cout
+            << "Hermano derecho: "
+            << this->arbol->HermanoDer(this->arbol->BuscarEtiqueta(e))->etiqueta
+            << std::endl;
+      } else {
+        std::cout << "El nodo ingresado no tiene hermano derecho." << std::endl;
+      }
+      break;
+    case 10: {
+      int e;
+      int val;
+      std::cout << "Ingrese el nodo a modificar: ";
+      std::cin >> e;
+      std::cout << "Ingrese el nuevo valor: ";
+      std::cin >> val;
+      this->arbol->ModificarEtiqueta(this->arbol->BuscarEtiqueta(e), val);
+      break;
+    }
+    case 11:
+      if (this->arbol->Raiz() == nullptr) {
+        std::cout << "El árbol está vacío." << std::endl;
+      } else {
+        std::cout << "Raíz: " << this->arbol->Raiz()->etiqueta << std::endl;
+      }
+      break;
+    case 12:
+      int nh;
+      std::cout << "Ingrese el nodo del cuál desea obtener el padre: ";
+      std::cin >> nh;
+      if (nh == this->arbol->Raiz()->etiqueta) {
+        std::cout << "El nodo ingresado es la raíz. No tiene padre"
+                  << std::endl;
+      } else {
+        std::cout
+            << "Padre: "
+            << this->arbol->Padre(this->arbol->BuscarEtiqueta(nh))->etiqueta
+            << std::endl;
+      }
+      break;
+    case 13:
+      int e;
+      std::cout << "Ingrese el nodo del cuál desea obtener la etiqueta: ";
+      std::cin >> e;
+      std::cout << "Etiqueta: "
+                << this->arbol->Etiqueta(this->arbol->BuscarEtiqueta(e))
+                << std::endl;
+      break;
+    case 14:
+      int p;
+      std::cout
+          << "Ingrese el nodo del cuál desea obtener el número de hijos: ";
+      std::cin >> p;
+      std::cout << "Número de hijos: "
+                << this->arbol->NumHijos(this->arbol->BuscarEtiqueta(p))
+                << std::endl;
+      break;
+    case 15:
+      int n;
+      std::cout << "Ingrese el nodo del cuál desea saber si es hoja: ";
+      std::cin >> n;
+      if (this->arbol->EsHoja(this->arbol->BuscarEtiqueta(n))) {
+        std::cout << "El nodo es una hoja." << std::endl;
+      } else {
+        std::cout << "El nodo no es una hoja." << std::endl;
+      }
+      break;
+    case 16:
+      std::cout << "Número de nodos: " << this->arbol->NumNodos() << std::endl;
+      break;
+    case 17:
+      std::cout << "Saliendo..." << std::endl;
+      break;
+    default:
+      std::cout << "Opción inválida." << std::endl;
+      break;
+    }
+  } while (opcion != 17);
+}
 
 int Menu::mostrarPrincipal() {
   int opcion;
