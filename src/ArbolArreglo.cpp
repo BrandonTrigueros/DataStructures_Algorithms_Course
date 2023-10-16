@@ -1,10 +1,14 @@
 #include "ArbolArreglo.hpp"
 
-ArbolArreglo::ArbolArreglo() { this->Iniciar(); }
+ArbolArreglo::ArbolArreglo() {
+  this->arreglo = nullptr;
+  this->capacidad = 0;
+  this->ultimoLleno = -1;
+}
 
 ArbolArreglo::~ArbolArreglo() {
   if (this->arreglo != nullptr) {
-    this->Destruir();
+    delete[] this->arreglo;
   }
 }
 
@@ -14,7 +18,11 @@ void ArbolArreglo::Iniciar() {
   this->arreglo = new nodo[this->capacidad];
 }
 
-void ArbolArreglo::Destruir() { delete[] this->arreglo; }
+void ArbolArreglo::Destruir() {
+  if (!this->Vacio()) {
+    this->Vaciar();
+  }
+}
 
 void ArbolArreglo::Vaciar() { this->ultimoLleno = -1; }
 
@@ -172,7 +180,12 @@ nodo* ArbolArreglo::BuscarEtiqueta(int64_t etiqueta) {
 
 void ArbolArreglo::Imprimir() {
   for (int64_t i = 0; i <= this->ultimoLleno; i++) {
-    std::cout << "[E: " << this->arreglo[i].etiqueta
-              << "| P: " << this->arreglo[i].padre << "] ";
+    if (this->arreglo[i].padre == -1) {
+      std::cout << "[E: " << this->arreglo[i].etiqueta << "|P: NULL] ";
+    } else {
+      std::cout << "[E: " << this->arreglo[i].etiqueta
+                << "|P: " << this->arreglo[i].padre << "] ";
+    }
   }
+  std::cout << std::endl;
 }
