@@ -5,13 +5,11 @@ void Cola::iniciar() {
 }
 
 void Cola::destruir() {
-  queueNode* it = this->frenteCola;
-  while (it->next != nullptr) {
-    queueNode* toDelete = it;
-    it = it->next;
-    delete toDelete;
+  if (this->vacia()) {
+    this->frenteCola = this->finalCola = nullptr;
+    return;
   }
-  this->frenteCola = this->finalCola = nullptr;
+  this->vaciar();
 }
 
 void Cola::vaciar() {
