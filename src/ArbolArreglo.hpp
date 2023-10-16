@@ -17,8 +17,8 @@ class ArbolArreglo {
   int capacidad;
 
  public:
-  ArbolArreglo();
-  ~ArbolArreglo();
+  ArbolArreglo() { }
+  ~ArbolArreglo() { }
 
   void Iniciar();
   void Destruir();

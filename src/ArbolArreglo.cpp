@@ -1,17 +1,5 @@
 #include "ArbolArreglo.hpp"
 
-ArbolArreglo::ArbolArreglo() {
-  this->arreglo = nullptr;
-  this->capacidad = 0;
-  this->ultimoLleno = -1;
-}
-
-ArbolArreglo::~ArbolArreglo() {
-  if (this->arreglo != nullptr) {
-    delete[] this->arreglo;
-  }
-}
-
 void ArbolArreglo::Iniciar() {
   this->capacidad = 100;
   this->ultimoLleno = -1;
@@ -22,6 +10,7 @@ void ArbolArreglo::Destruir() {
   if (!this->Vacio()) {
     this->Vaciar();
   }
+  delete[] this->arreglo;
 }
 
 void ArbolArreglo::Vaciar() { this->ultimoLleno = -1; }

@@ -10,6 +10,7 @@ void ArbolHMIHD::Destruir() {
     nodoArbol* nodo = this->raizArbol;
     DestruirPostOrden(nodo);
   }
+  // delete this->raizArbol;
   this->raizArbol = nullptr;
 }
 

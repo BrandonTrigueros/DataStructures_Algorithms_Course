@@ -22,7 +22,7 @@ class ArbolListaDeListas {
 
  public:
   ArbolListaDeListas() {};
-  ~ArbolListaDeListas() { delete this->raiz; };
+  ~ArbolListaDeListas() {};
 
   void Iniciar();
   void Destruir();

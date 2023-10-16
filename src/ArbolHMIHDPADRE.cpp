@@ -1,12 +1,17 @@
 #include "ArbolHMIHDPADRE.hpp"
 
-void ArbolHMIHDPADRE::Iniciar() { this->raizArbol = nullptr; this->contadorNodos = 0;}
+void ArbolHMIHDPADRE::Iniciar() {
+  this->raizArbol = nullptr;
+  this->contadorNodos = 0;
+}
 
 void ArbolHMIHDPADRE::Destruir() {
-  if (!Vacio()) {
+  if (!this->Vacio()) {
     nodoArbol* nodo = this->raizArbol;
     DestruirPostOrden(nodo);
   }
+  // delete this->raizArbol;
+  this->raizArbol = nullptr;
 }
 
 void ArbolHMIHDPADRE::DestruirPostOrden(nodoArbol* nodo) {
@@ -118,16 +123,19 @@ void ArbolHMIHDPADRE::ModificarEtiqueta(nodoArbol* nodo, int64_t etiqueta) {
 nodoArbol* ArbolHMIHDPADRE::Raiz() { return this->raizArbol; }
 
 nodoArbol* ArbolHMIHDPADRE::Padre(nodoArbol* nodo) {
-  while (nodo->ultimoHIjo != true)
-  {
+  while (nodo->ultimoHIjo != true) {
     nodo = nodo->hermanoDer;
   }
   return nodo->hermanoDer;
 }
 
-nodoArbol* ArbolHMIHDPADRE::HijoMasIzq(nodoArbol* nodo) { return nodo->hijoMasIzq; }
+nodoArbol* ArbolHMIHDPADRE::HijoMasIzq(nodoArbol* nodo) {
+  return nodo->hijoMasIzq;
+}
 
-nodoArbol* ArbolHMIHDPADRE::HermanoDer(nodoArbol* nodo) { return nodo->hermanoDer; }
+nodoArbol* ArbolHMIHDPADRE::HermanoDer(nodoArbol* nodo) {
+  return nodo->hermanoDer;
+}
 
 int64_t ArbolHMIHDPADRE::Etiqueta(nodoArbol* nodo) { return nodo->etiqueta; }
 
@@ -166,7 +174,8 @@ nodoArbol* ArbolHMIHDPADRE::BuscarEtiqueta(int64_t etiqueta) {
     }
 
     nodoArbol* nodoHijo = nodoActual->hijoMasIzq;
-    while (nodoHijo != nullptr && !nodoEncontrado && nodoHijo->ultimoHIjo == false) {
+    while (nodoHijo != nullptr && !nodoEncontrado
+        && nodoHijo->ultimoHIjo == false) {
       cola.push(nodoHijo);
       nodoHijo = nodoHijo->hermanoDer;
     }

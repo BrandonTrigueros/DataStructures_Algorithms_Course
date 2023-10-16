@@ -345,6 +345,7 @@ void Menu::runArbol() {
     case 18:
       std::cout << "Saliendo..." << std::endl;
       if (this->arbol != nullptr) {
+        this->arbol->Destruir();
         delete this->arbol;
         this->arbol = nullptr;
       }

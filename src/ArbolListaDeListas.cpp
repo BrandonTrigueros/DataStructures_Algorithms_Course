@@ -12,8 +12,14 @@ struct ListaPrincipal;
 void ArbolListaDeListas::Iniciar() { this->raiz = nullptr; }
 
 void ArbolListaDeListas::Destruir() {
-  this->Vaciar();
-  this->raiz = nullptr;
+  if (!this->Vacio()) {
+    this->Vaciar();
+    delete this->raiz;
+    this->raiz = nullptr;
+  } else {
+    // delete this->raiz;
+    this->raiz = nullptr;
+  }
 }
 
 void ArbolListaDeListas::Vaciar() {
@@ -88,7 +94,7 @@ ListaPrincipal* ArbolListaDeListas::AgregarHijo(
     nodo->primero = puntAg;
     puntAg->sigP = nullptr;
     puntAg->hijo = agregar;
-  } else if(puntAux == nodo->primero) {
+  } else if (puntAux == nodo->primero) {
     puntAg->sigP = nodo->primero;
     nodo->primero = puntAg;
     puntAg->hijo = agregar;
