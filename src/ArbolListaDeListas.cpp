@@ -88,6 +88,10 @@ ListaPrincipal* ArbolListaDeListas::AgregarHijo(
     nodo->primero = puntAg;
     puntAg->sigP = nullptr;
     puntAg->hijo = agregar;
+  } else if(puntAux == nodo->primero) {
+    puntAg->sigP = nodo->primero;
+    nodo->primero = puntAg;
+    puntAg->hijo = agregar;
   } else {
     puntAg->sigP = puntAux->sigP;
     puntAux->sigP = puntAg;
