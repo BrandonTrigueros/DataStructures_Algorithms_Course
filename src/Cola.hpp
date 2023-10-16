@@ -1,12 +1,13 @@
 #include <iostream>
 
 class Cola {
- private:
+ public:
   struct queueNode {
     int val;
     queueNode* next;
   };
 
+ private:
   queueNode* frenteCola;
   queueNode* finalCola;
 
@@ -14,7 +15,10 @@ class Cola {
   Cola(queueNode* frenteCola = nullptr, queueNode* finalCola = nullptr)
       : frenteCola(frenteCola)
       , finalCola(finalCola) {};
-  ~Cola() {};
+  ~Cola() {
+    free(this->frenteCola);
+    free(this->finalCola);
+  };
 
   void iniciar();
   void destruir();

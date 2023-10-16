@@ -4,7 +4,7 @@
 CC=gcc
 XC=g++
 JC=javac
-DEFS=LL
+DEFS=
 CSTD=-std=c17
 XSTD=-std=c++17
 FLAG=

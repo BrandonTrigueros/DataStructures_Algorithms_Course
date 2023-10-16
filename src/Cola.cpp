@@ -1,8 +1,6 @@
 #include "Cola.hpp"
 
-void Cola::iniciar() {
-  this->frenteCola = this->finalCola = nullptr;
-}
+void Cola::iniciar() { this->frenteCola = this->finalCola = nullptr; }
 
 void Cola::destruir() {
   if (this->vacia()) {
@@ -14,7 +12,7 @@ void Cola::destruir() {
 
 void Cola::vaciar() {
   queueNode* it = this->frenteCola;
-  while (it->next != nullptr) {
+  while (it != nullptr) {
     queueNode* toDelete = it;
     it = it->next;
     delete toDelete;
@@ -45,7 +43,9 @@ void Cola::encolar(int e) {
 
 Cola::queueNode* Cola::desencolar() {
   queueNode* toDelete = this->frenteCola;
-  Cola::queueNode* toReturn = toDelete;
+  Cola::queueNode* toReturn = new queueNode();
+  toReturn->val = toDelete->val;
+  toReturn->next = nullptr;
 
   if (this->finalCola == this->frenteCola) {
     this->finalCola = nullptr;
