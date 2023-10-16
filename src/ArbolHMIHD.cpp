@@ -1,12 +1,16 @@
 #include "ArbolHMIHD.hpp"
 
-void ArbolHMIHD::Iniciar() { this->raizArbol = nullptr; this->contadorNodos = 0;}
+void ArbolHMIHD::Iniciar() {
+  this->raizArbol = nullptr;
+  this->contadorNodos = 0;
+}
 
 void ArbolHMIHD::Destruir() {
   if (!Vacio()) {
     nodoArbol* nodo = this->raizArbol;
     DestruirPostOrden(nodo);
   }
+  this->raizArbol = nullptr;
 }
 
 void ArbolHMIHD::DestruirPostOrden(nodoArbol* nodo) {
@@ -68,6 +72,7 @@ nodoArbol* ArbolHMIHD::AgregarHijo(
 
 void ArbolHMIHD::BorrarHoja(nodoArbol* nodo) {
   if (nodo == Raiz()) {
+    delete nodo;
     raizArbol = nullptr;
     return;
   }
@@ -177,7 +182,10 @@ nodoArbol* ArbolHMIHD::crearNodo(int64_t etiqueta) {
 
 ArbolHMIHD::ArbolHMIHD() { }
 
-ArbolHMIHD::~ArbolHMIHD() { }
+ArbolHMIHD::~ArbolHMIHD() {
+  Destruir();
+  delete this->raizArbol;
+}
 
 void ArbolHMIHD::Imprimir() {
   if (this->Vacio()) {
@@ -186,15 +194,30 @@ void ArbolHMIHD::Imprimir() {
   }
   std::queue<nodoArbol*> cola;
   cola.push(Raiz());
+  int nodosEnNivelActual = 1;
+  int nodosEnNivelSiguiente = 0;
+
   while (!cola.empty()) {
     nodoArbol* nodoActual = cola.front();
-    std::cout << nodoActual->etiqueta << " ";
     cola.pop();
+    std::cout << "(" << nodoActual->etiqueta << ")";
+    std::cout << " HMI:";
+    if (nodoActual->hijoMasIzq != nullptr) {
+      std::cout << nodoActual->hijoMasIzq->etiqueta << ", ";
+    } else {
+      std::cout << "NULL, ";
+    }
     nodoArbol* nodoHijo = nodoActual->hijoMasIzq;
     while (nodoHijo != nullptr) {
       cola.push(nodoHijo);
       nodoHijo = nodoHijo->hermanoDer;
+      nodosEnNivelSiguiente++;
+    }
+
+    if (--nodosEnNivelActual == 0) {
+      std::cout << std::endl;
+      nodosEnNivelActual = nodosEnNivelSiguiente;
+      nodosEnNivelSiguiente = 0;
     }
   }
-  std::cout << std::endl;
 }

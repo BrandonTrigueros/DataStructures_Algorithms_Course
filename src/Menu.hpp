@@ -31,7 +31,7 @@
   "║ 11. Raíz              12. Padre              ║\n"                                                                                            \
   "║ 13. Etiqueta          14. NumHijos           ║\n"                                                                                             \
   "║ 15. EsHoja            16. NumNodos           ║\n"                                                                                             \
-  "║ 17. Ver Arbol Actual  18. Volver             ║\n"                                                                                             \
+  "║ 18. Volver                                   ║\n"                                                                                             \
   "╚══════════════════════════════════════════════╝\n" \
   "Seleccione una opción: "
 
@@ -42,8 +42,7 @@
   "║ 3. Vaciar         4. Vacío             ║\n"                                                                                \
   "║ 5. Encolar        6. Desencolar        ║\n"                                                                                 \
   "║ 7. Frente         8. Último            ║\n"                                                                                \
-  "║ 9. NumElementos   10. Ver Cola Actual  ║\n"                                                                                 \
-  "║ 11. Volver                             ║\n"                                                                                 \
+  "║ 9. NumElementos   11. Volver           ║\n"                                                                                 \
   "╚════════════════════════════════════════╝\n" \
   "Seleccione una opción: "
 
