@@ -74,7 +74,7 @@ ListaPrincipal* ArbolListaDeListas::AgregarHijo(
   ListaPunteros* puntAux;
   puntAux = nodo->primero;
   int64_t contador = 1;
-  while (puntAux != nullptr && contador < numHijo) {
+  while (puntAux != nullptr && contador+1 < numHijo) {
     if (puntAux->sigP != nullptr) {
       puntAux = puntAux->sigP;
     }
@@ -86,7 +86,13 @@ ListaPrincipal* ArbolListaDeListas::AgregarHijo(
     nodo->primero = puntAg;
     puntAg->sigP = nullptr;
     puntAg->hijo = agregar;
-  } else {
+  } 
+  else if (puntAux == nodo->primero) {
+    puntAg->sigP = nodo->primero; 
+    nodo->primero = puntAg;
+    puntAg->hijo = agregar;
+  }
+  else {
     puntAg->sigP = puntAux->sigP;
     puntAux->sigP = puntAg;
     puntAg->hijo = agregar;
