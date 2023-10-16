@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdint>
-#include "ArbolHMIHDPADRE.hpp"
-//#include "ArbolHMIHD.hpp"       
+//#include "ArbolHMIHDPADRE.hpp"
+#include "ArbolHMIHD.hpp"       
 
 int main() {
     ARBOL arbol;
@@ -18,8 +18,6 @@ int main() {
 
     arbol.Imprimir();
 
-    std::cout << "El 3 es Ultimo Hijo: " << arbol.BuscarEtiqueta(3)->ultimoHIjo << std::endl;
-    std::cout << "El 4 es Ultimo Hijo: " << arbol.BuscarEtiqueta(4)->ultimoHIjo << std::endl;
 
     std::cout << "Busqueda de padre del 3: " <<  arbol.Etiqueta(arbol.Padre(arbol.BuscarEtiqueta(3))) << std::endl;
     std::cout << "Busqueda de padre del 4: " <<  arbol.Etiqueta(arbol.Padre(arbol.BuscarEtiqueta(4))) << std::endl;
@@ -27,7 +25,6 @@ int main() {
     arbol.BorrarHoja(arbol.BuscarEtiqueta(3));
     arbol.BorrarHoja(arbol.BuscarEtiqueta(2));
     std::cout << "Borrado de hojas" << std::endl;
-    std::cout << "El 4 es Ultimo Hijo: " << arbol.BuscarEtiqueta(4)->ultimoHIjo << std::endl;
     std::cout << "Busqueda de padre del 4: " <<  arbol.Etiqueta(arbol.Padre(arbol.BuscarEtiqueta(4))) << std::endl;
 
     arbol.AgregarHijo(arbol.Raiz(), 1, 2);
