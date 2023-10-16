@@ -14,6 +14,9 @@ Menu::~Menu() {
   }
 }
 
+// ----------------------------------
+// ----------MENU PRINCIPAL----------
+// ----------------------------------
 void Menu::run() {
   int opcion;
   do {
@@ -38,6 +41,9 @@ void Menu::run() {
   } while (opcion != 4);
 }
 
+// -----------------------------
+// ----------MENU COLA----------
+// -----------------------------
 void Menu::runCola() {
   int opcion;
   do {
@@ -59,6 +65,10 @@ void Menu::runCola() {
       this->cola = nullptr;
       break;
     case 3:
+      if (this->cola == nullptr) {
+        std::cout << "No hay una cola actualmente." << std::endl;
+        break;
+      }
       if (this->cola->vacia()) {
         std::cout << "La cola está vacía." << std::endl;
         break;
@@ -139,6 +149,9 @@ void Menu::runCola() {
   } while (opcion != 11);
 }
 
+// ------------------------------
+// ----------MENU ARBOL----------
+// ------------------------------
 void Menu::runArbol() {
   int opcion;
   do {
@@ -146,9 +159,6 @@ void Menu::runArbol() {
     int n, p, e;
     switch (opcion) {
     case 1:
-      if (this->arbol != nullptr) {
-        delete this->arbol;
-      }
       this->arbol = new ARBOL;
       this->arbol->Iniciar();
       break;
@@ -158,8 +168,7 @@ void Menu::runArbol() {
       } else {
         this->arbol->Destruir();
         delete this->arbol;
-        this->arbol = nullptr;  // Establece el puntero a nullptr después de
-                                // eliminar el árbol.
+        this->arbol = nullptr;
       }
       break;
     case 3:
@@ -327,6 +336,10 @@ void Menu::runArbol() {
       }
       break;
     case 17:
+      if (this->arbol == nullptr) {
+        std::cout << "No hay un árbol actualmente." << std::endl;
+        break;
+      }
       this->mostrarArbolActual();
       break;
     case 18:
@@ -343,6 +356,9 @@ void Menu::runArbol() {
   } while (opcion != 18);
 }
 
+// --------------------------------------
+// ----------MÉTODOS AUXILIARES----------
+// --------------------------------------
 int Menu::mostrarPrincipal() {
   int opcion;
   std::cout << OPCIONES_PRINCIPAL;
@@ -375,8 +391,8 @@ void Menu::mostrarColaActual() {
 }
 
 void Menu::mostrarArbolActual() {
-  if (this->arbol == nullptr) {
-    std::cout << "No hay un árbol actualmente." << std::endl;
+  if (this->arbol->Vacio()) {
+    std::cout << "El árbol está vacío." << std::endl;
     return;
   }
   this->arbol->Imprimir();

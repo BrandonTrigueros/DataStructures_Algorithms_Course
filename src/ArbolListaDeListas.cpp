@@ -13,9 +13,10 @@ void ArbolListaDeListas::Iniciar() { this->raiz = nullptr; }
 
 void ArbolListaDeListas::Destruir() {
   this->Vaciar();
+  this->raiz = nullptr;
 }
 
-void ArbolListaDeListas::Vaciar() { 
+void ArbolListaDeListas::Vaciar() {
   ListaPrincipal* principal = this->raiz;
   this->raiz = nullptr;
   while (principal != nullptr) {
@@ -26,10 +27,11 @@ void ArbolListaDeListas::Vaciar() {
       delete eliminar;
     }
     ListaPrincipal* prinEliminar = principal;
-    principal = principal->sigM;  
+    principal = principal->sigM;
     delete prinEliminar;
   }
 }
+
 bool ArbolListaDeListas::Vacio() {
   if (this->raiz) {
     return false;
@@ -205,10 +207,14 @@ void ArbolListaDeListas::Imprimir() {
   ListaPrincipal* nodo = this->raiz;
   while (nodo != nullptr) {
     std::cout << nodo->etiqueta << " -> ";
-    ListaPunteros* hijo = nodo->primero;
-    while (hijo != nullptr) {
-      std::cout << hijo->hijo->etiqueta << "-";
-      hijo = hijo->sigP;
+    if (nodo->primero == nullptr) {
+      std::cout << "NULL";
+    } else {
+      ListaPunteros* hijo = nodo->primero;
+      while (hijo != nullptr) {
+        std::cout << hijo->hijo->etiqueta << "-";
+        hijo = hijo->sigP;
+      }
     }
     std::cout << std::endl;
     nodo = nodo->sigM;

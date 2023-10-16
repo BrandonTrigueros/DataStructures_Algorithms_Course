@@ -4,10 +4,10 @@
 #include <iostream>
 #include <string>
 
-#include "ArbolArreglo.hpp"
-// #include "ArbolListas/ArbolListaDeListas.hpp"
-// #include "ArbolHMIHD/src/ArbolHMIHD.hpp"
-// #include "ArbolHMIHDPADRE/src/ArbolHMIHDPADRE.hpp"
+// #include "ArbolArreglo.hpp"
+// #include "ArbolListaDeListas.hpp"
+#include "ArbolHMIHD.hpp"
+// #include "ArbolHMIHDPADRE.hpp"
 #include "Cola.hpp"
 
 #define OPCIONES_PRINCIPAL                                                        \
@@ -31,7 +31,7 @@
   "║ 11. Raíz              12. Padre              ║\n"                                                                                            \
   "║ 13. Etiqueta          14. NumHijos           ║\n"                                                                                             \
   "║ 15. EsHoja            16. NumNodos           ║\n"                                                                                             \
-  "║ 17. Ver Arbol Actual  18. Volver              ║\n"                                                                                            \
+  "║ 17. Ver Arbol Actual  18. Volver             ║\n"                                                                                             \
   "╚══════════════════════════════════════════════╝\n" \
   "Seleccione una opción: "
 
