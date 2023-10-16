@@ -1,12 +1,14 @@
-#pragma once
+#ifndef MENU_HPP
+#define MENU_HPP
 
 #include <iostream>
 #include <string>
 
+#include "ArbolArreglo.hpp"
 // #include "ArbolListas/ArbolListaDeListas.hpp"
-#include "ArbolHMIHD/src/ArbolHMIHD.hpp"
+// #include "ArbolHMIHD/src/ArbolHMIHD.hpp"
 // #include "ArbolHMIHDPADRE/src/ArbolHMIHDPADRE.hpp"
-#include "Cola/Cola.hpp"
+#include "Cola.hpp"
 
 #define OPCIONES_PRINCIPAL                                                        \
   "╔═══════════════════════╗\n" \
@@ -18,29 +20,31 @@
   "╚═══════════════════════╝\n" \
   "Seleccione una opción: "
 
-#define OPERADORES_ARBOL                                                                                                                   \
-  "╔══════════════════════════════════════════╗\n" \
-  "║         Operadores Básicos Árbol         ║\n"                                                                                   \
-  "║ 1. Iniciar        2. Destruir            ║\n"                                                                                     \
-  "║ 3. Vaciar         4. Vacío               ║\n"                                                                                    \
-  "║ 5. AgregarHijo    6. BorrarHoja          ║\n"                                                                                     \
-  "║ 7. PonerRaíz      8. HijoMasIzq          ║\n"                                                                                    \
-  "║ 9. HermanoDer     10. ModificarEtiqueta  ║\n"                                                                                     \
-  "║ 11. Raíz          12. Padre              ║\n"                                                                                    \
-  "║ 13. Etiqueta      14. NumHijos           ║\n"                                                                                     \
-  "║ 15. EsHoja        16. NumNodos           ║\n"                                                                                     \
-  "╚══════════════════════════════════════════╝\n" \
+#define OPERADORES_ARBOL                                                                                                                               \
+  "╔══════════════════════════════════════════════╗\n" \
+  "║         Operadores Básicos Árbol             ║\n"                                                                                           \
+  "║ 1. Iniciar            2. Destruir            ║\n"                                                                                             \
+  "║ 3. Vaciar             4. Vacío               ║\n"                                                                                            \
+  "║ 5. AgregarHijo        6. BorrarHoja          ║\n"                                                                                             \
+  "║ 7. PonerRaíz          8. HijoMasIzq          ║\n"                                                                                            \
+  "║ 9. HermanoDer         10. ModificarEtiqueta  ║\n"                                                                                             \
+  "║ 11. Raíz              12. Padre              ║\n"                                                                                            \
+  "║ 13. Etiqueta          14. NumHijos           ║\n"                                                                                             \
+  "║ 15. EsHoja            16. NumNodos           ║\n"                                                                                             \
+  "║ 17. Ver Arbol Actual  18. Volver              ║\n"                                                                                            \
+  "╚══════════════════════════════════════════════╝\n" \
   "Seleccione una opción: "
 
-#define OPERADORES_COLA                                                                                         \
-  "╔═════════════════════════════════╗\n" \
-  "║    Operadores Básicos Cola      ║\n"                                                                  \
-  "║ 1. Iniciar        2. Destruir   ║\n"                                                                   \
-  "║ 3. Vaciar         4. Vacío      ║\n"                                                                  \
-  "║ 5. Encolar        6. Desencolar ║\n"                                                                   \
-  "║ 7. Frente         8. Último     ║\n"                                                                  \
-  "║ 9. NumElementos                 ║\n"                                                                   \
-  "╚═════════════════════════════════╝\n" \
+#define OPERADORES_COLA                                                                                                              \
+  "╔════════════════════════════════════════╗\n" \
+  "║        Operadores Básicos Cola         ║\n"                                                                                \
+  "║ 1. Iniciar        2. Destruir          ║\n"                                                                                 \
+  "║ 3. Vaciar         4. Vacío             ║\n"                                                                                \
+  "║ 5. Encolar        6. Desencolar        ║\n"                                                                                 \
+  "║ 7. Frente         8. Último            ║\n"                                                                                \
+  "║ 9. NumElementos   10. Ver Cola Actual  ║\n"                                                                                 \
+  "║ 11. Volver                             ║\n"                                                                                 \
+  "╚════════════════════════════════════════╝\n" \
   "Seleccione una opción: "
 
 #define CREDITOS                                                                                    \
@@ -71,3 +75,5 @@ class Menu {
   void mostrarColaActual();
   void mostrarArbolActual();
 };
+
+#endif  // MENU_HPP

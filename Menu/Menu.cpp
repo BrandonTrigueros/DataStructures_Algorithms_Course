@@ -1,8 +1,18 @@
 #include "Menu.hpp"
 
-Menu::Menu() { }
+Menu::Menu() {
+  this->cola = nullptr;
+  this->arbol = nullptr;
+}
 
-Menu::~Menu() { }
+Menu::~Menu() {
+  if (this->cola != nullptr) {
+    this->cola->destruir();
+  }
+  if (this->arbol != nullptr) {
+    this->arbol->Destruir();
+  }
+}
 
 void Menu::run() {
   int opcion;
@@ -10,11 +20,9 @@ void Menu::run() {
     opcion = mostrarPrincipal();
     switch (opcion) {
     case 1:
-      this->cola = new Cola();
       this->runCola();
       break;
     case 2:
-      this->arbol = new ARBOL();
       this->runArbol();
       break;
     case 3:
@@ -33,13 +41,18 @@ void Menu::run() {
 void Menu::runCola() {
   int opcion;
   do {
-    this->mostrarColaActual();
     opcion = mostrarOperadoresCola();
+    int e = 0;
     switch (opcion) {
     case 1:
+      this->cola = new Cola();
       this->cola->iniciar();
       break;
     case 2:
+      if (this->cola == nullptr) {
+        std::cout << "No hay una cola actualmente." << std::endl;
+        break;
+      }
       this->cola->destruir();
       break;
     case 3:
@@ -52,15 +65,13 @@ void Menu::runCola() {
         std::cout << "La cola no está vacía." << std::endl;
       }
       break;
-    case 5: {
-      int e;
+    case 5:
       std::cout << "Ingrese el número a encolar: ";
       std::cin >> e;
       this->cola->encolar(e);
       break;
-    }
     case 6:
-      int e = this->cola->desencolar()->val;
+      e = this->cola->desencolar()->val;
       std::cout << "Elemento desencolado: " << e << std::endl;
       break;
     case 7:
@@ -82,20 +93,23 @@ void Menu::runCola() {
                 << std::endl;
       break;
     case 10:
+      this->mostrarColaActual();
+      break;
+    case 11:
       std::cout << "Saliendo..." << std::endl;
       break;
     default:
       std::cout << "Opción inválida." << std::endl;
       break;
     }
-  } while (opcion != 10);
+  } while (opcion != 11);
 }
 
 void Menu::runArbol() {
   int opcion;
   do {
-    this->mostrarArbolActual();
     opcion = mostrarOperadoresArbol();
+    int n, p, e;
     switch (opcion) {
     case 1:
       this->arbol->Iniciar();
@@ -113,10 +127,7 @@ void Menu::runArbol() {
         std::cout << "El árbol no está vacío." << std::endl;
       }
       break;
-    case 5: {
-      int n;
-      int p;
-      int e;
+    case 5:
       std::cout << "Ingrese el número a agregar: " << std::endl;
       std::cin >> e;
       std::cout << "Ingrese el nodo al que agregar el hijo: " << std::endl;
@@ -126,23 +137,18 @@ void Menu::runArbol() {
       this->arbol->AgregarHijo(this->arbol->BuscarEtiqueta(n), p, e);
       std::cout << "Hijo agregado." << std::endl;
       break;
-    }
     case 6:
-      int e;
       std::cout << "Ingrese el número de la hoja a borrar: \n";
       this->arbol->BorrarHoja(this->arbol->BuscarEtiqueta(e));
       std::cout << "Hoja borrada." << std::endl;
       break;
-    case 7: {
-      int e;
+    case 7:
       std::cout << "Ingrese el número a poner como raíz: ";
       std::cin >> e;
       this->arbol->PonerRaiz(e);
       std::cout << "Raíz puesta." << std::endl;
       break;
-    }
     case 8:
-      int e;
       std::cout
           << "Ingrese el nodo del cuál desea obtener el hijo más izquierdo:";
       std::cin >> e;
@@ -156,7 +162,6 @@ void Menu::runArbol() {
       }
       break;
     case 9:
-      int e;
       std::cout << "Ingrese el nodo del cuál desea obtener el hermano derecho:";
       std::cin >> e;
       if (this->arbol->HermanoDer(this->arbol->BuscarEtiqueta(e)) != nullptr) {
@@ -168,16 +173,13 @@ void Menu::runArbol() {
         std::cout << "El nodo ingresado no tiene hermano derecho." << std::endl;
       }
       break;
-    case 10: {
-      int e;
-      int val;
+    case 10:
       std::cout << "Ingrese el nodo a modificar: ";
-      std::cin >> e;
+      std::cin >> n;
       std::cout << "Ingrese el nuevo valor: ";
-      std::cin >> val;
-      this->arbol->ModificarEtiqueta(this->arbol->BuscarEtiqueta(e), val);
+      std::cin >> e;
+      this->arbol->ModificarEtiqueta(this->arbol->BuscarEtiqueta(n), e);
       break;
-    }
     case 11:
       if (this->arbol->Raiz() == nullptr) {
         std::cout << "El árbol está vacío." << std::endl;
@@ -186,21 +188,19 @@ void Menu::runArbol() {
       }
       break;
     case 12:
-      int nh;
       std::cout << "Ingrese el nodo del cuál desea obtener el padre: ";
-      std::cin >> nh;
-      if (nh == this->arbol->Raiz()->etiqueta) {
+      std::cin >> n;
+      if (n == this->arbol->Raiz()->etiqueta) {
         std::cout << "El nodo ingresado es la raíz. No tiene padre"
                   << std::endl;
       } else {
         std::cout
             << "Padre: "
-            << this->arbol->Padre(this->arbol->BuscarEtiqueta(nh))->etiqueta
+            << this->arbol->Padre(this->arbol->BuscarEtiqueta(n))->etiqueta
             << std::endl;
       }
       break;
     case 13:
-      int e;
       std::cout << "Ingrese el nodo del cuál desea obtener la etiqueta: ";
       std::cin >> e;
       std::cout << "Etiqueta: "
@@ -208,7 +208,6 @@ void Menu::runArbol() {
                 << std::endl;
       break;
     case 14:
-      int p;
       std::cout
           << "Ingrese el nodo del cuál desea obtener el número de hijos: ";
       std::cin >> p;
@@ -217,7 +216,6 @@ void Menu::runArbol() {
                 << std::endl;
       break;
     case 15:
-      int n;
       std::cout << "Ingrese el nodo del cuál desea saber si es hoja: ";
       std::cin >> n;
       if (this->arbol->EsHoja(this->arbol->BuscarEtiqueta(n))) {
@@ -230,13 +228,16 @@ void Menu::runArbol() {
       std::cout << "Número de nodos: " << this->arbol->NumNodos() << std::endl;
       break;
     case 17:
+      this->mostrarArbolActual();
+      break;
+    case 18:
       std::cout << "Saliendo..." << std::endl;
       break;
     default:
       std::cout << "Opción inválida." << std::endl;
       break;
     }
-  } while (opcion != 17);
+  } while (opcion != 18);
 }
 
 int Menu::mostrarPrincipal() {

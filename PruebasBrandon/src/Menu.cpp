@@ -49,6 +49,10 @@ void Menu::runCola() {
       this->cola->iniciar();
       break;
     case 2:
+      if (this->cola == nullptr) {
+        std::cout << "No hay una cola actualmente." << std::endl;
+        break;
+      }
       this->cola->destruir();
       break;
     case 3:
