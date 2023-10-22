@@ -134,7 +134,11 @@ nodoArbol* ArbolHMIHDPADRE::HijoMasIzq(nodoArbol* nodo) {
 }
 
 nodoArbol* ArbolHMIHDPADRE::HermanoDer(nodoArbol* nodo) {
-  return nodo->hermanoDer;
+  if(nodo->ultimoHIjo == true){
+    return nullptr;
+  } else {
+    return nodo->hermanoDer;
+  }
 }
 
 int64_t ArbolHMIHDPADRE::Etiqueta(nodoArbol* nodo) { return nodo->etiqueta; }
@@ -160,31 +164,6 @@ bool ArbolHMIHDPADRE::EsHoja(nodoArbol* nodo) {
 }
 
 int64_t ArbolHMIHDPADRE::NumNodos() { return this->contadorNodos; }
-
-nodoArbol* ArbolHMIHDPADRE::BuscarEtiqueta(int64_t etiqueta) {
-  bool nodoEncontrado = false;
-  std::queue<nodoArbol*> cola;
-  cola.push(Raiz());
-  while (!cola.empty() && !nodoEncontrado) {
-    nodoArbol* nodoActual = cola.front();
-    cola.pop();
-    if (nodoActual->etiqueta == etiqueta) {
-      nodoEncontrado = true;
-      return nodoActual;
-    }
-
-    nodoArbol* nodoHijo = nodoActual->hijoMasIzq;
-    while (nodoHijo != nullptr && !nodoEncontrado
-        && nodoHijo->ultimoHIjo == false) {
-      cola.push(nodoHijo);
-      nodoHijo = nodoHijo->hermanoDer;
-    }
-    if (nodoHijo != nullptr && !nodoEncontrado) {
-      cola.push(nodoHijo);
-    }
-  }
-  return nullptr;
-}
 
 nodoArbol* ArbolHMIHDPADRE::crearNodo(int64_t etiqueta) {
   nodoArbol* nodo = new nodoArbol();

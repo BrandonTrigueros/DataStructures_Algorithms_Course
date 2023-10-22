@@ -49,10 +49,10 @@ void Menu::runCola() {
   do {
     opcion = mostrarOperadoresCola();
     int e = 0;
-    Cola::queueNode* desencolado = nullptr;
+    Cola<int64_t>::queueNode* desencolado = nullptr;
     switch (opcion) {
     case 1:
-      this->cola = new Cola();
+      this->cola = new Cola<int64_t>();
       this->cola->iniciar();
       break;
     case 2:
@@ -195,7 +195,7 @@ void Menu::runArbol() {
         std::cin >> n;
         std::cout << "Ingrese la posición del hijo: ";
         std::cin >> p;
-        this->arbol->AgregarHijo(this->arbol->BuscarEtiqueta(n), p, e);
+        this->arbol->AgregarHijo(this->BuscarNodo(this->arbol,n), p, e);
         std::cout << "Hijo agregado." << std::endl;
       }
       break;
@@ -205,7 +205,7 @@ void Menu::runArbol() {
       } else {
         std::cout << "Ingrese el número de la hoja a borrar: ";
         std::cin >> e;
-        this->arbol->BorrarHoja(this->arbol->BuscarEtiqueta(e));
+        this->arbol->BorrarHoja(this->BuscarNodo(this->arbol,e));
         std::cout << "Hoja borrada." << std::endl;
       }
       break;
@@ -226,10 +226,10 @@ void Menu::runArbol() {
         std::cout
             << "Ingrese el nodo del cuál desea obtener el hijo más izquierdo: ";
         std::cin >> e;
-        if (this->arbol->HijoMasIzq(this->arbol->BuscarEtiqueta(e))
+        if (this->arbol->HijoMasIzq(this->BuscarNodo(this->arbol,e))
             != nullptr) {
           std::cout << "Hijo más izquierdo: "
-                    << this->arbol->HijoMasIzq(this->arbol->BuscarEtiqueta(e))
+                    << this->arbol->HijoMasIzq(this->BuscarNodo(this->arbol,e))
                            ->etiqueta
                     << std::endl;
         } else {
@@ -244,10 +244,10 @@ void Menu::runArbol() {
         std::cout
             << "Ingrese el nodo del cuál desea obtener el hermano derecho: ";
         std::cin >> e;
-        if (this->arbol->HermanoDer(this->arbol->BuscarEtiqueta(e))
+        if (this->arbol->HermanoDer(this->BuscarNodo(this->arbol,e))
             != nullptr) {
           std::cout << "Hermano derecho: "
-                    << this->arbol->HermanoDer(this->arbol->BuscarEtiqueta(e))
+                    << this->arbol->HermanoDer(this->BuscarNodo(this->arbol,e))
                            ->etiqueta
                     << std::endl;
         } else {
@@ -264,7 +264,7 @@ void Menu::runArbol() {
         std::cin >> n;
         std::cout << "Ingrese el nuevo valor: ";
         std::cin >> e;
-        this->arbol->ModificarEtiqueta(this->arbol->BuscarEtiqueta(n), e);
+        this->arbol->ModificarEtiqueta(this->BuscarNodo(this->arbol,n), e);
       }
       break;
     case 11:
@@ -286,7 +286,7 @@ void Menu::runArbol() {
         } else {
           std::cout
               << "Padre: "
-              << this->arbol->Padre(this->arbol->BuscarEtiqueta(n))->etiqueta
+              << this->arbol->Padre(this->BuscarNodo(this->arbol,n))->etiqueta
               << std::endl;
         }
       }
@@ -298,7 +298,7 @@ void Menu::runArbol() {
         std::cout << "Ingrese el nodo del cuál desea obtener la etiqueta: ";
         std::cin >> e;
         std::cout << "Etiqueta: "
-                  << this->arbol->Etiqueta(this->arbol->BuscarEtiqueta(e))
+                  << this->arbol->Etiqueta(this->BuscarNodo(this->arbol,e))
                   << std::endl;
       }
       break;
@@ -310,7 +310,7 @@ void Menu::runArbol() {
             << "Ingrese el nodo del cuál desea obtener el número de hijos: ";
         std::cin >> p;
         std::cout << "Número de hijos: "
-                  << this->arbol->NumHijos(this->arbol->BuscarEtiqueta(p))
+                  << this->arbol->NumHijos(this->BuscarNodo(this->arbol,p))
                   << std::endl;
       }
       break;
@@ -320,7 +320,7 @@ void Menu::runArbol() {
       } else {
         std::cout << "Ingrese el nodo del cuál desea saber si es hoja: ";
         std::cin >> n;
-        if (this->arbol->EsHoja(this->arbol->BuscarEtiqueta(n))) {
+        if (this->arbol->EsHoja(this->BuscarNodo(this->arbol,n))) {
           std::cout << "El nodo es una hoja." << std::endl;
         } else {
           std::cout << "El nodo no es una hoja." << std::endl;
@@ -397,4 +397,29 @@ void Menu::mostrarArbolActual() {
     return;
   }
   this->arbol->Imprimir();
+}
+
+// -----------------------------
+// -----ALGORITMOS ETAPA 3------
+// -----------------------------
+
+NODO* Menu::BuscarNodo(ARBOL* a, int64_t etiqueta) {
+  bool nodoEncontrado = false;
+  Cola<NODO*> colaNodo;
+  colaNodo.iniciar();
+  colaNodo.encolar(a->Raiz());
+  while (!colaNodo.vacia() && !nodoEncontrado) {
+    NODO* nodoActual = colaNodo.desencolar()->val;
+    if (nodoActual->etiqueta == etiqueta) {
+      nodoEncontrado = true;
+      return nodoActual;
+    }
+
+    nodoArbol* nodoHijo = nodoActual->hijoMasIzq;
+    while (nodoHijo != nullptr && !nodoEncontrado) {
+      colaNodo.encolar(nodoHijo);
+      nodoHijo = nodoHijo->hermanoDer;
+    }
+  }
+  return nullptr;
 }

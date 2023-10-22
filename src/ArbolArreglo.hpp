@@ -37,11 +37,10 @@ class ArbolArreglo {
   bool EsHoja(nodo* nodo);
   int64_t NumNodos();
 
-  nodo* BuscarEtiqueta(int64_t etiqueta);
-
   void Imprimir();
 };
 
 #define ARBOL ArbolArreglo
+#define NODO nodo
 
 #endif  // ARBOLARREGLO_HPP

@@ -44,16 +44,7 @@ bool ArbolListaDeListas::Vacio() {
   }
   return true;
 }
-ListaPrincipal* ArbolListaDeListas::BuscarEtiqueta(int64_t etiqueta) {
-  ListaPrincipal* iterator = this->raiz;
-  while (iterator != nullptr) {
-    if (iterator->etiqueta == etiqueta) {
-      return iterator;
-    }
-    iterator = iterator->sigM;
-  }
-  return nullptr;
-}
+
 
 ListaPrincipal* ArbolListaDeListas::HijoMasIzq(ListaPrincipal* nodo) {
   return nodo->primero->hijo;

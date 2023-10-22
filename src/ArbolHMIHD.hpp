@@ -40,13 +40,13 @@ class ArbolHMIHD {
   int64_t NumHijos(nodoArbol* nodo);
   bool EsHoja(nodoArbol* nodo);
   int64_t NumNodos();
-
-  nodoArbol* BuscarEtiqueta(int64_t etiqueta);
+  
   nodoArbol* crearNodo(int64_t etiqueta);
 
   void Imprimir();
 };
 
 #define ARBOL ArbolHMIHD
+#define NODO nodoArbol
 
 #endif  // ARBOLHMIHD_HPP

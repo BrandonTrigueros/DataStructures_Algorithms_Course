@@ -158,15 +158,6 @@ bool ArbolArreglo::EsHoja(nodo* nodo) {
 
 int64_t ArbolArreglo::NumNodos() { return this->ultimoLleno + 1; }
 
-nodo* ArbolArreglo::BuscarEtiqueta(int64_t etiqueta) {
-  for (int64_t i = 0; i <= this->ultimoLleno; i++) {
-    if (this->arreglo[i].etiqueta == etiqueta) {
-      return &this->arreglo[i];
-    }
-  }
-  return nullptr;
-}
-
 void ArbolArreglo::Imprimir() {
   for (int64_t i = 0; i <= this->ultimoLleno; i++) {
     if (this->arreglo[i].padre == -1) {

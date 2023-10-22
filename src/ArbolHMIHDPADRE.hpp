@@ -42,12 +42,12 @@ class ArbolHMIHDPADRE {
   bool EsHoja(nodoArbol* nodo);
   int64_t NumNodos();
 
-  nodoArbol* BuscarEtiqueta(int64_t etiqueta);
   nodoArbol* crearNodo(int64_t etiqueta);
 
   void Imprimir();
 };
 
 #define ARBOL ArbolHMIHDPADRE
+#define NODO nodoArbol
 
 #endif  // ARBOLHMIHDPADRE_HPP

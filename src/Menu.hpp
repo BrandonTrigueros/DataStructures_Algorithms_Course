@@ -1,12 +1,13 @@
 #ifndef MENU_HPP
 #define MENU_HPP
 
+#include <cstdint>
 #include <iostream>
 #include <string>
 
-#include "ArbolArreglo.hpp"
+// #include "ArbolArreglo.hpp"
 // #include "ArbolListaDeListas.hpp"
-// #include "ArbolHMIHD.hpp"
+#include "ArbolHMIHD.hpp"
 // #include "ArbolHMIHDPADRE.hpp"
 #include "Cola.hpp"
 
@@ -56,7 +57,7 @@
 
 class Menu {
  private:
-  Cola* cola;
+  Cola<int64_t>* cola;
   ARBOL* arbol;
 
  public:
@@ -73,6 +74,23 @@ class Menu {
   void mostrarCreditos();
   void mostrarColaActual();
   void mostrarArbolActual();
+  
+  // Algoritmos
+  NODO* BuscarNodo(ARBOL* a, int64_t etiqueta);
+  
+  NODO* HermanoIzquierdo(ARBOL* a, NODO* n);
+  bool EtiquetasRepetidas(ARBOL* a);
+  int64_t AlturaNodo(ARBOL* a, NODO* n);
+  int64_t ProfundidadNodo(ARBOL* a, NODO* n);
+  int64_t NivelesArbolPreOrden(ARBOL* a);
+  int64_t NivelesArbolNiveles(ARBOL* a);
+  void ListarEtiquetasNivel_I(ARBOL* a, int64_t i);
+
+  void ListarArbolPreOrden(ARBOL* a);
+  void ListarArbolNiveles(ARBOL* a);
+  bool BuscarEtiqueta(ARBOL* a, NODO* n);
+  void BorrarSubArbol(ARBOL* a, NODO* n);
+  void ListarHijosNodos(ARBOL* a, NODO* n);
 };
 
 #endif  // MENU_HPP

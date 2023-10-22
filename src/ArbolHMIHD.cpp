@@ -152,27 +152,6 @@ bool ArbolHMIHD::EsHoja(nodoArbol* nodo) {
 
 int64_t ArbolHMIHD::NumNodos() { return this->contadorNodos; }
 
-nodoArbol* ArbolHMIHD::BuscarEtiqueta(int64_t etiqueta) {
-  bool nodoEncontrado = false;
-  std::queue<nodoArbol*> cola;
-  cola.push(Raiz());
-  while (!cola.empty() && !nodoEncontrado) {
-    nodoArbol* nodoActual = cola.front();
-    cola.pop();
-    if (nodoActual->etiqueta == etiqueta) {
-      nodoEncontrado = true;
-      return nodoActual;
-    }
-
-    nodoArbol* nodoHijo = nodoActual->hijoMasIzq;
-    while (nodoHijo != nullptr && !nodoEncontrado) {
-      cola.push(nodoHijo);
-      nodoHijo = nodoHijo->hermanoDer;
-    }
-  }
-  return nullptr;
-}
-
 nodoArbol* ArbolHMIHD::crearNodo(int64_t etiqueta) {
   nodoArbol* nodo = new nodoArbol();
   nodo->etiqueta = etiqueta;
