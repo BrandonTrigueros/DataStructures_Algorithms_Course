@@ -49,7 +49,6 @@ void Menu::runCola() {
   do {
     opcion = mostrarOperadoresCola();
     int e = 0;
-    Cola<int64_t>::queueNode* desencolado = nullptr;
     switch (opcion) {
     case 1:
       this->cola = new Cola<int64_t>();
@@ -96,9 +95,7 @@ void Menu::runCola() {
         std::cout << "No hay una cola actualmente." << std::endl;
         break;
       }
-      desencolado = this->cola->desencolar();
-      std::cout << "Elemento desencolado: " << desencolado->val << std::endl;
-      delete desencolado;
+      std::cout << "Elemento desencolado: " << cola->desencolar() << std::endl;
       break;
     case 7:
       if (this->cola == nullptr) {
@@ -405,21 +402,86 @@ void Menu::mostrarArbolActual() {
 
 NODO* Menu::BuscarNodo(ARBOL* a, int64_t etiqueta) {
   bool nodoEncontrado = false;
+  NODO* nodoActual = nullptr;
   Cola<NODO*> colaNodo;
   colaNodo.iniciar();
   colaNodo.encolar(a->Raiz());
   while (!colaNodo.vacia() && !nodoEncontrado) {
-    NODO* nodoActual = colaNodo.desencolar()->val;
+    nodoActual = colaNodo.desencolar();
     if (nodoActual->etiqueta == etiqueta) {
       nodoEncontrado = true;
+      colaNodo.destruir();
       return nodoActual;
     }
 
-    nodoArbol* nodoHijo = nodoActual->hijoMasIzq;
+    NODO* nodoHijo = a->HijoMasIzq(nodoActual);
     while (nodoHijo != nullptr && !nodoEncontrado) {
       colaNodo.encolar(nodoHijo);
-      nodoHijo = nodoHijo->hermanoDer;
+      nodoHijo = a->HermanoDer(nodoHijo);
     }
   }
+  colaNodo.destruir();
   return nullptr;
+}
+
+NODO* Menu::HermanoIzquierdo(ARBOL* a, NODO* n) {
+  if (a->Raiz() == n) {
+    return nullptr;
+  }
+  NODO* nodoActual = nullptr;
+  NODO* nodoHermanoIzquierdo= nullptr;
+  Cola<NODO*> colaNodo;
+  colaNodo.iniciar();
+  colaNodo.encolar(a->Raiz());
+  while (!colaNodo.vacia()) {
+    nodoActual = colaNodo.desencolar();
+    NODO* nodoHijo = a->HijoMasIzq(nodoActual);
+    if (nodoHijo == n) {
+      colaNodo.destruir();
+      return nullptr;
+    }
+    while (nodoHijo != nullptr) {
+      colaNodo.encolar(nodoHijo);
+      nodoHermanoIzquierdo = nodoHijo;
+      nodoHijo = a->HermanoDer(nodoHijo);
+      if (nodoHijo == n) {
+        colaNodo.destruir();
+        return nodoHermanoIzquierdo;
+      }
+    }
+  }
+  colaNodo.destruir();
+  return nullptr;
+}
+
+bool Menu::EtiquetasRepetidas(ARBOL* a) {
+  bool etiquetasRepetidas = false;
+  if(!a->Vacio()) {
+    NODO* nodoActual = nullptr;
+    NODO* nodoHijo = nullptr;
+    Cola<NODO*> colaNodo;
+    colaNodo.iniciar();
+    std::map<std::int64_t, bool> diccionario;
+    colaNodo.encolar(a->Raiz());
+    diccionario[a->Etiqueta(a->Raiz())] = true;
+    while (!colaNodo.vacia() && etiquetasRepetidas != true) {
+        nodoActual = colaNodo.desencolar();
+        nodoHijo= a->HijoMasIzq(nodoActual);
+        while (nodoHijo != nullptr) {
+          colaNodo.encolar(nodoHijo);
+          if(diccionario.find(a->Etiqueta(nodoHijo)) != diccionario.end()) {
+              etiquetasRepetidas = true;
+          } else {
+              diccionario[a->Etiqueta(nodoHijo)] = true;
+              nodoHijo = a->HermanoDer(nodoHijo);
+          }
+        }
+    }
+    colaNodo.destruir();
+  }
+  return etiquetasRepetidas;
+}
+
+int64_t Menu::AlturaNodo(ARBOL* a, NODO* n) {
+  
 }

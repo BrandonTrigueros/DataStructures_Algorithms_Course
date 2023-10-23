@@ -17,10 +17,7 @@ class Cola {
       : frenteCola(frenteCola)
       , finalCola(finalCola) {};
 
-  ~Cola() {
-    free(this->frenteCola);
-    free(this->finalCola);
-  };
+  ~Cola() {};
 
   inline void iniciar() { this->frenteCola = this->finalCola = nullptr; }
 
@@ -63,11 +60,9 @@ class Cola {
     }
   }
 
-  queueNode* desencolar() {
+  DataType desencolar() {
     queueNode* toDelete = this->frenteCola;
-    queueNode* toReturn = new queueNode();
-    toReturn->val = toDelete->val;
-    toReturn->next = nullptr;
+    DataType toReturn = toDelete->val;
 
     if (this->finalCola == this->frenteCola) {
       this->finalCola = nullptr;
