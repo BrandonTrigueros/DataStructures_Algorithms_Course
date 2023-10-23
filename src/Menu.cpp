@@ -1,4 +1,5 @@
 #include "Menu.hpp"
+#include <cstdint>
 
 Menu::Menu() {
   this->cola = nullptr;
@@ -482,6 +483,28 @@ bool Menu::EtiquetasRepetidas(ARBOL* a) {
   return etiquetasRepetidas;
 }
 
-int64_t Menu::AlturaNodo(ARBOL* a, NODO* n) {
-  
+int64_t ProfundidadNodoAux(ARBOL* t, NODO* a, NODO* n, int64_t i) {
+  NODO* NodoActual = t->HijoMasIzq(a);
+    if (a == n) {
+        return i;
+    } else {
+        while (NodoActual != nullptr) {
+            ProfundidadNodoAux(t, NodoActual, n, i+1);
+            NodoActual = t->HermanoDer(NodoActual);
+        }
+    }
+    return 0;
 }
+
+int64_t Menu::ProfundidadNodo(ARBOL* a, NODO* n) {
+    if (a->Raiz() == nullptr) {
+        return 0;
+    }
+    if (a->Raiz() == n) {
+        return 1;
+    }
+    int64_t Profundidad = ProfundidadNodoAux(a, a->Raiz(), n, 1);
+    return Profundidad;
+}
+
+
