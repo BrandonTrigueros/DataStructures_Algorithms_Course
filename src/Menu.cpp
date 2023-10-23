@@ -465,17 +465,17 @@ bool Menu::EtiquetasRepetidas(ARBOL* a) {
     colaNodo.encolar(a->Raiz());
     diccionario[a->Etiqueta(a->Raiz())] = true;
     while (!colaNodo.vacia() && etiquetasRepetidas != true) {
-        nodoActual = colaNodo.desencolar();
-        nodoHijo= a->HijoMasIzq(nodoActual);
-        while (nodoHijo != nullptr) {
-          colaNodo.encolar(nodoHijo);
-          if(diccionario.find(a->Etiqueta(nodoHijo)) != diccionario.end()) {
-              etiquetasRepetidas = true;
-          } else {
-              diccionario[a->Etiqueta(nodoHijo)] = true;
-              nodoHijo = a->HermanoDer(nodoHijo);
-          }
+      nodoActual = colaNodo.desencolar();
+      nodoHijo= a->HijoMasIzq(nodoActual);
+      while (nodoHijo != nullptr) {
+        colaNodo.encolar(nodoHijo);
+        if(diccionario.find(a->Etiqueta(nodoHijo)) != diccionario.end()) {
+            etiquetasRepetidas = true;
+        } else {
+            diccionario[a->Etiqueta(nodoHijo)] = true;
+            nodoHijo = a->HermanoDer(nodoHijo);
         }
+      }
     }
     colaNodo.destruir();
   }
