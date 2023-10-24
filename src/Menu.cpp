@@ -1,4 +1,5 @@
 #include "Menu.hpp"
+
 #include <cstdint>
 
 Menu::Menu() {
@@ -193,7 +194,7 @@ void Menu::runArbol() {
         std::cin >> n;
         std::cout << "Ingrese la posición del hijo: ";
         std::cin >> p;
-        this->arbol->AgregarHijo(this->BuscarNodo(this->arbol,n), p, e);
+        this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, n), p, e);
         std::cout << "Hijo agregado." << std::endl;
       }
       break;
@@ -203,7 +204,7 @@ void Menu::runArbol() {
       } else {
         std::cout << "Ingrese el número de la hoja a borrar: ";
         std::cin >> e;
-        this->arbol->BorrarHoja(this->BuscarNodo(this->arbol,e));
+        this->arbol->BorrarHoja(this->BuscarNodo(this->arbol, e));
         std::cout << "Hoja borrada." << std::endl;
       }
       break;
@@ -224,10 +225,10 @@ void Menu::runArbol() {
         std::cout
             << "Ingrese el nodo del cuál desea obtener el hijo más izquierdo: ";
         std::cin >> e;
-        if (this->arbol->HijoMasIzq(this->BuscarNodo(this->arbol,e))
+        if (this->arbol->HijoMasIzq(this->BuscarNodo(this->arbol, e))
             != nullptr) {
           std::cout << "Hijo más izquierdo: "
-                    << this->arbol->HijoMasIzq(this->BuscarNodo(this->arbol,e))
+                    << this->arbol->HijoMasIzq(this->BuscarNodo(this->arbol, e))
                            ->etiqueta
                     << std::endl;
         } else {
@@ -242,10 +243,10 @@ void Menu::runArbol() {
         std::cout
             << "Ingrese el nodo del cuál desea obtener el hermano derecho: ";
         std::cin >> e;
-        if (this->arbol->HermanoDer(this->BuscarNodo(this->arbol,e))
+        if (this->arbol->HermanoDer(this->BuscarNodo(this->arbol, e))
             != nullptr) {
           std::cout << "Hermano derecho: "
-                    << this->arbol->HermanoDer(this->BuscarNodo(this->arbol,e))
+                    << this->arbol->HermanoDer(this->BuscarNodo(this->arbol, e))
                            ->etiqueta
                     << std::endl;
         } else {
@@ -262,7 +263,7 @@ void Menu::runArbol() {
         std::cin >> n;
         std::cout << "Ingrese el nuevo valor: ";
         std::cin >> e;
-        this->arbol->ModificarEtiqueta(this->BuscarNodo(this->arbol,n), e);
+        this->arbol->ModificarEtiqueta(this->BuscarNodo(this->arbol, n), e);
       }
       break;
     case 11:
@@ -284,7 +285,7 @@ void Menu::runArbol() {
         } else {
           std::cout
               << "Padre: "
-              << this->arbol->Padre(this->BuscarNodo(this->arbol,n))->etiqueta
+              << this->arbol->Padre(this->BuscarNodo(this->arbol, n))->etiqueta
               << std::endl;
         }
       }
@@ -296,7 +297,7 @@ void Menu::runArbol() {
         std::cout << "Ingrese el nodo del cuál desea obtener la etiqueta: ";
         std::cin >> e;
         std::cout << "Etiqueta: "
-                  << this->arbol->Etiqueta(this->BuscarNodo(this->arbol,e))
+                  << this->arbol->Etiqueta(this->BuscarNodo(this->arbol, e))
                   << std::endl;
       }
       break;
@@ -308,7 +309,7 @@ void Menu::runArbol() {
             << "Ingrese el nodo del cuál desea obtener el número de hijos: ";
         std::cin >> p;
         std::cout << "Número de hijos: "
-                  << this->arbol->NumHijos(this->BuscarNodo(this->arbol,p))
+                  << this->arbol->NumHijos(this->BuscarNodo(this->arbol, p))
                   << std::endl;
       }
       break;
@@ -318,7 +319,7 @@ void Menu::runArbol() {
       } else {
         std::cout << "Ingrese el nodo del cuál desea saber si es hoja: ";
         std::cin >> n;
-        if (this->arbol->EsHoja(this->BuscarNodo(this->arbol,n))) {
+        if (this->arbol->EsHoja(this->BuscarNodo(this->arbol, n))) {
           std::cout << "El nodo es una hoja." << std::endl;
         } else {
           std::cout << "El nodo no es una hoja." << std::endl;
@@ -430,7 +431,7 @@ NODO* Menu::HermanoIzquierdo(ARBOL* a, NODO* n) {
     return nullptr;
   }
   NODO* nodoActual = nullptr;
-  NODO* nodoHermanoIzquierdo= nullptr;
+  NODO* nodoHermanoIzquierdo = nullptr;
   Cola<NODO*> colaNodo;
   colaNodo.iniciar();
   colaNodo.encolar(a->Raiz());
@@ -457,7 +458,7 @@ NODO* Menu::HermanoIzquierdo(ARBOL* a, NODO* n) {
 
 bool Menu::EtiquetasRepetidas(ARBOL* a) {
   bool etiquetasRepetidas = false;
-  if(!a->Vacio()) {
+  if (!a->Vacio()) {
     NODO* nodoActual = nullptr;
     NODO* nodoHijo = nullptr;
     Cola<NODO*> colaNodo;
@@ -467,14 +468,14 @@ bool Menu::EtiquetasRepetidas(ARBOL* a) {
     diccionario[a->Etiqueta(a->Raiz())] = true;
     while (!colaNodo.vacia() && etiquetasRepetidas != true) {
       nodoActual = colaNodo.desencolar();
-      nodoHijo= a->HijoMasIzq(nodoActual);
+      nodoHijo = a->HijoMasIzq(nodoActual);
       while (nodoHijo != nullptr) {
         colaNodo.encolar(nodoHijo);
-        if(diccionario.find(a->Etiqueta(nodoHijo)) != diccionario.end()) {
-            etiquetasRepetidas = true;
+        if (diccionario.find(a->Etiqueta(nodoHijo)) != diccionario.end()) {
+          etiquetasRepetidas = true;
         } else {
-            diccionario[a->Etiqueta(nodoHijo)] = true;
-            nodoHijo = a->HermanoDer(nodoHijo);
+          diccionario[a->Etiqueta(nodoHijo)] = true;
+          nodoHijo = a->HermanoDer(nodoHijo);
         }
       }
     }
@@ -485,26 +486,24 @@ bool Menu::EtiquetasRepetidas(ARBOL* a) {
 
 int64_t ProfundidadNodoAux(ARBOL* t, NODO* a, NODO* n, int64_t i) {
   NODO* NodoActual = t->HijoMasIzq(a);
-    if (a == n) {
-        return i;
-    } else {
-        while (NodoActual != nullptr) {
-            ProfundidadNodoAux(t, NodoActual, n, i+1);
-            NodoActual = t->HermanoDer(NodoActual);
-        }
+  if (a == n) {
+    return i;
+  } else {
+    while (NodoActual != nullptr) {
+      ProfundidadNodoAux(t, NodoActual, n, i + 1);
+      NodoActual = t->HermanoDer(NodoActual);
     }
-    return 0;
+  }
+  return 0;
 }
 
 int64_t Menu::ProfundidadNodo(ARBOL* a, NODO* n) {
-    if (a->Raiz() == nullptr) {
-        return 0;
-    }
-    if (a->Raiz() == n) {
-        return 1;
-    }
-    int64_t Profundidad = ProfundidadNodoAux(a, a->Raiz(), n, 1);
-    return Profundidad;
+  if (a->Raiz() == nullptr) {
+    return 0;
+  }
+  if (a->Raiz() == n) {
+    return 1;
+  }
+  int64_t Profundidad = ProfundidadNodoAux(a, a->Raiz(), n, 1);
+  return Profundidad;
 }
-
-

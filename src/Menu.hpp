@@ -1,16 +1,16 @@
 #ifndef MENU_HPP
 #define MENU_HPP
 
-#include <cstdint>
-#include <iostream>
-#include <string>
-#include <map>
-
-// #include "ArbolArreglo.hpp"
- #include "ArbolListaDeListas.hpp"
+#include "ArbolArreglo.hpp"
+// #include "ArbolListaDeListas.hpp"
 // #include "ArbolHMIHD.hpp"
 // #include "ArbolHMIHDPADRE.hpp"
 #include "Cola.hpp"
+
+#include <cstdint>
+#include <iostream>
+#include <map>
+#include <string>
 
 #define OPCIONES_PRINCIPAL                                                        \
   "╔═══════════════════════╗\n" \
@@ -75,10 +75,10 @@ class Menu {
   void mostrarCreditos();
   void mostrarColaActual();
   void mostrarArbolActual();
-  
+
   // Algoritmos
   NODO* BuscarNodo(ARBOL* a, int64_t etiqueta);
-  
+
   NODO* HermanoIzquierdo(ARBOL* a, NODO* n);
   bool EtiquetasRepetidas(ARBOL* a);
   int64_t AlturaNodo(ARBOL* a, NODO* n);

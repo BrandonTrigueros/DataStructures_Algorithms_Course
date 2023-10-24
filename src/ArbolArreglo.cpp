@@ -28,16 +28,17 @@ nodo* ArbolArreglo::AgregarHijo(
   while (this->arreglo[indicePadre].etiqueta != padre->etiqueta) {
     indicePadre++;
   }
-  int64_t posCorrimiento;
+  int64_t posCorrimiento = 0;
+  // Si me piden agregarlo como ultimo hijo
   if (numHijo == this->NumHijos(padre) + 1) {
     this->arreglo[this->ultimoLleno + 1].etiqueta = etiquetaHijo;
     this->arreglo[this->ultimoLleno + 1].padre = indicePadre;
     this->ultimoLleno++;
     posCorrimiento = this->ultimoLleno;
   } else {
-    posCorrimiento = 0;
+    posCorrimiento = indicePadre + 1;
     int64_t hijosEncontrados = 0;
-    while (hijosEncontrados < numHijo) {
+    while (hijosEncontrados < numHijo - 1) {
       if (this->arreglo[posCorrimiento].padre == indicePadre) {
         hijosEncontrados++;
       }
@@ -82,10 +83,14 @@ nodo* ArbolArreglo::HijoMasIzq(nodo* nodo) {
     indicePadre++;
   }
   int64_t indiceHijo = indicePadre + 1;
-  while (this->arreglo[indiceHijo].padre != indicePadre) {
+  while (indiceHijo <= this->ultimoLleno
+      && this->arreglo[indiceHijo].padre != indicePadre) {
     indiceHijo++;
   }
-  return &this->arreglo[indiceHijo];
+  if (indiceHijo <= this->ultimoLleno) {
+    return &this->arreglo[indiceHijo];
+  }
+  return nullptr;
 }
 
 nodo* ArbolArreglo::HermanoDer(nodo* nodo) {
@@ -94,11 +99,14 @@ nodo* ArbolArreglo::HermanoDer(nodo* nodo) {
     indiceNodo++;
   }
   int64_t indiceHermDer = indiceNodo + 1;
-  while (
-      this->arreglo[indiceHermDer].padre != this->arreglo[indiceNodo].padre) {
+  while (indiceHermDer <= this->ultimoLleno
+      && this->arreglo[indiceHermDer].padre != nodo->padre) {
     indiceHermDer++;
   }
-  return &this->arreglo[indiceHermDer];
+  if (indiceHermDer <= this->ultimoLleno) {
+    return &this->arreglo[indiceHermDer];
+  }
+  return nullptr;
 }
 
 void ArbolArreglo::ModificarEtiqueta(nodo* nodo, int64_t etiqueta) {
@@ -111,14 +119,7 @@ void ArbolArreglo::ModificarEtiqueta(nodo* nodo, int64_t etiqueta) {
 
 nodo* ArbolArreglo::Raiz() { return &this->arreglo[0]; }
 
-nodo* ArbolArreglo::Padre(nodo* nodo) {
-  int64_t indiceNodo = 0;
-  while (this->arreglo[indiceNodo].etiqueta != nodo->etiqueta) {
-    indiceNodo++;
-  }
-  int64_t indicePadre = this->arreglo[indiceNodo].padre;
-  return &this->arreglo[indicePadre];
-}
+nodo* ArbolArreglo::Padre(nodo* nodo) { return &this->arreglo[nodo->padre]; }
 
 int64_t ArbolArreglo::Etiqueta(nodo* nodo) {
   int64_t indiceNodo = 0;
@@ -164,7 +165,8 @@ void ArbolArreglo::Imprimir() {
       std::cout << "[E: " << this->arreglo[i].etiqueta << "|P: NULL] ";
     } else {
       std::cout << "[E: " << this->arreglo[i].etiqueta
-                << "|P: " << this->arreglo[i].padre << "] ";
+                << "|P: " << this->arreglo[this->arreglo[i].padre].etiqueta
+                << "] ";
     }
   }
   std::cout << std::endl;
