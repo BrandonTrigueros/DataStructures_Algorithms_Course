@@ -162,11 +162,11 @@ int64_t ArbolArreglo::NumNodos() { return this->ultimoLleno + 1; }
 void ArbolArreglo::Imprimir() {
   for (int64_t i = 0; i <= this->ultimoLleno; i++) {
     if (this->arreglo[i].padre == -1) {
-      std::cout << "[E: " << this->arreglo[i].etiqueta << "|P: NULL] ";
+      std::cout << "[" << this->arreglo[i].etiqueta << "|P: NULL] ";
     } else {
-      std::cout << "[E: " << this->arreglo[i].etiqueta
+      std::cout << "[" << this->arreglo[i].etiqueta
                 << "|P: " << this->arreglo[this->arreglo[i].padre].etiqueta
-                << "] ";
+                << "] - ";
     }
   }
   std::cout << std::endl;

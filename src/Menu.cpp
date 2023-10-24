@@ -20,27 +20,46 @@ Menu::~Menu() {
 // ----------MENU PRINCIPAL----------
 // ----------------------------------
 void Menu::run() {
-  int opcion;
-  do {
-    opcion = mostrarPrincipal();
-    switch (opcion) {
-    case 1:
-      this->runCola();
-      break;
-    case 2:
-      this->runArbol();
-      break;
-    case 3:
-      mostrarCreditos();
-      break;
-    case 4:
-      std::cout << "Saliendo..." << std::endl;
-      break;
-    default:
-      std::cout << "Opción inválida." << std::endl;
-      break;
-    }
-  } while (opcion != 4);
+  this->arbol = new ARBOL;
+  this->arbol->Iniciar();
+  this->arbol->PonerRaiz(1);
+  NODO* hijo2 = this->arbol->AgregarHijo(this->arbol->Raiz(), 1, 2);
+  NODO* hijo3 = this->arbol->AgregarHijo(this->arbol->Raiz(), 2, 3);
+  NODO* hijo4 = this->arbol->AgregarHijo(hijo2, 1, 4);
+  NODO* hijo5 = this->arbol->AgregarHijo(hijo2, 2, 5);
+  NODO* hijo6 = this->arbol->AgregarHijo(hijo3, 1, 6);
+  NODO* hijo7 = this->arbol->AgregarHijo(hijo6, 1, 7);
+  NODO* hijo8 = this->arbol->AgregarHijo(hijo7, 1, 8);
+  NODO* hijo9 = this->arbol->AgregarHijo(hijo2, 2, 9);
+  NODO* hijo10 = this->arbol->AgregarHijo(hijo9, 1, 10);
+  NODO* hijo11 = this->arbol->AgregarHijo(hijo9, 2, 11);
+  NODO* hijo12 = this->arbol->AgregarHijo(hijo11, 1, 12);
+  NODO* hijo13 = this->arbol->AgregarHijo(hijo12, 1, 13);
+
+  std::cout << "Niveles: " << this->NivelesArbolNiveles(this->arbol)
+            << std::endl;
+
+  // int opcion;
+  // do {
+  //   opcion = mostrarPrincipal();
+  //   switch (opcion) {
+  //   case 1:
+  //     this->runCola();
+  //     break;
+  //   case 2:
+  //     this->runArbol();
+  //     break;
+  //   case 3:
+  //     mostrarCreditos();
+  //     break;
+  //   case 4:
+  //     std::cout << "Saliendo..." << std::endl;
+  //     break;
+  //   default:
+  //     std::cout << "Opción inválida." << std::endl;
+  //     break;
+  //   }
+  // } while (opcion != 4);
 }
 
 // -----------------------------
@@ -506,4 +525,52 @@ int64_t Menu::ProfundidadNodo(ARBOL* a, NODO* n) {
   }
   int64_t Profundidad = ProfundidadNodoAux(a, a->Raiz(), n, 1);
   return Profundidad;
+}
+
+void NivelesArbolPreOrdenAux(ARBOL* a, NODO* n, int64_t i, int64_t& niveles) {
+  if (i > niveles) {
+    niveles = i;
+  }
+  NODO* nodoHijo = a->HijoMasIzq(n);
+  if (nodoHijo != nullptr) {
+    i++;
+  }
+  while (nodoHijo != nullptr) {
+    NivelesArbolPreOrdenAux(a, nodoHijo, i, niveles);
+    nodoHijo = a->HermanoDer(nodoHijo);
+  }
+}
+
+// Averiguar cuántos niveles tiene el árbol haciendo un recorrido en pre-orden
+int64_t Menu::NivelesArbolPreOrden(ARBOL* a) {
+  int64_t niveles = 0;
+  if (a->Raiz() != nullptr) {
+    NivelesArbolPreOrdenAux(a, a->Raiz(), 1, niveles);
+  }
+  return niveles;
+}
+
+int64_t Menu::NivelesArbolNiveles(ARBOL* a) {
+  int64_t niveles = 0;
+  if (a->Raiz() != nullptr) {
+    NODO* nodoActual = nullptr;
+    NODO* nodoHijo = nullptr;
+    Cola<NODO*> colaNodo;
+    colaNodo.iniciar();
+    colaNodo.encolar(a->Raiz());
+    while (!colaNodo.vacia()) {
+      niveles++;
+      int64_t cantidadNodosNivelActual = colaNodo.numElem();
+      for (int64_t i = 0; i < cantidadNodosNivelActual; i++) {
+        nodoActual = colaNodo.desencolar();
+        nodoHijo = a->HijoMasIzq(nodoActual);
+        while (nodoHijo != nullptr) {
+          colaNodo.encolar(nodoHijo);
+          nodoHijo = a->HermanoDer(nodoHijo);
+        }
+      }
+    }
+    colaNodo.destruir();
+  }
+  return niveles;
 }
