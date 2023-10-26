@@ -508,6 +508,24 @@ bool Menu::EtiquetasRepetidas(ARBOL* a) {
   return etiquetasRepetidas;
 }
 
+void AlturaNodoAux(ARBOL* a, NODO* n, int64_t* height, int64_t i) { 
+  if (i > *height) {
+    *height = i;
+  }
+
+  NODO* nodoHijo = a->HijoMasIzq(n);
+  while (nodoHijo != nullptr) {
+    AlturaNodoAux(a, nodoHijo, height, i + 1);
+    nodoHijo = a->HermanoDer(nodoHijo);
+  }
+}
+
+int64_t Menu::AlturaNodo(ARBOL* a, NODO* n) { 
+  int64_t height = 0;
+  AlturaNodoAux(a, n, &height , 0);
+  return height; 
+}
+
 int64_t ProfundidadNodoAux(ARBOL* t, NODO* a, NODO* n, int64_t i) {
   NODO* NodoActual = t->HijoMasIzq(a);
   if (a == n) {
@@ -604,4 +622,89 @@ void Menu::ListarEtiquetasNivel_I(ARBOL* a, int64_t i) {
     }
     colaNodo.destruir();
   }
+}
+
+
+void ListarArbolPreOrdenAux(ARBOL* a, NODO* n) {
+  NODO* nodoHijo = a->HijoMasIzq(n);
+  while (nodoHijo != nullptr) {
+    std::cout << n->etiqueta << std::endl;
+    ListarArbolPreOrdenAux(a, nodoHijo);
+    nodoHijo = a->HermanoDer(nodoHijo);
+  }
+}
+
+void Menu::ListarArbolPreOrden(ARBOL* a) {
+  if (a->Raiz() == nullptr) {
+    std::cout << "Arbol Vacio" << std::endl;
+  }
+  ListarArbolPreOrdenAux(a, a->Raiz());
+}
+
+void Menu::ListarArbolNiveles(ARBOL* a) {
+  NODO* nodoActual = nullptr;
+  NODO* nodoHijo = nullptr;
+
+  Cola<NODO*> colaNodo;    
+  colaNodo.iniciar();
+  colaNodo.encolar(a->Raiz());
+
+  while (!colaNodo.vacia()) {
+    nodoActual = colaNodo.desencolar();
+    std::cout << colaNodo.frente()->val << std::endl; 
+
+    nodoHijo = a->HijoMasIzq(nodoActual);
+    while (nodoHijo != nullptr) {
+      colaNodo.encolar(nodoHijo);
+      nodoHijo = a->HermanoDer(nodoHijo);
+    }
+  }
+  colaNodo.destruir();
+}
+
+void BorrarSubArbolAux(ARBOL* a, NODO* n) {
+  NODO* nodoHijo = a->HijoMasIzq(n);
+  while (nodoHijo!= nullptr) {
+    BorrarSubArbolAux(a, n);
+    nodoHijo = a->HermanoDer(nodoHijo);
+  }
+  a->BorrarHoja(n);
+}
+
+void Menu::BorrarSubArbol(ARBOL* a, NODO* n) {
+  if (a->Raiz() == n) {
+    a->BorrarHoja(n);
+  }
+
+  NODO* nodoBorrar = nullptr;
+  nodoBorrar = BuscarNodo(a, n->etiqueta);
+  BorrarSubArbolAux(a, nodoBorrar);
+}
+
+
+void Menu::ListarHijosNodos(ARBOL* a, NODO* n) {
+  NODO* nodoActual = nullptr;
+  NODO* nodoHijo = nullptr;
+  bool salir = false;
+
+  Cola<NODO*> colaNodo;    
+  colaNodo.iniciar();
+  colaNodo.encolar(a->Raiz());
+
+  while (!colaNodo.vacia() && !salir) {
+    nodoActual = colaNodo.desencolar();
+    nodoHijo = a->HijoMasIzq(nodoActual);
+    if (nodoActual == n && !nodoHijo) {
+      salir = true;
+    }
+    while (nodoHijo != nullptr) {
+      if (nodoActual == n) {
+        std::cout << nodoHijo->etiqueta << " ";
+      } 
+      colaNodo.encolar(nodoHijo);
+      nodoHijo = a->HermanoDer(nodoHijo);
+    }
+    std::cout << std::endl; 
+  }
+  colaNodo.destruir();
 }
