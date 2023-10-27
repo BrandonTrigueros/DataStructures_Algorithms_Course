@@ -662,6 +662,13 @@ void Menu::ListarArbolNiveles(ARBOL* a) {
   colaNodo.destruir();
 }
 
+bool Menu::BuscarEtiqueta(ARBOL* a, NODO* n) {
+  if (BuscarNodo(a, n->etiqueta) == nullptr) {
+    return false;
+  }
+  return true;
+}
+
 void BorrarSubArbolAux(ARBOL* a, NODO* n) {
   NODO* nodoHijo = a->HijoMasIzq(n);
   while (nodoHijo!= nullptr) {
@@ -675,10 +682,7 @@ void Menu::BorrarSubArbol(ARBOL* a, NODO* n) {
   if (a->Raiz() == n) {
     a->BorrarHoja(n);
   }
-
-  NODO* nodoBorrar = nullptr;
-  nodoBorrar = BuscarNodo(a, n->etiqueta);
-  BorrarSubArbolAux(a, nodoBorrar);
+  BorrarSubArbolAux(a, n);
 }
 
 
@@ -700,11 +704,14 @@ void Menu::ListarHijosNodos(ARBOL* a, NODO* n) {
     while (nodoHijo != nullptr) {
       if (nodoActual == n) {
         std::cout << nodoHijo->etiqueta << " ";
+        salir = true;
       } 
       colaNodo.encolar(nodoHijo);
       nodoHijo = a->HermanoDer(nodoHijo);
     }
-    std::cout << std::endl; 
+    if (nodoActual == n) {
+      std::cout << std::endl; 
+    }
   }
   colaNodo.destruir();
 }

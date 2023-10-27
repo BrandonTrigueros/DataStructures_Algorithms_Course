@@ -76,21 +76,84 @@ class Menu {
   void mostrarColaActual();
   void mostrarArbolActual();
 
-  // Algoritmos
+// Algoritmos
+
+// Parámetros: Árbol “a”, Etiqueta "etiqueta"
+// Efecto: Busca un nodo en el arbol "a" con la etiqueta "etiqueta". Retorna un nodo si encuentra la etiqueta si no retorna nulo
+// Requiere: Árbol “a” inicializado
+// Modifica: N/A
   NODO* BuscarNodo(ARBOL* a, int64_t etiqueta);
 
-  NODO* HermanoIzquierdo(ARBOL* a, NODO* n); //
-  bool EtiquetasRepetidas(ARBOL* a); //
-  int64_t AlturaNodo(ARBOL* a, NODO* n);
-  int64_t ProfundidadNodo(ARBOL* a, NODO* n); //
-  int64_t NivelesArbolPreOrden(ARBOL* a); //
-  int64_t NivelesArbolNiveles(ARBOL* a); //
-  void ListarEtiquetasNivel_I(ARBOL* a, int64_t i); //
+// Parámetros: Árbol “a”, Nodo “n” 
+// Efecto: Encuentra el hermano izquierdo de “n” en el Árbol “a” y lo retorna. Si no tiene hermano izquierdo retorna nulo
+// Requiere: Árbol “a” inicializado, “n” válido en el Árbol “a”
+// Modifica: N/A
+  NODO* HermanoIzquierdo(ARBOL* a, NODO* n); 
 
-  void ListarArbolPreOrden(ARBOL* a); //
-  void ListarArbolNiveles(ARBOL* a); //
-  bool BuscarEtiqueta(ARBOL* a, NODO* n); //
-  void BorrarSubArbol(ARBOL* a, NODO* n); //
+// Parámetros: Árbol “a”
+// Efecto: Busca si en el árbol “a” se encuentran etiquetas repetidas, retorna verdadero si se encuentra, retorna falso si no
+// Requiere: Árbol “a” inicializado
+// Modifica: N/A
+  bool EtiquetasRepetidas(ARBOL* a);
+
+// Parámetros: Árbol “a”, Nodo “n”
+// Efecto: Obtiene la altura de un nodo “n”, retorna un entero que seria la altura de “n”
+// Requiere: Árbol “a: inicializado, Nodo “n” que pertenezca a “a”
+// Modifica:N/A
+  int64_t AlturaNodo(ARBOL* a, NODO* n);
+
+// Parámetros: Árbol “a”, Nodo “n”
+// Efecto: Obtiene la profundidad de un nodo “n”, retorna un entero que seria la profundidad del nodo
+// Requiere: Árbol “a” inicializado, Nodo “n” que pertenezca a “a”
+// Modifica: N/A
+  int64_t ProfundidadNodo(ARBOL* a, NODO* n);
+
+// Parámetros: Árbol “a”
+// Efecto: Obtiene la cantidad de niveles de “a” haciendo un recorrido en pre-orden, retorna un entero que seria el numero de niveles del árbol “a”
+// Requiere: Árbol “a” inicializado
+// Modifica: N/A
+  int64_t NivelesArbolPreOrden(ARBOL* a);
+
+// Parámetros: Árbol “a”
+// Efecto: Obtiene la cantidad de niveles de “a” haciendo un recorrido por niveles
+// Requiere: Árbol “a” inicializado
+// Modifica: N/A
+  int64_t NivelesArbolNiveles(ARBOL* a);
+
+// Parámetros: Árbol “a”, Entero “i”
+// Efecto: Imprime las etiquetas del nivel de “i”
+// Requiere: “a” inicializado, “i” sea un nivel válido dentro del árbol “a”
+// Modifica: N/A
+  void ListarEtiquetasNivel_I(ARBOL* a, int64_t i);
+
+// Parámetros: Árbol “a”
+// Efecto: Imprime el árbol “a” utilizando un recorrido en pre-orden
+// Requiere: “a” inicializado
+// Modifica: N/A
+  void ListarArbolPreOrden(ARBOL* a); 
+
+// Parámetros: Árbol “a”
+// Efecto: Imprime el árbol “a” utilizando un recorrido por niveles
+// Requiere: “a” inicializado
+// Modifica: N/A
+  void ListarArbolNiveles(ARBOL* a); 
+
+// Parámetros: Árbol “a”, Nodo “n”
+// Efecto: Buscar la etiqueta del nodo “n”, retorna verdadero si la etiqueta de “n” se encuentra en árbol “a”, retorna falso si la etiqueta no se encuentra en “a”
+// Requiere: “a” inicializado, “n” que pertenezca al árbol “a”
+// Modifica: N/A
+  bool BuscarEtiqueta(ARBOL* a, NODO* n); 
+
+// Parámetros: Árbol “a”, Nodo “n”
+// Efecto: Elimina el sub-árbol utilizando “n” como raíz
+// Requiere: “a” inicializado, “n” pertenezca al árbol “a”
+// Modifica: Árbol “a”
+  void BorrarSubArbol(ARBOL* a, NODO* n); 
+
+// Parámetros: Árbol “a”, Nodo “n”
+// Efecto: Imprime una lista con los hijos del nodo “n”
+// Requiere: “a” inicializado, “n” pertenezca a árbol “a”
+// Modifica: N/A
   void ListarHijosNodos(ARBOL* a, NODO* n); 
 };
 
