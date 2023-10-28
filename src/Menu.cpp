@@ -613,10 +613,10 @@ bool Menu::EtiquetasRepetidas(ARBOL* a) {
     std::map<std::int64_t, bool> diccionario;
     colaNodo.encolar(a->Raiz());
     diccionario[a->Etiqueta(a->Raiz())] = true;
-    while (!colaNodo.vacia() && etiquetasRepetidas != true) {
+    while (!colaNodo.vacia() && !etiquetasRepetidas) {
       nodoActual = colaNodo.desencolar();
       nodoHijo = a->HijoMasIzq(nodoActual);
-      while (nodoHijo != nullptr) {
+      while (nodoHijo != nullptr && !etiquetasRepetidas) {
         colaNodo.encolar(nodoHijo);
         if (diccionario.find(a->Etiqueta(nodoHijo)) != diccionario.end()) {
           etiquetasRepetidas = true;
