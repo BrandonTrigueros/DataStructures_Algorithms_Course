@@ -1,9 +1,9 @@
 #ifndef MENU_HPP
 #define MENU_HPP
 
-#include "ArbolArreglo.hpp"
+// #include "ArbolArreglo.hpp"
 // #include "ArbolListaDeListas.hpp"
-// #include "ArbolHMIHD.hpp"
+ #include "ArbolHMIHD.hpp"
 // #include "ArbolHMIHDPADRE.hpp"
 #include "Cola.hpp"
 
@@ -24,7 +24,8 @@
 
 #define OPERADORES_ARBOL                                                                                                                               \
   "╔══════════════════════════════════════════════╗\n" \
-  "║         Operadores Básicos Árbol             ║\n"                                                                                           \
+  "║         Operadores Básicos Árbol             ║\n"\
+  "║══════════════════════════════════════════════║\n"\
   "║ 1. Iniciar            2. Destruir            ║\n"                                                                                             \
   "║ 3. Vaciar             4. Vacío               ║\n"                                                                                            \
   "║ 5. AgregarHijo        6. BorrarHoja          ║\n"                                                                                             \
@@ -32,8 +33,17 @@
   "║ 9. HermanoDer         10. ModificarEtiqueta  ║\n"                                                                                             \
   "║ 11. Raíz              12. Padre              ║\n"                                                                                            \
   "║ 13. Etiqueta          14. NumHijos           ║\n"                                                                                             \
-  "║ 15. EsHoja            16. NumNodos           ║\n"                                                                                             \
-  "║ 18. Volver                                   ║\n"                                                                                             \
+  "║ 15. EsHoja            16. NumNodos           ║\n"\
+  "║══════════════════════════════════════════════║\n"\
+  "║                Algoritmos                    ║\n"\
+  "║══════════════════════════════════════════════║\n"\
+  "║ 17. HermanoIzq        18. EtiquetasRepetidas ║\n"\
+  "║ 19. AlturaNodo        20. ProfundidadNodo    ║\n"\
+  "║ 21. CantNivPreOrden   22. CantNivNiveles     ║\n"\
+  "║ 23. EtiquetasNivel    24. PreOrden           ║\n"\
+  "║ 25. Niveles           26. BuscarEtiqueta     ║\n"\
+  "║ 27. BorrarSubArbol    28. HijosNodo          ║\n"\
+  "║ 29. Volver                                   ║\n"                                                                                             \
   "╚══════════════════════════════════════════════╝\n" \
   "Seleccione una opción: "
 
@@ -138,11 +148,11 @@ class Menu {
 // Modifica: N/A
   void ListarArbolNiveles(ARBOL* a); 
 
-// Parámetros: Árbol “a”, Nodo “n”
-// Efecto: Buscar la etiqueta del nodo “n”, retorna verdadero si la etiqueta de “n” se encuentra en árbol “a”, retorna falso si la etiqueta no se encuentra en “a”
-// Requiere: “a” inicializado, “n” que pertenezca al árbol “a”
+// Parámetros: Árbol “a”, int “etiqueta”
+// Efecto: Buscar la etiqueta, retorna verdadero si la etiqueta se encuentra en árbol “a”, retorna falso si la etiqueta no se encuentra en “a”
+// Requiere: “a” inicializado
 // Modifica: N/A
-  bool BuscarEtiqueta(ARBOL* a, NODO* n); 
+  bool BuscarEtiqueta(ARBOL* a, int64_t etiqueta); 
 
 // Parámetros: Árbol “a”, Nodo “n”
 // Efecto: Elimina el sub-árbol utilizando “n” como raíz

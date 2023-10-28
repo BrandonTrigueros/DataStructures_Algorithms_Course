@@ -20,29 +20,23 @@ Menu::~Menu() {
 // ----------MENU PRINCIPAL----------
 // ----------------------------------
 void Menu::run() {
-  // this->arbol = new ARBOL;
-  // this->arbol->Iniciar();
-  // this->arbol->PonerRaiz(1);
-  // this->arbol->AgregarHijo(this->arbol->Raiz(), 1, 2);
-  // this->arbol->AgregarHijo(this->arbol->Raiz(), 2, 3);
-  // this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 2), 1, 4);
-  // this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 2), 2, 5);
-  // this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 3), 1, 6);
-  // this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 6), 1, 7);
-  // this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 7), 1, 8);
-  // this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 2), 2, 9);
-  // this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 9), 1, 10);
-  // this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 9), 2, 11);
-  // this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 11), 1, 12);
-  // this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 12), 1, 13);
-  // this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 6), 2, 14);
-  // this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 6), 1, 15);
-
-  // std::cout << "Niveles: " << this->NivelesArbolPreOrden(this->arbol)
-  //           << std::endl;
-  // std::cout << "Niveles: " << this->NivelesArbolNiveles(this->arbol)
-  //           << std::endl;
-  // this->ListarEtiquetasNivel_I(this->arbol, 4);
+   this->arbol = new ARBOL;
+   this->arbol->Iniciar();
+   this->arbol->PonerRaiz(1);
+   this->arbol->AgregarHijo(this->arbol->Raiz(), 1, 2);
+   this->arbol->AgregarHijo(this->arbol->Raiz(), 2, 3);
+   this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 2), 1, 4);
+   this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 2), 2, 5);
+   this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 3), 1, 6);
+   this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 6), 1, 7);
+   this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 7), 1, 8);
+   this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 2), 2, 9);
+   this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 9), 1, 10);
+   this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 9), 2, 11);
+   this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 11), 1, 12);
+   this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 12), 1, 13);
+   this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 6), 2, 14);
+   this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 6), 1, 15);
 
   int opcion;
   do {
@@ -179,7 +173,7 @@ void Menu::runArbol() {
   int opcion;
   do {
     opcion = mostrarOperadoresArbol();
-    int n, p, e;
+    int n, p, e, i;
     switch (opcion) {
     case 1:
       this->arbol = new ARBOL;
@@ -361,11 +355,140 @@ void Menu::runArbol() {
     case 17:
       if (this->arbol == nullptr) {
         std::cout << "No hay un árbol actualmente." << std::endl;
-        break;
+
+      } else {
+        std::cout << "Ingrese la etiqueta del nodo: ";
+        std::cin >> n;
+        std::cout << "Hermano izquierdo: "
+                  << this->HermanoIzquierdo(this->arbol,
+                     this->BuscarNodo(this->arbol, n))->etiqueta
+                    << std::endl;
       }
-      this->mostrarArbolActual();
       break;
     case 18:
+      if (this->arbol == nullptr) {
+        std::cout << "No hay un árbol actualmente." << std::endl;
+
+      } else {
+        if (this->EtiquetasRepetidas(this->arbol)) {
+          std::cout << "Hay etiquetas repetidas." << std::endl;
+        } else {
+          std::cout << "No hay etiquetas repetidas." << std::endl;
+        }
+      }
+      break;
+    case 19:
+      if (this->arbol == nullptr) {
+        std::cout << "No hay un árbol actualmente." << std::endl;
+
+      } else {
+        std::cout << "Ingrese la etiqueta del nodo: ";
+        std::cin >> n;
+        std::cout << "Altura del nodo: "
+                  << this->AlturaNodo(this->arbol,
+                     this->BuscarNodo(this->arbol, n)) << std::endl;
+      }
+      break;
+    case 20:
+      if (this->arbol == nullptr) {
+        std::cout << "No hay un árbol actualmente." << std::endl;
+
+      } else {
+        std::cout << "Ingrese la etiqueta del nodo: ";
+        std::cin >> n;
+        std::cout << "Profundidad del nodo: "
+                  << this->ProfundidadNodo(this->arbol,
+                     this->BuscarNodo(this->arbol, n)) << std::endl;
+      }
+      break;
+    case 21:
+      if (this->arbol == nullptr) {
+        std::cout << "No hay un árbol actualmente." << std::endl;
+
+      } else {
+        std::cout << "Niveles del árbol: "
+                  << this->NivelesArbolPreOrden(this->arbol) << std::endl;
+      }
+      break;
+    case 22:
+      if (this->arbol == nullptr) {
+        std::cout << "No hay un árbol actualmente." << std::endl;
+
+      } else {
+        std::cout << "Niveles del árbol: "
+                  << this->NivelesArbolNiveles(this->arbol) << std::endl;
+      }
+      break;
+    case 23:
+      if (this->arbol == nullptr) {
+        std::cout << "No hay un árbol actualmente." << std::endl;
+      } else {
+        std::cout << "Ingrese el nivel: ";
+        std::cin >> i;
+        std::cout << "Etiquetas: ";
+        this->ListarEtiquetasNivel_I(this->arbol, i);
+        std::cout << std::endl;
+      }
+      break;
+    case 24:
+      if (this->arbol == nullptr) {
+        std::cout << "No hay un árbol actualmente." << std::endl;
+      } else if (this->arbol->Vacio()) {
+        std::cout << "El árbol está vacío." << std::endl;
+      } else {
+        std::cout << "Árbol: ";
+        this->ListarArbolPreOrden(this->arbol);
+      }
+      break;
+    case 25:
+      if (this->arbol == nullptr) {
+        std::cout << "No hay un árbol actualmente." << std::endl;
+      } else if (this->arbol->Vacio()) {
+        std::cout << "El árbol está vacío." << std::endl;
+      } else {
+        std::cout << "Árbol: ";
+        this->ListarArbolNiveles(this->arbol);
+      }
+      break;
+    case 26:
+      if (this->arbol == nullptr) {
+        std::cout << "No hay un árbol actualmente." << std::endl;
+
+      } else {
+        std::cout << "Ingrese la etiqueta del nodo: ";
+        std::cin >> n;
+        if (this->BuscarEtiqueta(this->arbol, n))
+        {
+          std::cout << "La etiqueta se encuentra en el árbol." << std::endl;
+        } else {
+          std::cout << "La etiqueta no se encuentra en el árbol." << std::endl;
+        }
+      }
+      break;
+    case 27:
+      if (this->arbol == nullptr) {
+        std::cout << "No hay un árbol actualmente." << std::endl;
+
+      } else {
+        std::cout << "Ingrese la etiqueta del nodo: ";
+        std::cin >> n;
+        this->BorrarSubArbol(this->arbol, this->BuscarNodo(this->arbol, n));
+        std::cout << "Sub-árbol borrado." << std::endl;
+      }
+      
+      break;
+    case 28:
+      if (this->arbol == nullptr) {
+        std::cout << "No hay un árbol actualmente." << std::endl;
+
+      } else {
+        std::cout << "Ingrese la etiqueta del nodo: ";
+        std::cin >> n;
+        std::cout << "Hijos: ";
+        this->ListarHijosNodos(this->arbol, this->BuscarNodo(this->arbol, n));
+      }
+      break;
+    case 29:
       std::cout << "Saliendo..." << std::endl;
       if (this->arbol != nullptr) {
         this->arbol->Destruir();
@@ -377,7 +500,7 @@ void Menu::runArbol() {
       std::cout << "Opción inválida." << std::endl;
       break;
     }
-  } while (opcion != 18);
+  } while (opcion != 29);
 }
 
 // --------------------------------------
@@ -527,12 +650,15 @@ int64_t Menu::AlturaNodo(ARBOL* a, NODO* n) {
 }
 
 int64_t ProfundidadNodoAux(ARBOL* t, NODO* a, NODO* n, int64_t i) {
-  NODO* NodoActual = t->HijoMasIzq(a);
   if (a == n) {
     return i;
   } else {
+    NODO* NodoActual = t->HijoMasIzq(a);
     while (NodoActual != nullptr) {
-      ProfundidadNodoAux(t, NodoActual, n, i + 1);
+      int64_t profundidad = ProfundidadNodoAux(t, NodoActual, n, i + 1);
+      if (profundidad != 0) {
+        return profundidad;
+      }
       NodoActual = t->HermanoDer(NodoActual);
     }
   }
@@ -624,56 +750,74 @@ void Menu::ListarEtiquetasNivel_I(ARBOL* a, int64_t i) {
   }
 }
 
-
 void ListarArbolPreOrdenAux(ARBOL* a, NODO* n) {
-  NODO* nodoHijo = a->HijoMasIzq(n);
-  while (nodoHijo != nullptr) {
-    std::cout << n->etiqueta << std::endl;
-    ListarArbolPreOrdenAux(a, nodoHijo);
-    nodoHijo = a->HermanoDer(nodoHijo);
+  if (n != nullptr) {
+    std::cout << n->etiqueta << " ";
+    NODO* nodoHijo = a->HijoMasIzq(n);
+    while (nodoHijo != nullptr) {
+      ListarArbolPreOrdenAux(a, nodoHijo);
+      nodoHijo = a->HermanoDer(nodoHijo);
+    }
   }
 }
 
 void Menu::ListarArbolPreOrden(ARBOL* a) {
   if (a->Raiz() == nullptr) {
     std::cout << "Arbol Vacio" << std::endl;
+  } else {
+    ListarArbolPreOrdenAux(a, a->Raiz());
+    std::cout << std::endl;
   }
-  ListarArbolPreOrdenAux(a, a->Raiz());
 }
 
 void Menu::ListarArbolNiveles(ARBOL* a) {
   NODO* nodoActual = nullptr;
-  NODO* nodoHijo = nullptr;
-
-  Cola<NODO*> colaNodo;    
+  Cola<NODO*> colaNodo;
   colaNodo.iniciar();
   colaNodo.encolar(a->Raiz());
-
   while (!colaNodo.vacia()) {
     nodoActual = colaNodo.desencolar();
-    std::cout << colaNodo.frente()->val << std::endl; 
-
-    nodoHijo = a->HijoMasIzq(nodoActual);
+    std::cout << nodoActual->etiqueta << " ";
+    NODO* nodoHijo = a->HijoMasIzq(nodoActual);
     while (nodoHijo != nullptr) {
       colaNodo.encolar(nodoHijo);
       nodoHijo = a->HermanoDer(nodoHijo);
     }
   }
+  std::cout << std::endl;
   colaNodo.destruir();
 }
 
-bool Menu::BuscarEtiqueta(ARBOL* a, NODO* n) {
-  if (BuscarNodo(a, n->etiqueta) == nullptr) {
-    return false;
+bool Menu::BuscarEtiqueta(ARBOL* a, int64_t etiqueta) {
+  bool nodoEncontrado = false;
+  NODO* nodoActual = nullptr;
+  Cola<NODO*> colaNodo;
+  colaNodo.iniciar();
+  colaNodo.encolar(a->Raiz());
+  while (!colaNodo.vacia() && !nodoEncontrado) {
+    nodoActual = colaNodo.desencolar();
+    if (nodoActual->etiqueta == etiqueta) {
+      nodoEncontrado = true;
+      colaNodo.destruir();
+      return true;
+    }
+
+    NODO* nodoHijo = a->HijoMasIzq(nodoActual);
+    while (nodoHijo != nullptr && !nodoEncontrado) {
+      colaNodo.encolar(nodoHijo);
+      nodoHijo = a->HermanoDer(nodoHijo);
+    }
   }
-  return true;
+  colaNodo.destruir();
+  return false;
 }
 
 void BorrarSubArbolAux(ARBOL* a, NODO* n) {
   NODO* nodoHijo = a->HijoMasIzq(n);
-  while (nodoHijo!= nullptr) {
-    BorrarSubArbolAux(a, n);
-    nodoHijo = a->HermanoDer(nodoHijo);
+  while (nodoHijo != nullptr) {
+    NODO* siguienteHermano = a->HermanoDer(nodoHijo);
+    BorrarSubArbolAux(a, nodoHijo);
+    nodoHijo = siguienteHermano;
   }
   a->BorrarHoja(n);
 }
@@ -681,8 +825,9 @@ void BorrarSubArbolAux(ARBOL* a, NODO* n) {
 void Menu::BorrarSubArbol(ARBOL* a, NODO* n) {
   if (a->Raiz() == n) {
     a->BorrarHoja(n);
+  } else {
+    BorrarSubArbolAux(a, n);
   }
-  BorrarSubArbolAux(a, n);
 }
 
 
