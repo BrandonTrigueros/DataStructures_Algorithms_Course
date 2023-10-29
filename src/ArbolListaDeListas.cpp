@@ -47,7 +47,10 @@ bool ArbolListaDeListas::Vacio() {
 
 
 ListaPrincipal* ArbolListaDeListas::HijoMasIzq(ListaPrincipal* nodo) {
-  return nodo->primero->hijo;
+  if (nodo->primero != nullptr) {
+    return nodo->primero->hijo;
+  }
+  return nullptr;
 }
 
 ListaPrincipal* ArbolListaDeListas::HermanoDer(ListaPrincipal* nodo) {

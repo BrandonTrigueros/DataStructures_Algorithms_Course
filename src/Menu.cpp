@@ -359,12 +359,15 @@ void Menu::runArbol() {
       } else {
         std::cout << "Ingrese la etiqueta del nodo: ";
         std::cin >> n;
-        std::cout << "Hermano izquierdo: "
-                  << this->HermanoIzquierdo(this->arbol,
-                     this->BuscarNodo(this->arbol, n))->etiqueta
-                    << std::endl;
+        NODO* nodo = this->HermanoIzquierdo(
+            this->arbol, this->BuscarNodo(this->arbol, n));
+        if (nodo == nullptr) {
+          std::cout << "No tiene hermano izquierdo." << std::endl;
+        } else {
+          std::cout << "Hermano izquierdo: " << nodo->etiqueta << std::endl;
+        }
       }
-      break;
+      break; 
     case 18:
       if (this->arbol == nullptr) {
         std::cout << "No hay un árbol actualmente." << std::endl;
