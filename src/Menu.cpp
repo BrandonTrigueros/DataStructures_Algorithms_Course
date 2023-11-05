@@ -3,6 +3,7 @@
 #include <cmath>
 #include <cstdint>
 #include <ostream>
+#include <unistd.h>
 
 Menu::Menu() {
   this->cola = nullptr;
@@ -20,11 +21,10 @@ Menu::~Menu() {
 
 double log(double base, double x) { return std::log(x) / std::log(base); }
 
-void Menu::crearArbolAuto(int64_t levelsToCreate) {
+void Menu::crearArbolAuto(int64_t levelsToCreate, int64_t numHijos) {
   this->arbol->PonerRaiz(1);
   int64_t etiquetaHijo = 1;
-  int64_t numHijos = 3;
-  int64_t numNodos = 0;
+  int64_t numNodos = 1;
 
   if (levelsToCreate == 1) {
     return;
@@ -44,10 +44,9 @@ void Menu::crearArbolAuto(int64_t levelsToCreate) {
       ++numNodos;
     }
     int64_t leveledNodes = numNodos;
-    leveledNodes -=
-        std::pow(numHijos, levelsToCreate - 2 == 0 ? 1 : levelsToCreate - 2);
-
-    if (log(numHijos, leveledNodes) == levelsToCreate - 1) {
+    leveledNodes -= std::pow(numHijos, levelsToCreate - 2);
+    if (log(numHijos, levelsToCreate == 2 ? leveledNodes : leveledNodes - 1) ==
+        levelsToCreate - 1) {
       colaNodo.destruir();
       break;
     }
@@ -62,7 +61,7 @@ void Menu::run() {
   this->arbol->Iniciar();
 
   // Arbol creado automaticamente, balanceado
-  crearArbolAuto(3);
+  crearArbolAuto(10, 2);
 
   int opcion;
   do {

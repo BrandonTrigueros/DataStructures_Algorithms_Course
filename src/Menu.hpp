@@ -86,7 +86,7 @@ class Menu {
   void mostrarColaActual();
   void mostrarArbolActual();
 
-  void crearArbolAuto(int64_t levelsToCreate);
+  void crearArbolAuto(int64_t levelsToCreate, int64_t NumHijos);
 
 // Algoritmos
 
