@@ -86,6 +86,8 @@ class Menu {
   void mostrarColaActual();
   void mostrarArbolActual();
 
+  void crearArbolAuto(int64_t levelsToCreate);
+
 // Algoritmos
 
 // Parámetros: Árbol “a”, Etiqueta "etiqueta"

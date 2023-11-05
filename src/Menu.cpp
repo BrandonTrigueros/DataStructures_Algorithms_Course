@@ -1,6 +1,8 @@
 #include "Menu.hpp"
 
+#include <cmath>
 #include <cstdint>
+#include <ostream>
 
 Menu::Menu() {
   this->cola = nullptr;
@@ -16,27 +18,51 @@ Menu::~Menu() {
   }
 }
 
+double log(double base, double x) { return std::log(x) / std::log(base); }
+
+void Menu::crearArbolAuto(int64_t levelsToCreate) {
+  this->arbol->PonerRaiz(1);
+  int64_t etiquetaHijo = 1;
+  int64_t numHijos = 3;
+  int64_t numNodos = 0;
+
+  if (levelsToCreate == 1) {
+    return;
+  }
+
+  NODO *nodoActual = nullptr;
+
+  Cola<NODO *> colaNodo;
+  colaNodo.iniciar();
+  colaNodo.encolar(this->arbol->Raiz());
+  while (!colaNodo.vacia()) {
+    nodoActual = colaNodo.desencolar();
+    for (int i = 1; i <= numHijos; ++i) {
+      auto aux = this->arbol->AgregarHijo(nodoActual, i, etiquetaHijo);
+      colaNodo.encolar(aux);
+      ++etiquetaHijo;
+      ++numNodos;
+    }
+    int64_t leveledNodes = numNodos;
+    leveledNodes -=
+        std::pow(numHijos, levelsToCreate - 2 == 0 ? 1 : levelsToCreate - 2);
+
+    if (log(numHijos, leveledNodes) == levelsToCreate - 1) {
+      colaNodo.destruir();
+      break;
+    }
+  }
+}
+
 // ----------------------------------
 // ----------MENU PRINCIPAL----------
 // ----------------------------------
 void Menu::run() {
-   this->arbol = new ARBOL;
-   this->arbol->Iniciar();
-   this->arbol->PonerRaiz(1);
-   this->arbol->AgregarHijo(this->arbol->Raiz(), 1, 2);
-   this->arbol->AgregarHijo(this->arbol->Raiz(), 2, 3);
-   this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 2), 1, 4);
-   this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 2), 2, 5);
-   this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 3), 1, 6);
-   this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 6), 1, 7);
-   this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 7), 1, 8);
-   this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 2), 2, 9);
-   this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 9), 1, 10);
-   this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 9), 2, 11);
-   this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 11), 1, 12);
-   this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 12), 1, 13);
-   this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 6), 2, 14);
-   this->arbol->AgregarHijo(this->BuscarNodo(this->arbol, 6), 1, 15);
+  this->arbol = new ARBOL;
+  this->arbol->Iniciar();
+
+  // Arbol creado automaticamente, balanceado
+  crearArbolAuto(3);
 
   int opcion;
   do {
@@ -243,8 +269,8 @@ void Menu::runArbol() {
         std::cout
             << "Ingrese el nodo del cuál desea obtener el hijo más izquierdo: ";
         std::cin >> e;
-        if (this->arbol->HijoMasIzq(this->BuscarNodo(this->arbol, e))
-            != nullptr) {
+        if (this->arbol->HijoMasIzq(this->BuscarNodo(this->arbol, e)) !=
+            nullptr) {
           std::cout << "Hijo más izquierdo: "
                     << this->arbol->HijoMasIzq(this->BuscarNodo(this->arbol, e))
                            ->etiqueta
@@ -261,8 +287,8 @@ void Menu::runArbol() {
         std::cout
             << "Ingrese el nodo del cuál desea obtener el hermano derecho: ";
         std::cin >> e;
-        if (this->arbol->HermanoDer(this->BuscarNodo(this->arbol, e))
-            != nullptr) {
+        if (this->arbol->HermanoDer(this->BuscarNodo(this->arbol, e)) !=
+            nullptr) {
           std::cout << "Hermano derecho: "
                     << this->arbol->HermanoDer(this->BuscarNodo(this->arbol, e))
                            ->etiqueta
@@ -359,15 +385,15 @@ void Menu::runArbol() {
       } else {
         std::cout << "Ingrese la etiqueta del nodo: ";
         std::cin >> n;
-        NODO* nodo = this->HermanoIzquierdo(
-            this->arbol, this->BuscarNodo(this->arbol, n));
+        NODO *nodo = this->HermanoIzquierdo(this->arbol,
+                                            this->BuscarNodo(this->arbol, n));
         if (nodo == nullptr) {
           std::cout << "No tiene hermano izquierdo." << std::endl;
         } else {
           std::cout << "Hermano izquierdo: " << nodo->etiqueta << std::endl;
         }
       }
-      break; 
+      break;
     case 18:
       if (this->arbol == nullptr) {
         std::cout << "No hay un árbol actualmente." << std::endl;
@@ -389,7 +415,8 @@ void Menu::runArbol() {
         std::cin >> n;
         std::cout << "Altura del nodo: "
                   << this->AlturaNodo(this->arbol,
-                     this->BuscarNodo(this->arbol, n)) << std::endl;
+                                      this->BuscarNodo(this->arbol, n))
+                  << std::endl;
       }
       break;
     case 20:
@@ -401,7 +428,8 @@ void Menu::runArbol() {
         std::cin >> n;
         std::cout << "Profundidad del nodo: "
                   << this->ProfundidadNodo(this->arbol,
-                     this->BuscarNodo(this->arbol, n)) << std::endl;
+                                           this->BuscarNodo(this->arbol, n))
+                  << std::endl;
       }
       break;
     case 21:
@@ -460,8 +488,7 @@ void Menu::runArbol() {
       } else {
         std::cout << "Ingrese la etiqueta del nodo: ";
         std::cin >> n;
-        if (this->BuscarEtiqueta(this->arbol, n))
-        {
+        if (this->BuscarEtiqueta(this->arbol, n)) {
           std::cout << "La etiqueta se encuentra en el árbol." << std::endl;
         } else {
           std::cout << "La etiqueta no se encuentra en el árbol." << std::endl;
@@ -478,7 +505,7 @@ void Menu::runArbol() {
         this->BorrarSubArbol(this->arbol, this->BuscarNodo(this->arbol, n));
         std::cout << "Sub-árbol borrado." << std::endl;
       }
-      
+
       break;
     case 28:
       if (this->arbol == nullptr) {
@@ -552,10 +579,10 @@ void Menu::mostrarArbolActual() {
 // -----ALGORITMOS ETAPA 3------
 // -----------------------------
 
-NODO* Menu::BuscarNodo(ARBOL* a, int64_t etiqueta) {
+NODO *Menu::BuscarNodo(ARBOL *a, int64_t etiqueta) {
   bool nodoEncontrado = false;
-  NODO* nodoActual = nullptr;
-  Cola<NODO*> colaNodo;
+  NODO *nodoActual = nullptr;
+  Cola<NODO *> colaNodo;
   colaNodo.iniciar();
   colaNodo.encolar(a->Raiz());
   while (!colaNodo.vacia() && !nodoEncontrado) {
@@ -566,7 +593,7 @@ NODO* Menu::BuscarNodo(ARBOL* a, int64_t etiqueta) {
       return nodoActual;
     }
 
-    NODO* nodoHijo = a->HijoMasIzq(nodoActual);
+    NODO *nodoHijo = a->HijoMasIzq(nodoActual);
     while (nodoHijo != nullptr && !nodoEncontrado) {
       colaNodo.encolar(nodoHijo);
       nodoHijo = a->HermanoDer(nodoHijo);
@@ -576,18 +603,18 @@ NODO* Menu::BuscarNodo(ARBOL* a, int64_t etiqueta) {
   return nullptr;
 }
 
-NODO* Menu::HermanoIzquierdo(ARBOL* a, NODO* n) {
+NODO *Menu::HermanoIzquierdo(ARBOL *a, NODO *n) {
   if (a->Raiz() == n) {
     return nullptr;
   }
-  NODO* nodoActual = nullptr;
-  NODO* nodoHermanoIzquierdo = nullptr;
-  Cola<NODO*> colaNodo;
+  NODO *nodoActual = nullptr;
+  NODO *nodoHermanoIzquierdo = nullptr;
+  Cola<NODO *> colaNodo;
   colaNodo.iniciar();
   colaNodo.encolar(a->Raiz());
   while (!colaNodo.vacia()) {
     nodoActual = colaNodo.desencolar();
-    NODO* nodoHijo = a->HijoMasIzq(nodoActual);
+    NODO *nodoHijo = a->HijoMasIzq(nodoActual);
     if (nodoHijo == n) {
       colaNodo.destruir();
       return nullptr;
@@ -606,12 +633,12 @@ NODO* Menu::HermanoIzquierdo(ARBOL* a, NODO* n) {
   return nullptr;
 }
 
-bool Menu::EtiquetasRepetidas(ARBOL* a) {
+bool Menu::EtiquetasRepetidas(ARBOL *a) {
   bool etiquetasRepetidas = false;
   if (!a->Vacio()) {
-    NODO* nodoActual = nullptr;
-    NODO* nodoHijo = nullptr;
-    Cola<NODO*> colaNodo;
+    NODO *nodoActual = nullptr;
+    NODO *nodoHijo = nullptr;
+    Cola<NODO *> colaNodo;
     colaNodo.iniciar();
     std::map<std::int64_t, bool> diccionario;
     colaNodo.encolar(a->Raiz());
@@ -634,29 +661,29 @@ bool Menu::EtiquetasRepetidas(ARBOL* a) {
   return etiquetasRepetidas;
 }
 
-void AlturaNodoAux(ARBOL* a, NODO* n, int64_t* height, int64_t i) { 
+void AlturaNodoAux(ARBOL *a, NODO *n, int64_t *height, int64_t i) {
   if (i > *height) {
     *height = i;
   }
 
-  NODO* nodoHijo = a->HijoMasIzq(n);
+  NODO *nodoHijo = a->HijoMasIzq(n);
   while (nodoHijo != nullptr) {
     AlturaNodoAux(a, nodoHijo, height, i + 1);
     nodoHijo = a->HermanoDer(nodoHijo);
   }
 }
 
-int64_t Menu::AlturaNodo(ARBOL* a, NODO* n) { 
+int64_t Menu::AlturaNodo(ARBOL *a, NODO *n) {
   int64_t height = 0;
-  AlturaNodoAux(a, n, &height , 0);
-  return height; 
+  AlturaNodoAux(a, n, &height, 0);
+  return height;
 }
 
-int64_t ProfundidadNodoAux(ARBOL* t, NODO* a, NODO* n, int64_t i) {
+int64_t ProfundidadNodoAux(ARBOL *t, NODO *a, NODO *n, int64_t i) {
   if (a == n) {
     return i;
   } else {
-    NODO* NodoActual = t->HijoMasIzq(a);
+    NODO *NodoActual = t->HijoMasIzq(a);
     while (NodoActual != nullptr) {
       int64_t profundidad = ProfundidadNodoAux(t, NodoActual, n, i + 1);
       if (profundidad != 0) {
@@ -668,7 +695,7 @@ int64_t ProfundidadNodoAux(ARBOL* t, NODO* a, NODO* n, int64_t i) {
   return 0;
 }
 
-int64_t Menu::ProfundidadNodo(ARBOL* a, NODO* n) {
+int64_t Menu::ProfundidadNodo(ARBOL *a, NODO *n) {
   if (a->Raiz() == nullptr) {
     return 0;
   }
@@ -679,11 +706,11 @@ int64_t Menu::ProfundidadNodo(ARBOL* a, NODO* n) {
   return Profundidad;
 }
 
-void NivelesArbolPreOrdenAux(ARBOL* a, NODO* n, int64_t i, int64_t& niveles) {
+void NivelesArbolPreOrdenAux(ARBOL *a, NODO *n, int64_t i, int64_t &niveles) {
   if (i > niveles) {
     niveles = i;
   }
-  NODO* nodoHijo = a->HijoMasIzq(n);
+  NODO *nodoHijo = a->HijoMasIzq(n);
   if (nodoHijo != nullptr) {
     i++;
   }
@@ -693,7 +720,7 @@ void NivelesArbolPreOrdenAux(ARBOL* a, NODO* n, int64_t i, int64_t& niveles) {
   }
 }
 
-int64_t Menu::NivelesArbolPreOrden(ARBOL* a) {
+int64_t Menu::NivelesArbolPreOrden(ARBOL *a) {
   int64_t niveles = 0;
   if (a->Raiz() != nullptr) {
     NivelesArbolPreOrdenAux(a, a->Raiz(), 1, niveles);
@@ -701,12 +728,12 @@ int64_t Menu::NivelesArbolPreOrden(ARBOL* a) {
   return niveles;
 }
 
-int64_t Menu::NivelesArbolNiveles(ARBOL* a) {
+int64_t Menu::NivelesArbolNiveles(ARBOL *a) {
   int64_t niveles = 0;
   if (a->Raiz() != nullptr) {
-    NODO* nodoActual = nullptr;
-    NODO* nodoHijo = nullptr;
-    Cola<NODO*> colaNodo;
+    NODO *nodoActual = nullptr;
+    NODO *nodoHijo = nullptr;
+    Cola<NODO *> colaNodo;
     colaNodo.iniciar();
     colaNodo.encolar(a->Raiz());
     while (!colaNodo.vacia()) {
@@ -726,11 +753,11 @@ int64_t Menu::NivelesArbolNiveles(ARBOL* a) {
   return niveles;
 }
 
-void Menu::ListarEtiquetasNivel_I(ARBOL* a, int64_t i) {
+void Menu::ListarEtiquetasNivel_I(ARBOL *a, int64_t i) {
   if (a->Raiz() != nullptr) {
-    NODO* nodoActual = nullptr;
-    NODO* nodoHijo = nullptr;
-    Cola<NODO*> colaNodo;
+    NODO *nodoActual = nullptr;
+    NODO *nodoHijo = nullptr;
+    Cola<NODO *> colaNodo;
     colaNodo.iniciar();
     colaNodo.encolar(a->Raiz());
     int64_t nivelActual = 1;
@@ -753,10 +780,10 @@ void Menu::ListarEtiquetasNivel_I(ARBOL* a, int64_t i) {
   }
 }
 
-void ListarArbolPreOrdenAux(ARBOL* a, NODO* n) {
+void ListarArbolPreOrdenAux(ARBOL *a, NODO *n) {
   if (n != nullptr) {
     std::cout << n->etiqueta << " ";
-    NODO* nodoHijo = a->HijoMasIzq(n);
+    NODO *nodoHijo = a->HijoMasIzq(n);
     while (nodoHijo != nullptr) {
       ListarArbolPreOrdenAux(a, nodoHijo);
       nodoHijo = a->HermanoDer(nodoHijo);
@@ -764,7 +791,7 @@ void ListarArbolPreOrdenAux(ARBOL* a, NODO* n) {
   }
 }
 
-void Menu::ListarArbolPreOrden(ARBOL* a) {
+void Menu::ListarArbolPreOrden(ARBOL *a) {
   if (a->Raiz() == nullptr) {
     std::cout << "Arbol Vacio" << std::endl;
   } else {
@@ -773,15 +800,15 @@ void Menu::ListarArbolPreOrden(ARBOL* a) {
   }
 }
 
-void Menu::ListarArbolNiveles(ARBOL* a) {
-  NODO* nodoActual = nullptr;
-  Cola<NODO*> colaNodo;
+void Menu::ListarArbolNiveles(ARBOL *a) {
+  NODO *nodoActual = nullptr;
+  Cola<NODO *> colaNodo;
   colaNodo.iniciar();
   colaNodo.encolar(a->Raiz());
   while (!colaNodo.vacia()) {
     nodoActual = colaNodo.desencolar();
     std::cout << nodoActual->etiqueta << " ";
-    NODO* nodoHijo = a->HijoMasIzq(nodoActual);
+    NODO *nodoHijo = a->HijoMasIzq(nodoActual);
     while (nodoHijo != nullptr) {
       colaNodo.encolar(nodoHijo);
       nodoHijo = a->HermanoDer(nodoHijo);
@@ -791,10 +818,10 @@ void Menu::ListarArbolNiveles(ARBOL* a) {
   colaNodo.destruir();
 }
 
-bool Menu::BuscarEtiqueta(ARBOL* a, int64_t etiqueta) {
+bool Menu::BuscarEtiqueta(ARBOL *a, int64_t etiqueta) {
   bool nodoEncontrado = false;
-  NODO* nodoActual = nullptr;
-  Cola<NODO*> colaNodo;
+  NODO *nodoActual = nullptr;
+  Cola<NODO *> colaNodo;
   colaNodo.iniciar();
   colaNodo.encolar(a->Raiz());
   while (!colaNodo.vacia() && !nodoEncontrado) {
@@ -805,7 +832,7 @@ bool Menu::BuscarEtiqueta(ARBOL* a, int64_t etiqueta) {
       return true;
     }
 
-    NODO* nodoHijo = a->HijoMasIzq(nodoActual);
+    NODO *nodoHijo = a->HijoMasIzq(nodoActual);
     while (nodoHijo != nullptr && !nodoEncontrado) {
       colaNodo.encolar(nodoHijo);
       nodoHijo = a->HermanoDer(nodoHijo);
@@ -815,17 +842,17 @@ bool Menu::BuscarEtiqueta(ARBOL* a, int64_t etiqueta) {
   return false;
 }
 
-void BorrarSubArbolAux(ARBOL* a, NODO* n) {
-  NODO* nodoHijo = a->HijoMasIzq(n);
+void BorrarSubArbolAux(ARBOL *a, NODO *n) {
+  NODO *nodoHijo = a->HijoMasIzq(n);
   while (nodoHijo != nullptr) {
-    NODO* siguienteHermano = a->HermanoDer(nodoHijo);
+    NODO *siguienteHermano = a->HermanoDer(nodoHijo);
     BorrarSubArbolAux(a, nodoHijo);
     nodoHijo = siguienteHermano;
   }
   a->BorrarHoja(n);
 }
 
-void Menu::BorrarSubArbol(ARBOL* a, NODO* n) {
+void Menu::BorrarSubArbol(ARBOL *a, NODO *n) {
   if (a->Raiz() == n) {
     a->BorrarHoja(n);
   } else {
@@ -833,13 +860,12 @@ void Menu::BorrarSubArbol(ARBOL* a, NODO* n) {
   }
 }
 
-
-void Menu::ListarHijosNodos(ARBOL* a, NODO* n) {
-  NODO* nodoActual = nullptr;
-  NODO* nodoHijo = nullptr;
+void Menu::ListarHijosNodos(ARBOL *a, NODO *n) {
+  NODO *nodoActual = nullptr;
+  NODO *nodoHijo = nullptr;
   bool salir = false;
 
-  Cola<NODO*> colaNodo;    
+  Cola<NODO *> colaNodo;
   colaNodo.iniciar();
   colaNodo.encolar(a->Raiz());
 
@@ -853,12 +879,12 @@ void Menu::ListarHijosNodos(ARBOL* a, NODO* n) {
       if (nodoActual == n) {
         std::cout << nodoHijo->etiqueta << " ";
         salir = true;
-      } 
+      }
       colaNodo.encolar(nodoHijo);
       nodoHijo = a->HermanoDer(nodoHijo);
     }
     if (nodoActual == n) {
-      std::cout << std::endl; 
+      std::cout << std::endl;
     }
   }
   colaNodo.destruir();
