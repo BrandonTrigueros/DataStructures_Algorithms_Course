@@ -70,6 +70,7 @@ class Menu {
  private:
   Cola<int64_t>* cola;
   ARBOL* arbol;
+  double timeElapsed = 0;
 
  public:
   Menu();

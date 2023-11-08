@@ -1,6 +1,9 @@
 #include "Menu.hpp"
 
 #include <cmath>
+#include <ctime>
+#include <sched.h>
+#include <time.h>
 #include <cstdint>
 #include <ostream>
 #include <unistd.h>
@@ -22,7 +25,7 @@ Menu::~Menu() {
 double log(double base, double x) { return std::log(x) / std::log(base); }
 
 void Menu::crearArbolAuto(int64_t levelsToCreate, int64_t numHijos) {
-  this->arbol->PonerRaiz(1);
+  this->arbol->PonerRaiz(0);
   int64_t etiquetaHijo = 1;
   int64_t numNodos = 1;
 
@@ -46,7 +49,7 @@ void Menu::crearArbolAuto(int64_t levelsToCreate, int64_t numHijos) {
     int64_t leveledNodes = numNodos;
     leveledNodes -= std::pow(numHijos, levelsToCreate - 2);
     if (log(numHijos, levelsToCreate == 2 ? leveledNodes : leveledNodes - 1) ==
-        levelsToCreate - 1) {
+        levelsToCreate - 1 ) {
       colaNodo.destruir();
       break;
     }
@@ -61,7 +64,7 @@ void Menu::run() {
   this->arbol->Iniciar();
 
   // Arbol creado automaticamente, balanceado
-  crearArbolAuto(10, 2);
+  crearArbolAuto(10,3);
 
   int opcion;
   do {
@@ -674,7 +677,10 @@ void AlturaNodoAux(ARBOL *a, NODO *n, int64_t *height, int64_t i) {
 
 int64_t Menu::AlturaNodo(ARBOL *a, NODO *n) {
   int64_t height = 0;
+
   AlturaNodoAux(a, n, &height, 0);
+
+
   return height;
 }
 
@@ -695,6 +701,8 @@ int64_t ProfundidadNodoAux(ARBOL *t, NODO *a, NODO *n, int64_t i) {
 }
 
 int64_t Menu::ProfundidadNodo(ARBOL *a, NODO *n) {
+  struct std::timespec before;
+  clock_gettime(CLOCK_MONOTONIC,&before);
   if (a->Raiz() == nullptr) {
     return 0;
   }
@@ -702,6 +710,15 @@ int64_t Menu::ProfundidadNodo(ARBOL *a, NODO *n) {
     return 1;
   }
   int64_t Profundidad = ProfundidadNodoAux(a, a->Raiz(), n, 1);
+  struct std::timespec after;
+  clock_gettime(CLOCK_MONOTONIC,&after);
+
+  uint64_t before_ns = (before.tv_sec * 1000000000) + before.tv_nsec;
+  uint64_t after_ns = (after.tv_sec * 1000000000) + after.tv_nsec;
+
+  int64_t elapsed = after_ns - before_ns;
+  std::cout << "Time sec: " << after.tv_sec - before.tv_sec << std::endl;
+  std::cout << "Time: 0." << elapsed << std::endl;
   return Profundidad;
 }
 
@@ -791,12 +808,23 @@ void ListarArbolPreOrdenAux(ARBOL *a, NODO *n) {
 }
 
 void Menu::ListarArbolPreOrden(ARBOL *a) {
+  struct std::timespec before;
+  clock_gettime(CLOCK_MONOTONIC,&before);
   if (a->Raiz() == nullptr) {
     std::cout << "Arbol Vacio" << std::endl;
   } else {
     ListarArbolPreOrdenAux(a, a->Raiz());
     std::cout << std::endl;
   }
+  struct std::timespec after;
+  clock_gettime(CLOCK_MONOTONIC,&after);
+
+  uint64_t before_ns = (before.tv_sec * 1000000000) + before.tv_nsec;
+  uint64_t after_ns = (after.tv_sec * 1000000000) + after.tv_nsec;
+
+  int64_t elapsed = after_ns - before_ns;
+  std::cout << "Time sec: " << after.tv_sec - before.tv_sec << std::endl;
+  std::cout << "Time: 0." << elapsed << std::endl;
 }
 
 void Menu::ListarArbolNiveles(ARBOL *a) {
@@ -852,11 +880,22 @@ void BorrarSubArbolAux(ARBOL *a, NODO *n) {
 }
 
 void Menu::BorrarSubArbol(ARBOL *a, NODO *n) {
+  struct std::timespec before;
+  clock_gettime(CLOCK_MONOTONIC,&before);
   if (a->Raiz() == n) {
     a->BorrarHoja(n);
   } else {
     BorrarSubArbolAux(a, n);
   }
+  struct std::timespec after;
+  clock_gettime(CLOCK_MONOTONIC,&after);
+
+  uint64_t before_ns = (before.tv_sec * 1000000000) + before.tv_nsec;
+  uint64_t after_ns = (after.tv_sec * 1000000000) + after.tv_nsec;
+
+  int64_t elapsed = after_ns - before_ns;
+  std::cout << "Time sec: " << after.tv_sec - before.tv_sec << std::endl;
+  std::cout << "Time: 0." << elapsed << std::endl;
 }
 
 void Menu::ListarHijosNodos(ARBOL *a, NODO *n) {

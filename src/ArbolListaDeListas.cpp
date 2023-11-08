@@ -123,19 +123,12 @@ void ArbolListaDeListas::BorrarHoja(ListaPrincipal* nodo) {
     delete punteroEliminar;
   }
 
-  ListaPrincipal* raiz = this->raiz;
-  ListaPrincipal* ant = raiz;
-  while (raiz != nullptr) {
-    if (raiz != ant && raiz == nodo) {
-      ant->sigM = raiz->sigM;
-      delete raiz;
-      return;
-    } else if (raiz == ant && raiz == nodo) {
-      delete raiz;
-    }
-    ant = raiz;
-    raiz = raiz->sigM;
+  ListaPrincipal* nodoBuscar = this->raiz;
+  while (nodoBuscar != nullptr && nodoBuscar->sigM != nodo) {
+    nodoBuscar = nodoBuscar->sigM;
   }
+  nodoBuscar->sigM = nodo->sigM;
+  delete nodo;
 }
 
 void ArbolListaDeListas::PonerRaiz(int64_t etiqueta) {
@@ -196,7 +189,7 @@ int64_t ArbolListaDeListas::NumNodos() {
   }
   int64_t numNodos = 1;
   ListaPrincipal* nodoAux = this->raiz;
-  while (nodoAux->sigM) {
+  while (nodoAux->sigM != nullptr) {
     ++numNodos;
     nodoAux = nodoAux->sigM;
   }

@@ -1,7 +1,7 @@
 #include "ArbolArreglo.hpp"
 
 void ArbolArreglo::Iniciar() {
-  this->capacidad = 100;
+  this->capacidad = 200000;
   this->ultimoLleno = -1;
   this->arreglo = new nodo[this->capacidad];
 }
