@@ -40,8 +40,8 @@ class ListasDeAdyacencia {
   double Peso(Vertice* salida, Vertice* llegada);
   Vertice* PrimerVertice();
   Vertice* SiguienteVertice(Vertice* vert);
-  Vertice* PrimerVerticeAdyacente(Vertice* primer, Vertice* segundo);
-  Vertice* SiguienteVerticeAdyacente(Vertice* vert);
+  Vertice* PrimerVerticeAdyacente(Vertice* segundo);
+  Vertice* SiguienteVerticeAdyacente(Vertice* vert, Vertice* sig);
   int64_t NumVertices();
 };
 

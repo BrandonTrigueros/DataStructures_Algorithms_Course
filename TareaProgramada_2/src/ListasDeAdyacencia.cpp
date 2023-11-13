@@ -1,7 +1,6 @@
 #include "ListasDeAdyacencia.hpp"
 #include <iterator>
 
-
 void ListasDeAdyacencia::Iniciar(){
   this->listaVert = nullptr; 
   this->cantVert = 0;
@@ -124,12 +123,16 @@ Vertice* ListasDeAdyacencia::SiguienteVertice(Vertice* vert) {
   return vert->siguienteVert;
 }
 
-Vertice* ListasDeAdyacencia::PrimerVerticeAdyacente(Vertice* primer, Vertice* segundo) {
-  
+Vertice* ListasDeAdyacencia::PrimerVerticeAdyacente(Vertice* primer) {
+  return primer->listaAristas->verticeApuntado; 
 }
 
-Vertice* ListasDeAdyacencia::SiguienteVerticeAdyacente(Vertice* vert) {
-  return vert->listaAristas->verticeApuntado;
+Vertice* ListasDeAdyacencia::SiguienteVerticeAdyacente(Vertice* vert, Vertice* sig) {
+  Aristas* aristaAux = vert->listaAristas;
+  while (aristaAux->verticeApuntado != sig) {
+    aristaAux = aristaAux->sigArista;
+  }
+  return aristaAux->sigArista->verticeApuntado; 
 }
 
 int64_t ListasDeAdyacencia::NumVertices() {
