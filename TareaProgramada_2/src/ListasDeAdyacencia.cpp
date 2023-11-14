@@ -76,11 +76,18 @@ std::string ListasDeAdyacencia::Etiqueta(Vertice* vert) {
 
 void ListasDeAdyacencia::AgregarArista(Vertice* salida, Vertice* llegada, double peso) {
   Aristas* aristaAgregar= new Aristas();
+  Aristas* aristaAgregarInv = new Aristas();
+
   aristaAgregar->peso = peso;
   aristaAgregar->verticeApuntado = llegada;
   aristaAgregar->sigArista = salida->listaAristas;
 
+  aristaAgregarInv->peso = peso;
+  aristaAgregarInv->verticeApuntado = salida;
+  aristaAgregar->sigArista = llegada->listaAristas;
+
   salida->listaAristas = aristaAgregar;
+  llegada->listaAristas = aristaAgregar;
 }
 
 void ListasDeAdyacencia::EliminarArista(Vertice* salida, Vertice* llegada) {
