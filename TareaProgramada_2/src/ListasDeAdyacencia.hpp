@@ -2,27 +2,26 @@
 #define LISTAS_DE_ADYACENCIA
 
 #include <cstdint>
-#include <string>
-
 #include <iostream>
+#include <string>
 
 struct Vertice;
 
-struct Aristas {
+struct Arista {
   double peso = 0;
-  Vertice *verticeApuntado = nullptr;
-  Aristas* sigArista = nullptr;
+  Vertice* verticeApuntado = nullptr;
+  Arista* sigArista = nullptr;
 };
 
 struct Vertice {
-  Aristas *listaAristas = nullptr;
-  Vertice *siguienteVert = nullptr;
+  Arista* listaAristas = nullptr;
+  Vertice* siguienteVert = nullptr;
   std::string etiqueta = "";
 };
 
 class ListasDeAdyacencia {
  public:
-  Vertice *listaVert;
+  Vertice* listaVert;
   int64_t cantVert;
 
  public:
@@ -45,4 +44,5 @@ class ListasDeAdyacencia {
   int64_t NumVertices();
 };
 
-#endif // LISTAS_DE_ADYACENCIA
+#define GRAFO ListasDeAdyacencia
+#endif  // LISTAS_DE_ADYACENCIA

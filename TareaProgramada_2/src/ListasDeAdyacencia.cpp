@@ -1,29 +1,30 @@
 #include "ListasDeAdyacencia.hpp"
+
 #include <iterator>
 
-void ListasDeAdyacencia::Iniciar(){
-  this->listaVert = nullptr; 
+void ListasDeAdyacencia::Iniciar() {
+  this->listaVert = nullptr;
   this->cantVert = 0;
 }
 
 void ListasDeAdyacencia::Destruir() {
   if (!this->Vacio()) {
     Vaciar();
-  } 
+  }
 }
 
 void ListasDeAdyacencia::Vaciar() {
   Vertice* aux = this->listaVert;
   while (aux != nullptr) {
-    Aristas* aristaAux = aux->listaAristas;
+    Arista* aristaAux = aux->listaAristas;
     while (aristaAux != nullptr) {
-      Aristas* aristaBorrar = aristaAux;
+      Arista* aristaBorrar = aristaAux;
       aristaAux = aristaAux->sigArista;
       this->EliminarArista(aux, aristaBorrar->verticeApuntado);
     }
     Vertice* borrar = aux;
     aux = aux->siguienteVert;
-    this->EliminarVert(borrar); 
+    this->EliminarVert(borrar);
   }
 }
 
@@ -40,7 +41,7 @@ Vertice* ListasDeAdyacencia::AgregarVert(std::string etiq) {
 
   if (this->listaVert == nullptr) {
     this->listaVert = toAdd;
-  } else { 
+  } else {
     toAdd->siguienteVert = this->listaVert;
     this->listaVert = toAdd;
   }
@@ -74,9 +75,10 @@ std::string ListasDeAdyacencia::Etiqueta(Vertice* vert) {
   return vert->etiqueta;
 }
 
-void ListasDeAdyacencia::AgregarArista(Vertice* salida, Vertice* llegada, double peso) {
-  Aristas* aristaAgregar= new Aristas();
-  Aristas* aristaAgregarInv = new Aristas();
+void ListasDeAdyacencia::AgregarArista(
+    Vertice* salida, Vertice* llegada, double peso) {
+  Arista* aristaAgregar = new Arista();
+  Arista* aristaAgregarInv = new Arista();
 
   aristaAgregar->peso = peso;
   aristaAgregar->verticeApuntado = llegada;
@@ -91,7 +93,7 @@ void ListasDeAdyacencia::AgregarArista(Vertice* salida, Vertice* llegada, double
 }
 
 void ListasDeAdyacencia::EliminarArista(Vertice* salida, Vertice* llegada) {
-  Aristas* aristaABorrar = salida->listaAristas;  
+  Arista* aristaABorrar = salida->listaAristas;
   if (aristaABorrar->verticeApuntado == llegada) {
     salida->listaAristas = aristaABorrar->sigArista;
     delete aristaABorrar;
@@ -106,43 +108,40 @@ void ListasDeAdyacencia::EliminarArista(Vertice* salida, Vertice* llegada) {
   delete aristaABorrar->sigArista;
 }
 
-void ListasDeAdyacencia::ModificarPeso(Vertice* salida, Vertice* llegada, double peso) {
-  Aristas* pesoAModificar = salida->listaAristas;
+void ListasDeAdyacencia::ModificarPeso(
+    Vertice* salida, Vertice* llegada, double peso) {
+  Arista* pesoAModificar = salida->listaAristas;
   while (pesoAModificar->verticeApuntado != llegada) {
     pesoAModificar = pesoAModificar->sigArista;
   }
-  pesoAModificar->peso = peso; 
+  pesoAModificar->peso = peso;
 }
 
 double ListasDeAdyacencia::Peso(Vertice* salida, Vertice* llegada) {
-  Aristas* pesoARetornar= salida->listaAristas;
+  Arista* pesoARetornar = salida->listaAristas;
   while (pesoARetornar->verticeApuntado != llegada) {
     pesoARetornar = pesoARetornar->sigArista;
   }
   return pesoARetornar->peso;
 }
 
-Vertice* ListasDeAdyacencia::PrimerVertice() {
-  return this->listaVert;
-}
+Vertice* ListasDeAdyacencia::PrimerVertice() { return this->listaVert; }
 
 Vertice* ListasDeAdyacencia::SiguienteVertice(Vertice* vert) {
   return vert->siguienteVert;
 }
 
 Vertice* ListasDeAdyacencia::PrimerVerticeAdyacente(Vertice* primer) {
-  return primer->listaAristas->verticeApuntado; 
+  return primer->listaAristas->verticeApuntado;
 }
 
-Vertice* ListasDeAdyacencia::SiguienteVerticeAdyacente(Vertice* vert, Vertice* sig) {
-  Aristas* aristaAux = vert->listaAristas;
+Vertice* ListasDeAdyacencia::SiguienteVerticeAdyacente(
+    Vertice* vert, Vertice* sig) {
+  Arista* aristaAux = vert->listaAristas;
   while (aristaAux->verticeApuntado != sig) {
     aristaAux = aristaAux->sigArista;
   }
-  return aristaAux->sigArista->verticeApuntado; 
+  return aristaAux->sigArista->verticeApuntado;
 }
 
-int64_t ListasDeAdyacencia::NumVertices() {
-  return this->cantVert;
-}
-
+int64_t ListasDeAdyacencia::NumVertices() { return this->cantVert; }

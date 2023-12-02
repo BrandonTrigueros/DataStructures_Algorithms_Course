@@ -1,4 +1,6 @@
+#if 0
 #include <iostream>
+
 #include "ListasDeAdyacencia.hpp"
 
 int main () {
@@ -24,3 +26,4 @@ int main () {
 
   return 0;
 }
+#endif
