@@ -45,7 +45,7 @@ Vertice* ListasDeAdyacencia::AgregarVert(std::string etiq) {
     toAdd->siguienteVert = this->listaVert;
     this->listaVert = toAdd;
   }
-
+  ++this->cantVert;
   return toAdd;
 }
 
@@ -86,10 +86,10 @@ void ListasDeAdyacencia::AgregarArista(
 
   aristaAgregarInv->peso = peso;
   aristaAgregarInv->verticeApuntado = salida;
-  aristaAgregar->sigArista = llegada->listaAristas;
+  aristaAgregarInv->sigArista = llegada->listaAristas;
 
   salida->listaAristas = aristaAgregar;
-  llegada->listaAristas = aristaAgregar;
+  llegada->listaAristas = aristaAgregarInv;
 }
 
 void ListasDeAdyacencia::EliminarArista(Vertice* salida, Vertice* llegada) {
@@ -132,7 +132,10 @@ Vertice* ListasDeAdyacencia::SiguienteVertice(Vertice* vert) {
 }
 
 Vertice* ListasDeAdyacencia::PrimerVerticeAdyacente(Vertice* primer) {
-  return primer->listaAristas->verticeApuntado;
+  if (primer->listaAristas != nullptr) {
+    return primer->listaAristas->verticeApuntado;
+  }
+  return nullptr;
 }
 
 Vertice* ListasDeAdyacencia::SiguienteVerticeAdyacente(
@@ -141,7 +144,10 @@ Vertice* ListasDeAdyacencia::SiguienteVerticeAdyacente(
   while (aristaAux->verticeApuntado != sig) {
     aristaAux = aristaAux->sigArista;
   }
-  return aristaAux->sigArista->verticeApuntado;
+  if (aristaAux->sigArista != nullptr) {
+    return aristaAux->sigArista->verticeApuntado; 
+  }
+  return nullptr;
 }
 
 int64_t ListasDeAdyacencia::NumVertices() { return this->cantVert; }

@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <iostream>
 #include <map>
+#include <set>
 #include <string>
 #include <map>
 
@@ -40,6 +41,7 @@
   "║ 20. ConexoAncho               21. Dijkstra                   ║\n"                                                                                                                             \
   "║ 22. Floyd                     23. Prim                       ║\n"                                                                                                                             \
   "║ 24. Kruskal                   25. CircuitoHamiltonMC-BEP     ║\n"                                                                                                                             \
+  "║ 26. Salir                                                    ║\n"                                                                                                                             \
   "╚══════════════════════════════════════════════════════════════╝\n" \
   "Seleccione una opción: "
 

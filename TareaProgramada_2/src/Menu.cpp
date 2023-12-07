@@ -51,6 +51,7 @@ void Menu::run() {
 // ------------------------------
 void Menu::runGrafo() {
   int opcion;
+  bool salir = false;
   std::string etiq;
   std::string etiq1;
   Vertice* vertice = nullptr;
@@ -228,8 +229,12 @@ void Menu::runGrafo() {
         std::cin >> etiq1;
         vertice1 = this->BuscarVertice(etiq1);
         vertice = this->grafo->SiguienteVerticeAdyacente(vertice, vertice1);
-        std::cout << "Siguiente vertice adyacente: " << vertice->etiqueta
-                  << std::endl;
+        if (vertice != nullptr) {
+          std::cout << "Siguiente vertice adyacente: " << vertice->etiqueta
+            << std::endl;
+        } else {
+          std::cout << "Siguiente vertice adyacente es nulo " << std::endl; 
+        }
       }
       break;
     case 17:
@@ -241,7 +246,10 @@ void Menu::runGrafo() {
                   << std::endl;
       }
       break;
-    case 18:
+    case 18: {
+      int64_t aristas = this->numAristas(this->grafo);
+      std::cout << "Numero de aristas es: " << aristas << std::endl;
+      }
 
       break;
     case 19:
@@ -265,11 +273,17 @@ void Menu::runGrafo() {
     case 25:
 
       break;
+    case 26:
+      salir = true; 
+      std::cout << "Saliendo" << std::endl;
+      this->grafo->Destruir();
+      break;
+
     default:
       std::cout << "Opción inválida. Volviendo" << std::endl;
       break;
     }
-  } while (opcion < 1 || opcion > 25);
+  } while ((opcion >= 1 || opcion <= 25) && !salir);
 }
 
 // --------------------------------------
@@ -302,3 +316,23 @@ Vertice* Menu::BuscarVertice(std::string etiq) {
 // -----------------------------
 // -----ALGORITMOS GRAFOS-------
 // -----------------------------
+
+int64_t Menu::numAristas(GRAFO* g) {
+  int64_t count = 0;
+  std::set<Vertice*> dicVisVertex;
+  if (!g->Vacio()) {
+    Vertice* v = g->PrimerVertice();
+    while (v != nullptr) {
+      if (dicVisVertex.find(v) == dicVisVertex.end()) {
+        Vertice* va = g->PrimerVerticeAdyacente(v);
+        while (va != nullptr) {
+          ++count;
+          va = g->SiguienteVerticeAdyacente(v, va);
+        }
+      }
+      dicVisVertex.insert(v);
+      v = g->SiguienteVertice(v);
+    }
+  }
+  return count/2;
+}
