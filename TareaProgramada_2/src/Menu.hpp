@@ -6,6 +6,7 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <map>
 
 #include "ListasDeAdyacencia.hpp"
 // #include "MatrizDeAdyacencia.hpp"
@@ -97,7 +98,7 @@ class Menu {
   // Retorna:
   // Requiere:
   // Modifica: N/A
-  Vertice** Dijkstra(GRAFO* g, Vertice* origen);
+  std::map<Vertice, int64_t>  Dijkstra(GRAFO* g, Vertice* origen);
 
   // Parámetros:
   // Efecto:
