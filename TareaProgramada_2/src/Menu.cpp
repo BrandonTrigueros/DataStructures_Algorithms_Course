@@ -28,6 +28,8 @@ double log(double base, double x) { return std::log(x) / std::log(base); }
 int64_t profPrimR(
     GRAFO* g, Vertice* vertAct, std::set<Vertice*>& dicVertVis, int64_t& count);
 
+bool ExisteArista(GRAFO* g, Vertice* v1, Vertice* v2);
+
 // void Menu::crearGrafoAuto() { }
 
 // ----------------------------------
@@ -293,7 +295,7 @@ void Menu::runGrafo() {
       Vertice* v = this->grafo->PrimerVertice();
       while (v != nullptr) {
         // Set width to 3 characters for each output
-        std::cout << std::setw(3) << this->grafo->Etiqueta(v) << " ";
+        std::cout << std::setw(3) << this->grafo->Etiqueta(v);
         v = this->grafo->SiguienteVertice(v);
       }
 
@@ -302,8 +304,7 @@ void Menu::runGrafo() {
 
       for (size_t i = 0; i < resultado->P.size(); i++) {
         // Set width to 3 characters for each output
-        std::cout << std::setw(3) << this->grafo->Etiqueta(resultado->P[i])
-                  << " ";
+        std::cout << std::setw(3) << this->grafo->Etiqueta(resultado->P[i]);
       }
 
       std::cout << std::endl;
@@ -312,10 +313,10 @@ void Menu::runGrafo() {
       for (size_t i = 0; i < resultado->D.size(); ++i) {
         if (resultado->D[i] > 100000) {
           // Set width to 3 characters for each output
-          std::cout << std::setw(3) << " - ";
+          std::cout << std::setw(3) << "-";
         } else {
           // Set width to 3 characters for each output
-          std::cout << std::setw(3) << resultado->D[i] << " ";
+          std::cout << std::setw(3) << resultado->D[i];
         }
       }
       std::cout << std::endl;
@@ -323,9 +324,11 @@ void Menu::runGrafo() {
     }
 
     break;
-    case 22:
+    case 22: {
+      // ResultadoFloyd* resultado = this->Floyd(this->grafo);
+    }
 
-      break;
+    break;
     case 23:
 
       break;
@@ -552,7 +555,11 @@ ResultadoDijkstra* Menu::Dijkstra(GRAFO* G, Vertice* origen) {
   int i = 0;
   while (v != nullptr) {
     P[i] = origen;
-    D[i] = G->Peso(origen, v);
+    if (ExisteArista(G, origen, v)) {
+      D[i] = G->Peso(origen, v);
+    } else {
+      D[i] = std::numeric_limits<double>::max();
+    }
     v = G->SiguienteVertice(v);
     ++i;
   }
@@ -562,9 +569,11 @@ ResultadoDijkstra* Menu::Dijkstra(GRAFO* G, Vertice* origen) {
     v = G->PrimerVertice();
     for (int64_t j = 0; j < n; ++j) {
       if (!dicc.Pertenece(v)) {
-        if (D[p.indice] + G->Peso(p.vertice, v) < D[j]) {
-          D[j] = D[p.indice] + G->Peso(p.vertice, v);
-          P[j] = p.vertice;
+        if (ExisteArista(G, p.vertice, v)) {
+          if (D[p.indice] + G->Peso(p.vertice, v) < D[j]) {
+            D[j] = D[p.indice] + G->Peso(p.vertice, v);
+            P[j] = p.vertice;
+          }
         }
       }
       v = G->SiguienteVertice(v);
@@ -580,7 +589,6 @@ ResultadoFloyd* Menu::Floyd(GRAFO* g) {
   std::vector<std::vector<double>> A(g->NumVertices());
   std::vector<std::vector<int64_t>> P(g->NumVertices());
   Vertice* vi = g->PrimerVertice();
-  // std::cout << g->Etiqueta(vi) << std::endl;
   Vertice* vj = g->PrimerVertice();
   for (int64_t i = 0; i < g->NumVertices(); ++i) {
     for (int64_t j = 0; j < g->NumVertices(); ++j) {

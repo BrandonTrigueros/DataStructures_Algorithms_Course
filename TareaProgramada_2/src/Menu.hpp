@@ -10,8 +10,8 @@
 #include <string>
 #include <vector>
 
-// #include "ListasDeAdyacencia.hpp"
-#include "MatrizDeAdyacencia.hpp"
+#include "ListasDeAdyacencia.hpp"
+// #include "MatrizDeAdyacencia.hpp"
 
 #define OPCIONES_PRINCIPAL                                                        \
   "╔═══════════════════════╗\n" \
