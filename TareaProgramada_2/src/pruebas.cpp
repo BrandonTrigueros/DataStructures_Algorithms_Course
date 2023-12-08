@@ -2,11 +2,12 @@
 #include <iostream>
 #include <map>
 #include <queue>
+#include <set>
 
-//#include "ListasDeAdyacencia.hpp"
-#include "MatrizDeAdyacencia.hpp"
+#include "ListasDeAdyacencia.hpp"
+//#include "MatrizDeAdyacencia.hpp"
 
-void RecorridoAnchoPrimero(GRAFO grafo);
+void RecorridoAnchoPrimero(GRAFO* g);
 
 int main () {
   // Pruebas a todos los operadores del grafo
@@ -54,11 +55,11 @@ int main () {
 
   std::cout << "grafo vacio despues de agregar vertices y aristas: " << grafo.Vacio() << std::endl;
 
-  RecorridoAnchoPrimero(grafo);
+  RecorridoAnchoPrimero(&grafo);
 
   std::cout << "Peso de la arista entre el vertice 3 y el vertice 2: " << grafo.Peso(vertice3, vertice2) << std::endl;
 
-  grafo.EliminarArista(vertice3, vertice2);
+  //grafo.EliminarArista(vertice3, vertice2);
 
   std::cout << "Peso de la arista entre el vertice 3 y el vertice 2 despues de eliminarla: " << grafo.Peso(vertice3, vertice2) << std::endl;
 
@@ -88,32 +89,32 @@ int main () {
 }
 #endif
 
-void RecorridoAnchoPrimero(GRAFO grafo) {
-  if(!grafo.Vacio()) {
-    std::map<Vertice*, bool> diccionario;
+void RecorridoAnchoPrimero(GRAFO* g) {
+  if(!g->Vacio()) {
+    std::set<Vertice*> diccionario;
     std::queue<Vertice*> cola;
-    Vertice* vertice = grafo.PrimerVertice();
+    Vertice* vertice = g->PrimerVertice();
     while(vertice != nullptr) {
       // Si el vertice no ha sido visitado
       if (diccionario.find(vertice) == diccionario.end()) {
+        diccionario.insert(vertice);
         cola.push(vertice);
-        diccionario[vertice] = true;
         while(!cola.empty()) {
-          Vertice* verticeActual = cola.front();
+          Vertice* verticeActual = cola.back();
           cola.pop();
-          std::cout << grafo.Etiqueta(verticeActual) << " ";
-          Vertice* verticeAdyacente = grafo.PrimerVerticeAdyacente(verticeActual);
+          std::cout << g->Etiqueta(verticeActual) << " " << std::flush;
+          Vertice* verticeAdyacente = g->PrimerVerticeAdyacente(verticeActual);
           while(verticeAdyacente != nullptr) {
             if (diccionario.find(verticeAdyacente) == diccionario.end()) {
               cola.push(verticeAdyacente);
-              diccionario[verticeAdyacente] = true;
+              diccionario.insert(verticeAdyacente);
             }
-            verticeAdyacente = grafo.SiguienteVerticeAdyacente(verticeActual, verticeAdyacente);
+            verticeAdyacente = g->SiguienteVerticeAdyacente(verticeActual, verticeAdyacente);
           }
         }
       }
-      vertice = grafo.SiguienteVertice(vertice);
+      vertice = g->SiguienteVertice(vertice);
     }
-    diccionario.clear();
+    std::cout << std::endl;
   }
 }

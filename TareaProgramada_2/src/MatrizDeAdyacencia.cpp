@@ -2,6 +2,8 @@
 
 void MatrizDeAdyacencia::Iniciar()
 {
+  this->maxVertices = MAX_VERTICES;
+  this->cantVertices = 0;
   this->vertices = new Vertice[this->maxVertices];
   this->matriz = new Arista**[this->maxVertices];
   for (int64_t i = 0; i < this->maxVertices; ++i) {
@@ -20,19 +22,12 @@ void MatrizDeAdyacencia::Destruir()
   // Liberar la memoria de los vértices
 }
 
-void MatrizDeAdyacencia::Destruir()
-{
-  this->cantVertices = 0;
-  this->maxVertices = 0;
-  this->Vaciar();
-}
-
 void MatrizDeAdyacencia::Vaciar()
 {
   this->cantVertices = 0;
   for (int64_t i = 0; i < this->maxVertices; ++i) {
     for (int64_t j = 0; j < this->maxVertices; ++j) {
-      this->matriz[i][j]->peso = 0;
+      this->matriz[i][j]->peso = -1;
     }
   }
 }
@@ -118,7 +113,7 @@ void MatrizDeAdyacencia::EliminarArista(
       posLlegada = i;
     }
   }
-  this->matriz[posSalida][posLlegada]->peso = 0;
+  this->matriz[posSalida][posLlegada]->peso = -1;
 }
 
 void MatrizDeAdyacencia::ModificarPeso(
@@ -170,7 +165,11 @@ Vertice* MatrizDeAdyacencia::SiguienteVertice(Vertice* vert)
       break;
     }
   }
-  return &this->vertices[pos + 1];
+  if (pos == this->cantVertices) {
+    return nullptr;
+  } else {
+    return &this->vertices[pos + 1];
+  }
 }
 
 Vertice* MatrizDeAdyacencia::PrimerVerticeAdyacente(Vertice* segundo)
@@ -183,7 +182,7 @@ Vertice* MatrizDeAdyacencia::PrimerVerticeAdyacente(Vertice* segundo)
     }
   }
   for (int64_t i = 0; i < this->cantVertices; ++i) {
-    if (this->matriz[pos][i]->peso != 0) {
+    if (this->matriz[pos][i]->peso != -1) {
       return &this->vertices[i];
     }
   }
@@ -204,7 +203,7 @@ Vertice* MatrizDeAdyacencia::SiguienteVerticeAdyacente(
     }
   }
   for (int64_t i = posSig + 1; i < this->cantVertices; ++i) {
-    if (this->matriz[pos][i]->peso != 0) {
+    if (this->matriz[pos][i]->peso != -1) {
       return &this->vertices[i];
     }
   }
