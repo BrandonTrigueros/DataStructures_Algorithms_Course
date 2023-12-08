@@ -266,7 +266,14 @@ void Menu::runGrafo() {
     }
 
       break;
-    case 20:
+    case 20: {
+      bool result = this->ConexoAncho(this->grafo);
+      if (result) {
+        std::cout << "El grafo es conexo" << std::endl;
+      } else {
+        std::cout << "El grafo no es conexo" << std::endl;
+      }
+    }
 
       break;
     case 21:
@@ -392,7 +399,7 @@ bool Menu::ConexoAncho(GRAFO* g) {
         v = colaVert.back();
         colaVert.pop();
         dicVertVis.insert(v);
-        Vertice* va = g->PrimerVerticeAdyacente(va);
+        Vertice* va = g->PrimerVerticeAdyacente(v);
         while (va != nullptr) {
           if (dicVertVis.find(va) == dicVertVis.end()) {
             colaVert.push(va);
