@@ -90,6 +90,7 @@ class Menu {
   int mostrarOperadoresGrafo();
   void mostrarCreditos();
   Vertice* BuscarVertice(std::string etiq);
+  void crearGrafoManual();
 
   // void crearGrafoAuto();
 
