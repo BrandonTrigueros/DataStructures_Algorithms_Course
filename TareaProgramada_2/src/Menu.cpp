@@ -5,6 +5,7 @@
 #include <ctime>
 #include <ostream>
 #include <sched.h>
+#include <system_error>
 #include <time.h>
 #include <unistd.h>
 
@@ -17,6 +18,9 @@ Menu::~Menu() {
 }
 
 double log(double base, double x) { return std::log(x) / std::log(base); }
+
+int64_t profPrimR(GRAFO* g, Vertice* vertAct, std::set<Vertice*>& dicVertVis,
+    int64_t& count);
 
 // void Menu::crearGrafoAuto() { }
 
@@ -249,10 +253,17 @@ void Menu::runGrafo() {
     case 18: {
       int64_t aristas = this->numAristas(this->grafo);
       std::cout << "Numero de aristas es: " << aristas << std::endl;
-      }
+    }
 
       break;
-    case 19:
+    case 19: {
+      bool result = this->ConexoProfundidad(this->grafo);
+      if (result) {
+        std::cout << "El grafo es conexo" << std::endl;
+      } else {
+        std::cout << "El grafo no es conexo" << std::endl;
+      }
+    }
 
       break;
     case 20:
@@ -336,3 +347,64 @@ int64_t Menu::numAristas(GRAFO* g) {
   }
   return count/2;
 }
+
+int64_t profPrimR(GRAFO* g, Vertice* vertAct, std::set<Vertice*>& dicVertVis,
+    int64_t& count) {
+  dicVertVis.insert(vertAct);
+  count++;
+  Vertice* vertAdy = g->PrimerVerticeAdyacente(vertAct);
+  while (vertAdy != NULL) {
+    if (dicVertVis.find(vertAdy) == dicVertVis.end()) {
+      dicVertVis.insert(vertAdy);
+      count = profPrimR(g, vertAdy, dicVertVis, count);
+    }
+    vertAdy = g->SiguienteVerticeAdyacente(vertAct, vertAdy);
+  }
+  return count;
+}
+
+bool Menu::ConexoProfundidad(GRAFO* g) {
+  int64_t count = 0;
+  std::set<Vertice*> dicVertVis;
+  if (!g->Vacio()) {
+    Vertice* vertAct = g->PrimerVertice();
+    if (dicVertVis.find(vertAct) == dicVertVis.end()) {
+      profPrimR(g, vertAct, dicVertVis, count);
+    }
+  }
+  
+  if (count != g->NumVertices()) {
+    return false;
+  }
+  return true;
+}
+
+bool Menu::ConexoAncho(GRAFO* g) {
+  int64_t count = 0;
+  if (!g->Vacio()) {
+    std::queue<Vertice*> colaVert;
+    std::set<Vertice*> dicVertVis;
+    Vertice* v = g->PrimerVertice();
+    if (dicVertVis.find(v) == dicVertVis.end()) {
+      colaVert.push(v);
+      while (!colaVert.empty()) {
+        ++count;
+        v = colaVert.back();
+        colaVert.pop();
+        dicVertVis.insert(v);
+        Vertice* va = g->PrimerVerticeAdyacente(va);
+        while (va != nullptr) {
+          if (dicVertVis.find(va) == dicVertVis.end()) {
+            colaVert.push(va);
+          }
+          va = g->SiguienteVerticeAdyacente(v, va);
+        }
+      }
+    }
+  }
+  if (count == g->NumVertices()) {
+    return true;
+  }
+  return false;
+}
+
