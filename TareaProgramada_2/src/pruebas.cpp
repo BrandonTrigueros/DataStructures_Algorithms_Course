@@ -1,4 +1,4 @@
-#if 1
+#if 0
 #include <iostream>
 #include <map>
 #include <queue>
@@ -103,7 +103,7 @@ int main() {
   return 0;
 }
 
-#endif
+
 
 void RecorridoAnchoPrimero(GRAFO* g) {
   if (!g->Vacio()) {
@@ -135,3 +135,5 @@ void RecorridoAnchoPrimero(GRAFO* g) {
     std::cout << std::endl;
   }
 }
+
+#endif

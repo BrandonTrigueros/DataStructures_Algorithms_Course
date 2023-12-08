@@ -14,9 +14,12 @@ void MatrizDeAdyacencia::Iniciar() {
 
 void MatrizDeAdyacencia::Destruir() {
   this->vertices = nullptr;
-  this->matriz = nullptr;
   this->cantVertices = 0;
   delete[] this->vertices;
+  for (int64_t i = 0; i < this->maxVertices; i++) {
+    delete[] this->matriz[i];
+  }
+  delete[] this->matriz;
 }
 
 void MatrizDeAdyacencia::Vaciar() {

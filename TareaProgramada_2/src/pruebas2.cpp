@@ -58,10 +58,12 @@ int main () {
   RecorridoAnchoPrimero(&grafo);
 
   std::cout << "Peso de la arista entre el vertice 3 y el vertice 2: " << grafo.Peso(vertice3, vertice2) << std::endl;
+  std::cout << "Peso de la arista entre el vertice 2 y el vertice 3: " << grafo.Peso(vertice2, vertice3) << std::endl;
 
   grafo.EliminarArista(vertice3, vertice2);
 
   std::cout << "Peso de la arista entre el vertice 3 y el vertice 2 despues de eliminarla: " << grafo.Peso(vertice3, vertice2) << std::endl;
+  std::cout << "Peso de la arista entre el vertice 2 y el vertice 3 despues de eliminarla: " << grafo.Peso(vertice2, vertice3) << std::endl;
 
   grafo.ModificarEtiqueta(vertice1, "Vertice 1 modificado");
 
@@ -70,6 +72,7 @@ int main () {
 
   std::cout << "Peso de la arista entre el vertice 1 y el vertice 4: " << grafo.Peso(vertice1, vertice4) << std::endl;
   std::cout << "Peso de la arista entre el vertice 4 y el vertice 3: " << grafo.Peso(vertice4, vertice3) << std::endl;
+  std::cout << "Peso de la arista entre el vertice 3 y el vertice 4: " << grafo.Peso(vertice3, vertice4) << std::endl;
 
   std::cout << "Numero de vertices: " << grafo.NumVertices() << std::endl;
 
@@ -87,7 +90,7 @@ int main () {
   grafo.Destruir();
   return 0;
 }
-#endif
+
 
 /* void RecorridoAnchoPrimero(GRAFO* g) {
   if(!g->Vacio()) {
@@ -158,3 +161,5 @@ void RecorridoAnchoPrimero(GRAFO* g) {
     std::cout << std::endl;
   }
 }
+
+#endif

@@ -23,6 +23,10 @@ struct Arista {
     void setPeso(double pesoAux) {
       this->peso = pesoAux;
     }
+
+    ~Arista() {
+      this->peso = -1;
+    }
 };
 
 struct Vertice {
@@ -34,6 +38,9 @@ struct Vertice {
 
     void setEtiqueta(std::string etiq) {
       this->etiqueta = etiq;
+    }
+
+    ~Vertice() {
     }
 };
 
