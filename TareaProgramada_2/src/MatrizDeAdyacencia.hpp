@@ -5,78 +5,66 @@
 
 #include <cstdint>
 #include <iostream>
-
-#include <cstdint>
-#include <iostream>
+#include <limits>
 #include <string>
 #include <vector>
-#include <limits>
 
-// implementar por matriz de adyacencia el modelo Grafo No Dirigido, con pesos, sin aristas paralelas y sin lazos.
+// implementar por matriz de adyacencia el modelo Grafo No Dirigido, con pesos,
+// sin aristas paralelas y sin lazos.
 
 struct Arista {
-  public:
-    double peso;
-    Arista(double pesoAux = -1) {
-      this->peso = pesoAux;
-    }
+ public:
+  double peso;
+  Arista(double pesoAux = std::numeric_limits<int64_t>::max()) {
+    this->peso = pesoAux;
+  }
 
-    void setPeso(double pesoAux) {
-      this->peso = pesoAux;
-    }
+  void setPeso(double pesoAux) { this->peso = pesoAux; }
 
-    ~Arista() {
-      this->peso = -1;
-    }
+  ~Arista() { this->peso = std::numeric_limits<int64_t>::max(); }
 };
 
 struct Vertice {
-  public:
-    std::string etiqueta;
-    Vertice(std::string etiq = "") {
-      this->etiqueta = etiq;
-    }
+ public:
+  std::string etiqueta;
+  Vertice(std::string etiq = "") { this->etiqueta = etiq; }
 
-    void setEtiqueta(std::string etiq) {
-      this->etiqueta = etiq;
-    }
+  void setEtiqueta(std::string etiq) { this->etiqueta = etiq; }
 
-    ~Vertice() {
-    }
+  ~Vertice() { }
 };
 
-class MatrizDeAdyacencia
-{
-  private:
-    int64_t maxVertices;
-    int64_t cantVertices;
-    Vertice* vertices;
-    Arista** matriz;
-    int64_t limiteMatriz;
+class MatrizDeAdyacencia {
+ private:
+  int64_t maxVertices;
+  int64_t cantVertices;
+  Vertice* vertices;
+  Arista** matriz;
+  int64_t limiteMatriz;
 
-  public:
-    MatrizDeAdyacencia();
-    ~MatrizDeAdyacencia();
+ public:
+  MatrizDeAdyacencia();
+  ~MatrizDeAdyacencia();
 
-    void Iniciar();
-    void Destruir();
-    void Vaciar();
-    bool Vacio();
-    Vertice* AgregarVert(std::string etiq);
-    void EliminarVert(Vertice* vert);
-    void ModificarEtiqueta(Vertice* vert, std::string etiq);
-    std::string Etiqueta(Vertice* vert);
-    void AgregarArista(Vertice* salida, Vertice* llegada, double peso);
-    void EliminarArista(Vertice* salida, Vertice* llegada);
-    void ModificarPeso(Vertice* salida, Vertice* llegada, double peso);
-    double Peso(Vertice* salida, Vertice* llegada);
-    Vertice* PrimerVertice();
-    Vertice* SiguienteVertice(Vertice* vert);
-    Vertice* PrimerVerticeAdyacente(Vertice* segundo);
-    Vertice* SiguienteVerticeAdyacente(Vertice* vert, Vertice* sig);
-    int64_t NumVertices();
+  void Iniciar();
+  void Destruir();
+  void Vaciar();
+  bool Vacio();
+  Vertice* AgregarVert(std::string etiq);
+  void EliminarVert(Vertice* vert);
+  void ModificarEtiqueta(Vertice* vert, std::string etiq);
+  std::string Etiqueta(Vertice* vert);
+  void AgregarArista(Vertice* salida, Vertice* llegada, double peso);
+  void EliminarArista(Vertice* salida, Vertice* llegada);
+  void ModificarPeso(Vertice* salida, Vertice* llegada, double peso);
+  double Peso(Vertice* salida, Vertice* llegada);
+  Vertice* PrimerVertice();
+  Vertice* SiguienteVertice(Vertice* vert);
+  Vertice* PrimerVerticeAdyacente(Vertice* segundo);
+  Vertice* SiguienteVerticeAdyacente(Vertice* vert, Vertice* sig);
+  int64_t NumVertices();
 };
 
 #define GRAFO MatrizDeAdyacencia
 
-#endif // MATRIZ_DE_ADYACENCIA_HPP
+#endif  // MATRIZ_DE_ADYACENCIA_HPP

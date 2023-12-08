@@ -525,7 +525,7 @@ ResultadoDijkstra* Menu::Dijkstra(GRAFO* G, Vertice* origen) {
     for (int64_t j = 0; j < n; ++j) {
       if (!dicc.Pertenece(v)) {
         if (D[p.indice] + G->Peso(p.vertice, v) < D[j]) {
-          D[j] = D[j] + G->Peso(p.vertice, v);
+          D[j] = D[p.indice] + G->Peso(p.vertice, v);
           P[j] = p.vertice;
         }
       }

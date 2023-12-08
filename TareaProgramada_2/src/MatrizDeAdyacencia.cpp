@@ -1,6 +1,7 @@
 #include "MatrizDeAdyacencia.hpp"
 
-// implementar por matriz de adyacencia el modelo Grafo No Dirigido, con pesos, sin aristas paralelas y sin lazos.
+// implementar por matriz de adyacencia el modelo Grafo No Dirigido, con pesos,
+// sin aristas paralelas y sin lazos.
 
 void MatrizDeAdyacencia::Iniciar() {
   this->limiteMatriz = std::numeric_limits<int64_t>::max();
@@ -23,13 +24,9 @@ void MatrizDeAdyacencia::Destruir() {
   delete[] this->matriz;
 }
 
-void MatrizDeAdyacencia::Vaciar() {
-  this->cantVertices = 0;
-}
+void MatrizDeAdyacencia::Vaciar() { this->cantVertices = 0; }
 
-bool MatrizDeAdyacencia::Vacio() {
-  return this->cantVertices == 0;
-}
+bool MatrizDeAdyacencia::Vacio() { return this->cantVertices == 0; }
 
 Vertice* MatrizDeAdyacencia::AgregarVert(std::string etiq) {
   if (this->cantVertices < this->maxVertices) {
@@ -84,7 +81,8 @@ std::string MatrizDeAdyacencia::Etiqueta(Vertice* vert) {
   return "";
 }
 
-void MatrizDeAdyacencia::AgregarArista(Vertice* salida, Vertice* llegada, double peso) {
+void MatrizDeAdyacencia::AgregarArista(
+    Vertice* salida, Vertice* llegada, double peso) {
   int64_t indiceSalida = this->limiteMatriz;
   int64_t indiceLlegada = this->limiteMatriz;
   for (int64_t i = 0; i < this->cantVertices; i++) {
@@ -95,7 +93,8 @@ void MatrizDeAdyacencia::AgregarArista(Vertice* salida, Vertice* llegada, double
       indiceLlegada = i;
     }
   }
-  if (indiceSalida != this->limiteMatriz && indiceLlegada != this->limiteMatriz) {
+  if (indiceSalida != this->limiteMatriz
+      && indiceLlegada != this->limiteMatriz) {
     this->matriz[indiceSalida][indiceLlegada].peso = peso;
     this->matriz[indiceLlegada][indiceSalida].peso = peso;
   }
@@ -112,13 +111,15 @@ void MatrizDeAdyacencia::EliminarArista(Vertice* salida, Vertice* llegada) {
       indiceLlegada = i;
     }
   }
-  if (indiceSalida != this->limiteMatriz && indiceLlegada != this->limiteMatriz) {
+  if (indiceSalida != this->limiteMatriz
+      && indiceLlegada != this->limiteMatriz) {
     this->matriz[indiceSalida][indiceLlegada].peso = this->limiteMatriz;
     this->matriz[indiceLlegada][indiceSalida].peso = this->limiteMatriz;
   }
 }
 
-void MatrizDeAdyacencia::ModificarPeso(Vertice* salida, Vertice* llegada, double peso) {
+void MatrizDeAdyacencia::ModificarPeso(
+    Vertice* salida, Vertice* llegada, double peso) {
   int64_t indiceSalida = this->limiteMatriz;
   int64_t indiceLlegada = this->limiteMatriz;
   for (int64_t i = 0; i < this->cantVertices; i++) {
@@ -129,7 +130,8 @@ void MatrizDeAdyacencia::ModificarPeso(Vertice* salida, Vertice* llegada, double
       indiceLlegada = i;
     }
   }
-  if (indiceSalida != this->limiteMatriz && indiceLlegada != this->limiteMatriz) {
+  if (indiceSalida != this->limiteMatriz
+      && indiceLlegada != this->limiteMatriz) {
     this->matriz[indiceSalida][indiceLlegada].peso = peso;
     this->matriz[indiceLlegada][indiceSalida].peso = peso;
   }
@@ -146,7 +148,8 @@ double MatrizDeAdyacencia::Peso(Vertice* salida, Vertice* llegada) {
       indiceLlegada = i;
     }
   }
-  if (indiceSalida != this->limiteMatriz && indiceLlegada != this->limiteMatriz) {
+  if (indiceSalida != this->limiteMatriz
+      && indiceLlegada != this->limiteMatriz) {
     return this->matriz[indiceSalida][indiceLlegada].peso;
   }
   return this->limiteMatriz;
@@ -186,7 +189,8 @@ Vertice* MatrizDeAdyacencia::PrimerVerticeAdyacente(Vertice* segundo) {
   return nullptr;
 }
 
-Vertice* MatrizDeAdyacencia::SiguienteVerticeAdyacente(Vertice* vert, Vertice* sig) {
+Vertice* MatrizDeAdyacencia::SiguienteVerticeAdyacente(
+    Vertice* vert, Vertice* sig) {
   int64_t indiceVert = this->limiteMatriz;
   int64_t indiceSig = this->limiteMatriz;
   for (int64_t i = 0; i < this->cantVertices; i++) {
@@ -207,17 +211,11 @@ Vertice* MatrizDeAdyacencia::SiguienteVerticeAdyacente(Vertice* vert, Vertice* s
   return nullptr;
 }
 
-int64_t MatrizDeAdyacencia::NumVertices() {
-  return this->cantVertices;
-}
-
-
+int64_t MatrizDeAdyacencia::NumVertices() { return this->cantVertices; }
 
 MatrizDeAdyacencia::MatrizDeAdyacencia() {
   this->vertices = nullptr;
   this->matriz = nullptr;
 }
 
-MatrizDeAdyacencia::~MatrizDeAdyacencia() {
-}
-
+MatrizDeAdyacencia::~MatrizDeAdyacencia() { }

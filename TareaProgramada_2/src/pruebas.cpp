@@ -1,4 +1,4 @@
-#if 0
+#if 1
 #include <iostream>
 #include <map>
 #include <queue>
@@ -32,14 +32,14 @@ int main() {
   grafo.AgregarArista(verticeE, verticeF, 12);
   grafo.AgregarArista(verticeD, verticeF, 5);
 
-  ResultadoDijkstra* resultado = menu->Dijkstra(&grafo, verticeA);
+  ResultadoDijkstra* resultado = menu->Dijkstra(&grafo, verticeC);
   std::cout << "Resultado Dijkstra: " << std::endl;
   for (size_t i = 0; i < resultado->P.size(); i++) {
-    std::cout << grafo.Etiqueta(resultado->P[i]) << " " << std::flush;
+    std::cout << grafo.Etiqueta(resultado->P[i]) << " ";
   }
   std::cout << std::endl;
   for (size_t i = 0; i < resultado->D.size(); i++) {
-    std::cout << resultado->D[i] << " " << std::flush;
+    std::cout << resultado->D[i] << " ";
   }
 }
 
