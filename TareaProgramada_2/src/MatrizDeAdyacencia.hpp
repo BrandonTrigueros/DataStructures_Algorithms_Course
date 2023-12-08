@@ -11,22 +11,30 @@
 #include <string>
 #include <vector>
 
-struct Arista {
-  double peso;
-  Arista(double pesoAux = -1) {
-    this->peso = pesoAux;
-  }
+// implementar por matriz de adyacencia el modelo Grafo No Dirigido, con pesos, sin aristas paralelas y sin lazos.
 
-  void setPeso(double pesoAux) {
-    this->peso = pesoAux;
-  }
+struct Arista {
+  public:
+    double peso;
+    Arista(double pesoAux = -1) {
+      this->peso = pesoAux;
+    }
+
+    void setPeso(double pesoAux) {
+      this->peso = pesoAux;
+    }
 };
 
 struct Vertice {
-  std::string etiqueta;
-  Vertice(std::string etiq = "") {
-    this->etiqueta = etiq;
-  }
+  public:
+    std::string etiqueta;
+    Vertice(std::string etiq = "") {
+      this->etiqueta = etiq;
+    }
+
+    void setEtiqueta(std::string etiq) {
+      this->etiqueta = etiq;
+    }
 };
 
 class MatrizDeAdyacencia
@@ -35,7 +43,7 @@ class MatrizDeAdyacencia
     int64_t maxVertices;
     int64_t cantVertices;
     Vertice* vertices;
-    Arista*** matriz;
+    Arista** matriz;
 
   public:
     MatrizDeAdyacencia();
