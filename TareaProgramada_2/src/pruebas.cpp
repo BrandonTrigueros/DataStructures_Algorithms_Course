@@ -4,6 +4,53 @@
 #include <queue>
 #include <set>
 
+// #include "ListasDeAdyacencia.hpp"
+#include "MatrizDeAdyacencia.hpp"
+#include "Menu.hpp"
+
+void RecorridoAnchoPrimero(GRAFO* g);
+
+int main() {
+  // Pruebas a todos los operadores del grafo
+  Menu* menu = new Menu();
+  GRAFO grafo;
+  grafo.Iniciar();
+  Vertice* verticeA = grafo.AgregarVert("A");
+  Vertice* verticeB = grafo.AgregarVert("B");
+  Vertice* verticeC = grafo.AgregarVert("C");
+  Vertice* verticeD = grafo.AgregarVert("D");
+  Vertice* verticeE = grafo.AgregarVert("E");
+  Vertice* verticeF = grafo.AgregarVert("F");
+
+  grafo.AgregarArista(verticeA, verticeE, 1);
+  grafo.AgregarArista(verticeB, verticeA, 2);
+  grafo.AgregarArista(verticeC, verticeA, 10);
+  grafo.AgregarArista(verticeC, verticeB, 10);
+  grafo.AgregarArista(verticeC, verticeF, 20);
+  grafo.AgregarArista(verticeE, verticeC, 8);
+  grafo.AgregarArista(verticeE, verticeD, 16);
+  grafo.AgregarArista(verticeE, verticeF, 12);
+  grafo.AgregarArista(verticeD, verticeF, 5);
+
+  ResultadoDijkstra* resultado = menu->Dijkstra(&grafo, verticeA);
+  std::cout << "Resultado Dijkstra: " << std::endl;
+  for (size_t i = 0; i < resultado->P.size(); i++) {
+    std::cout << grafo.Etiqueta(resultado->P[i]) << " " << std::flush;
+  }
+  std::cout << std::endl;
+  for (size_t i = 0; i < resultado->D.size(); i++) {
+    std::cout << resultado->D[i] << " " << std::flush;
+  }
+}
+
+#endif
+
+#if 0
+#include <iostream>
+#include <map>
+#include <queue>
+#include <set>
+
 #include "ListasDeAdyacencia.hpp"
 // #include "MatrizDeAdyacencia.hpp"
 
@@ -103,35 +150,35 @@ int main() {
   return 0;
 }
 
-#endif
-
-void RecorridoAnchoPrimero(GRAFO* g) {
-  if (!g->Vacio()) {
-    std::set<Vertice*> diccionario;
-    std::queue<Vertice*> cola;
-    Vertice* vertice = g->PrimerVertice();
-    while (vertice != nullptr) {
-      // Si el vertice no ha sido visitado
-      if (diccionario.find(vertice) == diccionario.end()) {
-        diccionario.insert(vertice);
-        cola.push(vertice);
-        while (!cola.empty()) {
-          Vertice* verticeActual = cola.back();
-          cola.pop();
-          std::cout << g->Etiqueta(verticeActual) << " " << std::flush;
-          Vertice* verticeAdyacente = g->PrimerVerticeAdyacente(verticeActual);
-          while (verticeAdyacente != nullptr) {
-            if (diccionario.find(verticeAdyacente) == diccionario.end()) {
-              cola.push(verticeAdyacente);
-              diccionario.insert(verticeAdyacente);
+  void RecorridoAnchoPrimero(GRAFO * g) {
+    if (!g->Vacio()) {
+      std::set<Vertice*> diccionario;
+      std::queue<Vertice*> cola;
+      Vertice* vertice = g->PrimerVertice();
+      while (vertice != nullptr) {
+        // Si el vertice no ha sido visitado
+        if (diccionario.find(vertice) == diccionario.end()) {
+          diccionario.insert(vertice);
+          cola.push(vertice);
+          while (!cola.empty()) {
+            Vertice* verticeActual = cola.back();
+            cola.pop();
+            std::cout << g->Etiqueta(verticeActual) << " " << std::flush;
+            Vertice* verticeAdyacente
+                = g->PrimerVerticeAdyacente(verticeActual);
+            while (verticeAdyacente != nullptr) {
+              if (diccionario.find(verticeAdyacente) == diccionario.end()) {
+                cola.push(verticeAdyacente);
+                diccionario.insert(verticeAdyacente);
+              }
+              verticeAdyacente = g->SiguienteVerticeAdyacente(
+                  verticeActual, verticeAdyacente);
             }
-            verticeAdyacente
-                = g->SiguienteVerticeAdyacente(verticeActual, verticeAdyacente);
           }
         }
+        vertice = g->SiguienteVertice(vertice);
       }
-      vertice = g->SiguienteVertice(vertice);
+      std::cout << std::endl;
     }
-    std::cout << std::endl;
   }
-}
+#endif

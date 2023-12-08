@@ -9,7 +9,7 @@ template <typename T> struct Elemento {
 };
 
 template <typename T> class Diccionario {
- private:
+ public:
   Elemento<T>* primero;
   Elemento<T>* ultimo;
   int64_t tamanno;

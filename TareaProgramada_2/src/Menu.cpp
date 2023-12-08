@@ -336,6 +336,84 @@ Vertice* Menu::BuscarVertice(std::string etiq) {
   return vertice;
 }
 
+int64_t PreImagen(std::map<int64_t, Vertice*> map, Vertice* v) {
+  int64_t i = 0;
+  for (auto it = map.begin(); it != map.end(); ++it) {
+    if (it->second == v) {
+      return i;
+    }
+    ++i;
+  }
+  return -1;
+}
+
+Vertice* Imagen(std::map<int64_t, Vertice*> map, int64_t i) {
+  for (auto it = map.begin(); it != map.end(); ++it) {
+    if (it->first == i) {
+      return it->second;
+    }
+  }
+  return nullptr;
+}
+
+pivote encontrarPivoteDijkstra(
+    GRAFO* G, Diccionario<Vertice*>* dicc, std::vector<double>& D) {
+  int64_t i = 0;
+  int64_t pivIndice = 0;
+  double min = std::numeric_limits<double>::max();
+  Vertice* p = nullptr;
+  Vertice* v = G->PrimerVertice();
+  while (v != nullptr) {
+    if (!dicc->Pertenece(v)) {
+      if (D[i] < min) {
+        min = D[i];
+        p = v;
+        pivIndice = i;
+      }
+    }
+    ++i;
+    v = G->SiguienteVertice(v);
+  }
+  pivote piv;
+  piv.vertice = p;
+  piv.indice = pivIndice;
+  return piv;
+}
+
+int64_t EncontrarPivotePrim(
+    std::vector<double>& costos, Diccionario<int64_t>& dicc) {
+  int64_t i = 0;
+  int64_t pivIndice = 0;
+  double min = std::numeric_limits<double>::max();
+  for (auto it = costos.begin(); it != costos.end(); ++it) {
+    if (!dicc.Pertenece(i)) {
+      if (*it < min) {
+        min = *it;
+        pivIndice = i;
+      }
+    }
+    ++i;
+  }
+  return pivIndice;
+}
+
+bool ExisteArista(GRAFO* g, Vertice* v1, Vertice* v2) {
+  Vertice* v = g->PrimerVertice();
+  while (v != nullptr) {
+    if (v == v1) {
+      Vertice* va = g->PrimerVerticeAdyacente(v);
+      while (va != nullptr) {
+        if (va == v2) {
+          return true;
+        }
+        va = g->SiguienteVerticeAdyacente(v, va);
+      }
+    }
+    v = g->SiguienteVertice(v);
+  }
+  return false;
+}
+
 // -----------------------------
 // -----ALGORITMOS GRAFOS-------
 // -----------------------------
@@ -418,4 +496,124 @@ bool Menu::ConexoAncho(GRAFO* g) {
     return true;
   }
   return false;
+}
+
+ResultadoDijkstra* Menu::Dijkstra(GRAFO* G, Vertice* origen) {
+  int64_t n = G->NumVertices();
+  Vertice* v = nullptr;
+
+  std::vector<Vertice*> P(n);
+  std::vector<double> D(n);
+
+  Diccionario<Vertice*> dicc;
+  dicc.Iniciar();
+  dicc.Agregar(origen);
+  std::cout << G->Etiqueta(origen) << std::endl;
+
+  v = G->PrimerVertice();
+  int i = 0;
+  while (v != nullptr) {
+    P[i] = origen;
+    D[i] = G->Peso(origen, v);
+    v = G->SiguienteVertice(v);
+    ++i;
+  }
+  for (int64_t i = 0; i < n - 2; ++i) {
+    pivote p = encontrarPivoteDijkstra(G, &dicc, D);
+    dicc.Agregar(p.vertice);
+    v = G->PrimerVertice();
+    for (int64_t j = 0; j < n; ++j) {
+      if (!dicc.Pertenece(v)) {
+        if (D[p.indice] + G->Peso(p.vertice, v) < D[j]) {
+          D[j] = D[j] + G->Peso(p.vertice, v);
+          P[j] = p.vertice;
+        }
+      }
+      v = G->SiguienteVertice(v);
+    }
+  }
+  ResultadoDijkstra* resultado = new ResultadoDijkstra;
+  resultado->P = P;
+  resultado->D = D;
+  return resultado;
+}
+
+ResultadoFloyd* Menu::Floyd(GRAFO* g) {
+  std::vector<std::vector<double>> A(g->NumVertices());
+  std::vector<std::vector<int64_t>> P(g->NumVertices());
+  Vertice* vi = g->PrimerVertice();
+  // std::cout << g->Etiqueta(vi) << std::endl;
+  Vertice* vj = g->PrimerVertice();
+  for (int64_t i = 0; i < g->NumVertices(); ++i) {
+    for (int64_t j = 0; j < g->NumVertices(); ++j) {
+      if (i == j) {
+        A[i][j] = 0;
+      } else {
+        A[i][j] = g->Peso(vi, vj);
+        vj = g->SiguienteVertice(vj);
+      }
+      P[i][j] = 0;
+      vi = g->SiguienteVertice(vi);
+    }
+  }
+  for (int64_t k = 0; k < g->NumVertices(); ++k) {
+    for (int64_t i = 0; i < g->NumVertices(); ++i) {
+      for (int64_t j = 0; j < g->NumVertices(); ++j) {
+        if (A[i][k] + A[k][j] < A[i][j]) {
+          A[i][j] = A[i][k] + A[k][j];
+          P[i][j] = k;
+        }
+      }
+    }
+  }
+  ResultadoFloyd* resultado = new ResultadoFloyd;
+  resultado->A = A;
+  resultado->P = P;
+  return resultado;
+}
+
+ResultadoPrim* Menu::Prim(GRAFO* g, Vertice* origen) {
+  std::map<int64_t, Vertice*> map;
+  std::vector<double> costos(g->NumVertices());
+  std::vector<int64_t> vertices(g->NumVertices());
+  std::vector<Vertice*> verticesR1a1(g->NumVertices());
+  map[0] = origen;
+  Vertice* sv = g->SiguienteVertice(origen);
+  int64_t i = 0;
+  while (sv != nullptr) {
+    map[i + 1] = sv;
+    if (ExisteArista(g, origen, sv)) {
+      costos[i] = g->Peso(origen, sv);
+    } else {
+      costos[i] = std::numeric_limits<double>::max();
+    }
+    vertices[i] = 0;
+    verticesR1a1[i] = origen;
+    sv = g->SiguienteVertice(sv);
+    ++i;
+  }
+
+  Diccionario<int64_t> diccPiv;
+  diccPiv.Iniciar();
+  for (int64_t i = 0; i < g->NumVertices() - 2; ++i) {
+    int64_t piv = EncontrarPivotePrim(costos, diccPiv);
+    diccPiv.Agregar(piv);
+    Vertice* vertPivote = Imagen(map, piv);
+    for (int64_t j = 0; j < g->NumVertices() - 1; ++j) {
+      Vertice* vertJ = Imagen(map, j);
+      if (!diccPiv.Pertenece(j)) {
+        if (ExisteArista(g, vertJ, vertPivote)) {
+          if (g->Peso(vertJ, vertPivote) < costos[j]) {
+            costos[j] = g->Peso(vertJ, vertPivote);
+            vertices[j] = piv;
+            verticesR1a1[j] = vertPivote;
+          }
+        }
+      }
+    }
+  }
+  ResultadoPrim* resultado = new ResultadoPrim;
+  resultado->costos = costos;
+  resultado->vertices = verticesR1a1;
+  return resultado;
 }

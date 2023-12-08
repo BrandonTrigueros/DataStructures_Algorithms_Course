@@ -5,13 +5,13 @@
 #include <cstdint>
 #include <iostream>
 #include <map>
-#include <set>
 #include <queue>
+#include <set>
 #include <string>
 #include <vector>
 
-#include "ListasDeAdyacencia.hpp"
-// #include "MatrizDeAdyacencia.hpp"
+// #include "ListasDeAdyacencia.hpp"
+#include "MatrizDeAdyacencia.hpp"
 
 #define OPCIONES_PRINCIPAL                                                        \
   "╔═══════════════════════╗\n" \
@@ -62,6 +62,16 @@ struct pivote {
 struct ResultadoDijkstra {
   std::vector<Vertice*> P;
   std::vector<double> D;
+};
+
+struct ResultadoFloyd {
+  std::vector<std::vector<double>> A;
+  std::vector<std::vector<int64_t>> P;
+};
+
+struct ResultadoPrim {
+  std::vector<Vertice*> vertices;
+  std::vector<double> costos;
 };
 
 class Menu {
@@ -121,14 +131,14 @@ class Menu {
   // Retorna:
   // Requiere:
   // Modifica: N/A
-  Vertice* Floyd(GRAFO* g, Vertice* origen, Vertice* destino);
+  ResultadoFloyd* Floyd(GRAFO* g);
 
   // Parámetros:
   // Efecto:
   // Retorna:
   // Requiere:
   // Modifica: N/A
-  Arista* Prim(GRAFO* g);
+  ResultadoPrim* Prim(GRAFO* g, Vertice* origen);
 
   // Parámetros:
   // Efecto:
