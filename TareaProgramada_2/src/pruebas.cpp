@@ -52,6 +52,8 @@ int main () {
   grafo.AgregarArista(vertice3, vertice2, 45);
   grafo.AgregarArista(vertice4, vertice8, 56);
 
+  std::cout << "grafo vacio despues de agregar vertices y aristas: " << grafo.Vacio() << std::endl;
+
   RecorridoAnchoPrimero(grafo);
 
   std::cout << "Peso de la arista entre el vertice 3 y el vertice 2: " << grafo.Peso(vertice3, vertice2) << std::endl;

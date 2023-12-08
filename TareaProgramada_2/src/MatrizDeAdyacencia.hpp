@@ -1,22 +1,29 @@
 #ifndef MATRIZ_DE_ADYACENCIA_HPP
 #define MATRIZ_DE_ADYACENCIA_HPP
-#define MAX_VERTICES 5
+
+#define MAX_VERTICES 100
 
 #include <cstdint>
 #include <iostream>
-#include <string>
 #include <vector>
 
 struct Arista {
   double peso;
 
-  Arista() {
-    this->peso = -1;
+  Arista(double pesoAux = -1) {
+    this->peso = pesoAux;
+  }
+
+  void setPeso(double pesoAux) {
+    this->peso = pesoAux;
   }
 };
 
 struct Vertice {
-  std::string etiqueta = "";
+  std::string etiqueta;
+  Vertice(std::string etiq = "") {
+    this->etiqueta = etiq;
+  }
 };
 
 class MatrizDeAdyacencia
@@ -24,8 +31,8 @@ class MatrizDeAdyacencia
   private:
     int64_t maxVertices;
     int64_t cantVertices;
-    Vertice vertices[MAX_VERTICES];
-    Arista matriz[MAX_VERTICES][MAX_VERTICES];
+    Vertice* vertices;
+    Arista*** matriz;
 
   public:
     MatrizDeAdyacencia();
