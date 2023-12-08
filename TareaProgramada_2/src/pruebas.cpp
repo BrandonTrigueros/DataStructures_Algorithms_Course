@@ -1,4 +1,4 @@
-#if 1
+#if 0
 #include <iostream>
 #include <map>
 #include <queue>
@@ -25,10 +25,10 @@ int main() {
   grafo.AgregarArista(verticeA, verticeE, 1);
   grafo.AgregarArista(verticeB, verticeA, 2);
   grafo.AgregarArista(verticeC, verticeA, 10);
-  grafo.AgregarArista(verticeC, verticeB, 10);
+  grafo.AgregarArista(verticeC, verticeB, 4);
   grafo.AgregarArista(verticeC, verticeF, 20);
   grafo.AgregarArista(verticeE, verticeC, 8);
-  grafo.AgregarArista(verticeE, verticeD, 16);
+  grafo.AgregarArista(verticeE, verticeD, 6);
   grafo.AgregarArista(verticeE, verticeF, 12);
   grafo.AgregarArista(verticeD, verticeF, 5);
 

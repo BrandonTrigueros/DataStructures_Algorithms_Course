@@ -4,6 +4,7 @@
 #include <cmath>
 #include <cstdint>
 #include <ctime>
+#include <iomanip>
 #include <limits>
 #include <ostream>
 #include <sched.h>
@@ -63,6 +64,7 @@ void Menu::run() {
 // ----------MENU GRAFO----------
 // ------------------------------
 void Menu::runGrafo() {
+  this->crearGrafoManual();
   int opcion;
   bool salir = false;
   std::string etiq;
@@ -285,9 +287,46 @@ void Menu::runGrafo() {
     }
 
     break;
-    case 21:
+    case 21: {
+      std::cout << "Ingrese el vertice de origen:";
+      std::cin >> etiq;
+      vertice = this->BuscarVertice(etiq);
+      ResultadoDijkstra* resultado = this->Dijkstra(this->grafo, vertice);
 
-      break;
+      std::cout << "-------------------------" << std::endl;
+      Vertice* v = this->grafo->PrimerVertice();
+      while (v != nullptr) {
+        // Set width to 3 characters for each output
+        std::cout << std::setw(3) << this->grafo->Etiqueta(v) << " ";
+        v = this->grafo->SiguienteVertice(v);
+      }
+
+      std::cout << std::endl;
+      std::cout << "-------------------------" << std::endl;
+
+      for (size_t i = 0; i < resultado->P.size(); i++) {
+        // Set width to 3 characters for each output
+        std::cout << std::setw(3) << this->grafo->Etiqueta(resultado->P[i])
+                  << " ";
+      }
+
+      std::cout << std::endl;
+      std::cout << "-------------------------" << std::endl;
+
+      for (size_t i = 0; i < resultado->D.size(); ++i) {
+        if (resultado->D[i] > 100000) {
+          // Set width to 3 characters for each output
+          std::cout << std::setw(3) << " - ";
+        } else {
+          // Set width to 3 characters for each output
+          std::cout << std::setw(3) << resultado->D[i] << " ";
+        }
+      }
+      std::cout << std::endl;
+      std::cout << "-------------------------" << std::endl;
+    }
+
+    break;
     case 22:
 
       break;
@@ -512,7 +551,6 @@ ResultadoDijkstra* Menu::Dijkstra(GRAFO* G, Vertice* origen) {
   Diccionario<Vertice*> dicc;
   dicc.Iniciar();
   dicc.Agregar(origen);
-  std::cout << G->Etiqueta(origen) << std::endl;
 
   v = G->PrimerVertice();
   int i = 0;
@@ -666,4 +704,25 @@ Vertice** CircuitoHamiltonMC_BEP(GRAFO* g) {
       lowestHamiltonianPath, dicVertVis, solucionAct);
   
   return lowestHamiltonianPath;
+}
+
+void Menu::crearGrafoManual() {
+  this->grafo = new GRAFO;
+  this->grafo->Iniciar();
+  Vertice* verticeA = this->grafo->AgregarVert("A");
+  Vertice* verticeB = this->grafo->AgregarVert("B");
+  Vertice* verticeC = this->grafo->AgregarVert("C");
+  Vertice* verticeD = this->grafo->AgregarVert("D");
+  Vertice* verticeE = this->grafo->AgregarVert("E");
+  Vertice* verticeF = this->grafo->AgregarVert("F");
+
+  this->grafo->AgregarArista(verticeA, verticeE, 1);
+  this->grafo->AgregarArista(verticeB, verticeA, 2);
+  this->grafo->AgregarArista(verticeC, verticeA, 10);
+  this->grafo->AgregarArista(verticeC, verticeB, 4);
+  this->grafo->AgregarArista(verticeC, verticeF, 20);
+  this->grafo->AgregarArista(verticeE, verticeC, 8);
+  this->grafo->AgregarArista(verticeE, verticeD, 6);
+  this->grafo->AgregarArista(verticeE, verticeF, 12);
+  this->grafo->AgregarArista(verticeD, verticeF, 5);
 }
