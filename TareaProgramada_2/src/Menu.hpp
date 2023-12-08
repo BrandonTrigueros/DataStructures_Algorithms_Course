@@ -153,7 +153,7 @@ class Menu {
   // Retorna:
   // Requiere:
   // Modifica: N/A
-  Vertice* CircuitoHamiltonMC_BEP(GRAFO* g);
+  Vertice** CircuitoHamiltonMC_BEP(GRAFO* g);
 };
 
 #endif  // MENU_HPP

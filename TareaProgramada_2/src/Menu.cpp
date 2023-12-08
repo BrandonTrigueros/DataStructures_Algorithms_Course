@@ -27,6 +27,10 @@ double log(double base, double x) { return std::log(x) / std::log(base); }
 int64_t profPrimR(
     GRAFO* g, Vertice* vertAct, std::set<Vertice*>& dicVertVis, int64_t& count);
 
+void CircuitoHamiltonMC_BEP_i(GRAFO* g, int64_t i, int64_t& costoAct,
+    int64_t& menorCosto, Vertice** lowestHamiltonianPath,
+    std::set<Vertice*>& dicVertVis, Vertice** solucionAct);
+
 // void Menu::crearGrafoAuto() { }
 
 // ----------------------------------
@@ -616,4 +620,50 @@ ResultadoPrim* Menu::Prim(GRAFO* g, Vertice* origen) {
   resultado->costos = costos;
   resultado->vertices = verticesR1a1;
   return resultado;
+}
+
+void CircuitoHamiltonMC_BEP_i(GRAFO* g, int64_t i, int64_t& costoAct,
+    int64_t& menorCosto, Vertice** lowestHamiltonianPath,
+    std::set<Vertice*>& dicVertVis, Vertice** solucionAct) {
+  Vertice* va = g->PrimerVerticeAdyacente(lowestHamiltonianPath[i-2]);
+  while (va != nullptr) {
+    if (dicVertVis.find(va) == dicVertVis.end()) {
+      lowestHamiltonianPath[i-1] = va;
+      dicVertVis.insert(va);
+      int64_t costoAct  = g->Peso(lowestHamiltonianPath[i-1], va);
+      if (i == g->NumVertices()) {
+        if (ExisteArista(g, va, lowestHamiltonianPath[0])) {
+          if (costoAct + g->Peso(va,lowestHamiltonianPath[0]) < menorCosto) {
+            menorCosto = costoAct + g->Peso(va, lowestHamiltonianPath[i-1]);
+            lowestHamiltonianPath = solucionAct;
+            delete solucionAct;
+          }
+        }
+      }
+      else {
+        CircuitoHamiltonMC_BEP_i(g, i+1, costoAct, menorCosto,
+            lowestHamiltonianPath, dicVertVis, solucionAct);
+      }
+      dicVertVis.erase(va);
+      costoAct -= g->Peso(lowestHamiltonianPath[i-1], va);
+    }
+    va = g->SiguienteVerticeAdyacente(lowestHamiltonianPath[i-2],va);
+  }
+}
+
+Vertice** CircuitoHamiltonMC_BEP(GRAFO* g) {
+  std::set<Vertice*> dicVertVis;
+  std::map<int64_t, Vertice*> rel1a1;
+  Vertice** lowestHamiltonianPath = new Vertice*[g->NumVertices()+1];
+  Vertice** solucionAct = new Vertice*[g->NumVertices()+1];
+  int64_t costoActFinal = 0;
+  int64_t menorCostoInit = 0;
+
+  lowestHamiltonianPath[0] = g->PrimerVertice();
+  dicVertVis.insert(g->PrimerVertice());
+
+  CircuitoHamiltonMC_BEP_i(g, 2, costoActFinal, menorCostoInit,
+      lowestHamiltonianPath, dicVertVis, solucionAct);
+  
+  return lowestHamiltonianPath;
 }
