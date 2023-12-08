@@ -93,19 +93,38 @@ void ListasDeAdyacencia::AgregarArista(
 }
 
 void ListasDeAdyacencia::EliminarArista(Vertice* salida, Vertice* llegada) {
+  bool salirS = false;
+  bool salirL = false;
   Arista* aristaABorrar = salida->listaAristas;
+  Arista* aristaABorrarLlegada = llegada->listaAristas;
+  
   if (aristaABorrar->verticeApuntado == llegada) {
     salida->listaAristas = aristaABorrar->sigArista;
     delete aristaABorrar;
-    return;
+    salirS = true;
   }
 
-  while (aristaABorrar->sigArista->verticeApuntado != llegada) {
-    aristaABorrar = aristaABorrar->sigArista;
+  if (aristaABorrarLlegada->verticeApuntado == salida) {
+    llegada->listaAristas = aristaABorrarLlegada->sigArista;
+    delete aristaABorrarLlegada;
+    salirL = true;
   }
 
-  aristaABorrar->sigArista = aristaABorrar->sigArista->sigArista;
-  delete aristaABorrar->sigArista;
+  if (!salirS) {
+    while (aristaABorrar->sigArista->verticeApuntado != llegada) {
+      aristaABorrar = aristaABorrar->sigArista;
+    }
+    aristaABorrar->sigArista = aristaABorrar->sigArista->sigArista;
+    delete aristaABorrar->sigArista;
+  }
+
+  if (!salirL) {
+    while (aristaABorrarLlegada->sigArista->verticeApuntado != salida) {
+      aristaABorrarLlegada = aristaABorrarLlegada->sigArista;
+    }
+    aristaABorrarLlegada->sigArista = aristaABorrarLlegada->sigArista->sigArista;
+    delete aristaABorrarLlegada->sigArista;
+  }
 }
 
 void ListasDeAdyacencia::ModificarPeso(

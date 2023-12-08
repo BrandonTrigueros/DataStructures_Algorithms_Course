@@ -88,7 +88,6 @@ int main () {
 }
 #endif
 
-
 void RecorridoAnchoPrimero(GRAFO grafo) {
   if(!grafo.Vacio()) {
     std::map<Vertice*, bool> diccionario;

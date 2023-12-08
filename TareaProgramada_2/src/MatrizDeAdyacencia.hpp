@@ -5,11 +5,14 @@
 
 #include <cstdint>
 #include <iostream>
+
+#include <cstdint>
+#include <iostream>
+#include <string>
 #include <vector>
 
 struct Arista {
   double peso;
-
   Arista(double pesoAux = -1) {
     this->peso = pesoAux;
   }

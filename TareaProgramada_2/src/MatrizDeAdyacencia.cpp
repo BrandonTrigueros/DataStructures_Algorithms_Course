@@ -2,8 +2,6 @@
 
 void MatrizDeAdyacencia::Iniciar()
 {
-  this->maxVertices = MAX_VERTICES;
-  this->cantVertices = 0;
   this->vertices = new Vertice[this->maxVertices];
   this->matriz = new Arista**[this->maxVertices];
   for (int64_t i = 0; i < this->maxVertices; ++i) {
@@ -20,6 +18,13 @@ void MatrizDeAdyacencia::Destruir()
     Vaciar();
   }
   // Liberar la memoria de los vértices
+}
+
+void MatrizDeAdyacencia::Destruir()
+{
+  this->cantVertices = 0;
+  this->maxVertices = 0;
+  this->Vaciar();
 }
 
 void MatrizDeAdyacencia::Vaciar()
@@ -43,6 +48,7 @@ bool MatrizDeAdyacencia::Vacio()
 Vertice* MatrizDeAdyacencia::AgregarVert(std::string etiq)
 {
   Vertice* toAdd = new Vertice(etiq);
+  toAdd->etiqueta = etiq;
   this->vertices[this->cantVertices] = *toAdd;
   ++this->cantVertices;
   return toAdd;
@@ -77,7 +83,6 @@ void MatrizDeAdyacencia::ModificarEtiqueta(Vertice* vert, std::string etiq)
 {
   vert->etiqueta = etiq;
 }
-
 
 std::string MatrizDeAdyacencia::Etiqueta(Vertice* vert)
 {
