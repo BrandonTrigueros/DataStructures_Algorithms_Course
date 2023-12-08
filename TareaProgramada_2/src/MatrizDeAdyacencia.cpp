@@ -3,6 +3,7 @@
 // implementar por matriz de adyacencia el modelo Grafo No Dirigido, con pesos, sin aristas paralelas y sin lazos.
 
 void MatrizDeAdyacencia::Iniciar() {
+  this->limiteMatriz = std::numeric_limits<int64_t>::max();
   this->maxVertices = MAX_VERTICES;
   this->cantVertices = 0;
   this->vertices = new Vertice[this->maxVertices];
@@ -40,14 +41,14 @@ Vertice* MatrizDeAdyacencia::AgregarVert(std::string etiq) {
 }
 
 void MatrizDeAdyacencia::EliminarVert(Vertice* vert) {
-  int64_t indice = -1;
+  int64_t indice = this->limiteMatriz;
   for (int64_t i = 0; i < this->cantVertices; i++) {
     if (&this->vertices[i] == vert) {
       indice = i;
       break;
     }
   }
-  if (indice != -1) {
+  if (indice != this->limiteMatriz) {
     for (int64_t i = indice; i < this->cantVertices - 1; i++) {
       this->vertices[i] = this->vertices[i + 1];
     }
@@ -84,8 +85,8 @@ std::string MatrizDeAdyacencia::Etiqueta(Vertice* vert) {
 }
 
 void MatrizDeAdyacencia::AgregarArista(Vertice* salida, Vertice* llegada, double peso) {
-  int64_t indiceSalida = -1;
-  int64_t indiceLlegada = -1;
+  int64_t indiceSalida = this->limiteMatriz;
+  int64_t indiceLlegada = this->limiteMatriz;
   for (int64_t i = 0; i < this->cantVertices; i++) {
     if (&this->vertices[i] == salida) {
       indiceSalida = i;
@@ -94,15 +95,15 @@ void MatrizDeAdyacencia::AgregarArista(Vertice* salida, Vertice* llegada, double
       indiceLlegada = i;
     }
   }
-  if (indiceSalida != -1 && indiceLlegada != -1) {
+  if (indiceSalida != this->limiteMatriz && indiceLlegada != this->limiteMatriz) {
     this->matriz[indiceSalida][indiceLlegada].peso = peso;
     this->matriz[indiceLlegada][indiceSalida].peso = peso;
   }
 }
 
 void MatrizDeAdyacencia::EliminarArista(Vertice* salida, Vertice* llegada) {
-  int64_t indiceSalida = -1;
-  int64_t indiceLlegada = -1;
+  int64_t indiceSalida = this->limiteMatriz;
+  int64_t indiceLlegada = this->limiteMatriz;
   for (int64_t i = 0; i < this->cantVertices; i++) {
     if (&this->vertices[i] == salida) {
       indiceSalida = i;
@@ -111,15 +112,15 @@ void MatrizDeAdyacencia::EliminarArista(Vertice* salida, Vertice* llegada) {
       indiceLlegada = i;
     }
   }
-  if (indiceSalida != -1 && indiceLlegada != -1) {
-    this->matriz[indiceSalida][indiceLlegada].peso = -1;
-    this->matriz[indiceLlegada][indiceSalida].peso = -1;
+  if (indiceSalida != this->limiteMatriz && indiceLlegada != this->limiteMatriz) {
+    this->matriz[indiceSalida][indiceLlegada].peso = this->limiteMatriz;
+    this->matriz[indiceLlegada][indiceSalida].peso = this->limiteMatriz;
   }
 }
 
 void MatrizDeAdyacencia::ModificarPeso(Vertice* salida, Vertice* llegada, double peso) {
-  int64_t indiceSalida = -1;
-  int64_t indiceLlegada = -1;
+  int64_t indiceSalida = this->limiteMatriz;
+  int64_t indiceLlegada = this->limiteMatriz;
   for (int64_t i = 0; i < this->cantVertices; i++) {
     if (&this->vertices[i] == salida) {
       indiceSalida = i;
@@ -128,15 +129,15 @@ void MatrizDeAdyacencia::ModificarPeso(Vertice* salida, Vertice* llegada, double
       indiceLlegada = i;
     }
   }
-  if (indiceSalida != -1 && indiceLlegada != -1) {
+  if (indiceSalida != this->limiteMatriz && indiceLlegada != this->limiteMatriz) {
     this->matriz[indiceSalida][indiceLlegada].peso = peso;
     this->matriz[indiceLlegada][indiceSalida].peso = peso;
   }
 }
 
 double MatrizDeAdyacencia::Peso(Vertice* salida, Vertice* llegada) {
-  int64_t indiceSalida = -1;
-  int64_t indiceLlegada = -1;
+  int64_t indiceSalida = this->limiteMatriz;
+  int64_t indiceLlegada = this->limiteMatriz;
   for (int64_t i = 0; i < this->cantVertices; i++) {
     if (&this->vertices[i] == salida) {
       indiceSalida = i;
@@ -145,10 +146,10 @@ double MatrizDeAdyacencia::Peso(Vertice* salida, Vertice* llegada) {
       indiceLlegada = i;
     }
   }
-  if (indiceSalida != -1 && indiceLlegada != -1) {
+  if (indiceSalida != this->limiteMatriz && indiceLlegada != this->limiteMatriz) {
     return this->matriz[indiceSalida][indiceLlegada].peso;
   }
-  return -1;
+  return this->limiteMatriz;
 }
 
 Vertice* MatrizDeAdyacencia::PrimerVertice() {
@@ -168,16 +169,16 @@ Vertice* MatrizDeAdyacencia::SiguienteVertice(Vertice* vert) {
 }
 
 Vertice* MatrizDeAdyacencia::PrimerVerticeAdyacente(Vertice* segundo) {
-  int64_t indice = -1;
+  int64_t indice = this->limiteMatriz;
   for (int64_t i = 0; i < this->cantVertices; i++) {
     if (&this->vertices[i] == segundo) {
       indice = i;
       break;
     }
   }
-  if (indice != -1) {
+  if (indice != this->limiteMatriz) {
     for (int64_t i = 0; i < this->cantVertices; i++) {
-      if (this->matriz[indice][i].peso != -1) {
+      if (this->matriz[indice][i].peso != this->limiteMatriz) {
         return &this->vertices[i];
       }
     }
@@ -186,8 +187,8 @@ Vertice* MatrizDeAdyacencia::PrimerVerticeAdyacente(Vertice* segundo) {
 }
 
 Vertice* MatrizDeAdyacencia::SiguienteVerticeAdyacente(Vertice* vert, Vertice* sig) {
-  int64_t indiceVert = -1;
-  int64_t indiceSig = -1;
+  int64_t indiceVert = this->limiteMatriz;
+  int64_t indiceSig = this->limiteMatriz;
   for (int64_t i = 0; i < this->cantVertices; i++) {
     if (&this->vertices[i] == vert) {
       indiceVert = i;
@@ -196,9 +197,9 @@ Vertice* MatrizDeAdyacencia::SiguienteVerticeAdyacente(Vertice* vert, Vertice* s
       indiceSig = i;
     }
   }
-  if (indiceVert != -1 && indiceSig != -1) {
+  if (indiceVert != this->limiteMatriz && indiceSig != this->limiteMatriz) {
     for (int64_t i = indiceSig + 1; i < this->cantVertices; i++) {
-      if (this->matriz[indiceVert][i].peso != -1) {
+      if (this->matriz[indiceVert][i].peso != this->limiteMatriz) {
         return &this->vertices[i];
       }
     }

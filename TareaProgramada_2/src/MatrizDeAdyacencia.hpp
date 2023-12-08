@@ -10,6 +10,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <limits>
 
 // implementar por matriz de adyacencia el modelo Grafo No Dirigido, con pesos, sin aristas paralelas y sin lazos.
 
@@ -51,6 +52,7 @@ class MatrizDeAdyacencia
     int64_t cantVertices;
     Vertice* vertices;
     Arista** matriz;
+    int64_t limiteMatriz;
 
   public:
     MatrizDeAdyacencia();
