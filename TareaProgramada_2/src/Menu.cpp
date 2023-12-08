@@ -30,6 +30,9 @@ int64_t profPrimR(
 
 bool ExisteArista(GRAFO* g, Vertice* v1, Vertice* v2);
 
+Vertice* Imagen(std::map<int64_t, Vertice*> map, int64_t i);
+int64_t PreImagen(std::map<int64_t, Vertice*> map, Vertice* v);
+
 void CircuitoHamiltonMC_BEP_i(GRAFO* g, int64_t i, int64_t& costoAct,
     int64_t& menorCosto, Vertice** lowestHamiltonianPath,
     std::set<Vertice*>& dicVertVis, Vertice** solucionAct);
@@ -329,7 +332,45 @@ void Menu::runGrafo() {
 
     break;
     case 22: {
-      // ResultadoFloyd* resultado = this->Floyd(this->grafo);
+      ResultadoFloyd* resultado = this->Floyd(this->grafo);
+
+      // Relación 1 a 1
+      std::map<int64_t, Vertice*> map;
+      Vertice* v = this->grafo->PrimerVertice();
+      int64_t i = 0;
+      while (v != nullptr) {
+        map[i + 1] = v;
+        v = this->grafo->SiguienteVertice(v);
+        ++i;
+      }
+
+      // Encabezado
+      v = this->grafo->PrimerVertice();
+      std::cout << std::setw(3) << "*";
+      while (v != nullptr) {
+        std::cout << std::setw(3) << "" << this->grafo->Etiqueta(v);
+        v = this->grafo->SiguienteVertice(v);
+      }
+      std::cout << std::endl;
+      std::cout << "-------------------------" << std::endl;
+
+      for (size_t i = 0; i < resultado->A.size(); ++i) {
+        std::cout << std::setw(3) << this->grafo->Etiqueta(Imagen(map, i + 1))
+                  << " |";
+        for (size_t j = 0; j < resultado->A[i].size(); ++j) {
+          if (i == j) {
+            std::cout << std::setw(3) << "0";
+          } else {
+            if (resultado->A[i][j] > 100000) {
+              std::cout << std::setw(3) << "-";
+            } else {
+              std::cout << std::setw(3) << resultado->A[i][j];
+            }
+          }
+        }
+        std::cout << std::endl;
+      }
+      std::cout << "-------------------------" << std::endl;
     }
 
     break;
@@ -592,19 +633,28 @@ ResultadoDijkstra* Menu::Dijkstra(GRAFO* G, Vertice* origen) {
 ResultadoFloyd* Menu::Floyd(GRAFO* g) {
   std::vector<std::vector<double>> A(g->NumVertices());
   std::vector<std::vector<int64_t>> P(g->NumVertices());
+  for (int64_t i = 0; i < g->NumVertices(); ++i) {
+    A[i].resize(g->NumVertices());
+    P[i].resize(g->NumVertices());
+  }
   Vertice* vi = g->PrimerVertice();
   Vertice* vj = g->PrimerVertice();
   for (int64_t i = 0; i < g->NumVertices(); ++i) {
+    vj = g->PrimerVertice();
     for (int64_t j = 0; j < g->NumVertices(); ++j) {
       if (i == j) {
         A[i][j] = 0;
       } else {
-        A[i][j] = g->Peso(vi, vj);
-        vj = g->SiguienteVertice(vj);
+        if (ExisteArista(g, vi, vj)) {
+          A[i][j] = g->Peso(vi, vj);
+        } else {
+          A[i][j] = std::numeric_limits<double>::max();
+        }
       }
+      vj = g->SiguienteVertice(vj);
       P[i][j] = 0;
-      vi = g->SiguienteVertice(vi);
     }
+    vi = g->SiguienteVertice(vi);
   }
   for (int64_t k = 0; k < g->NumVertices(); ++k) {
     for (int64_t i = 0; i < g->NumVertices(); ++i) {
