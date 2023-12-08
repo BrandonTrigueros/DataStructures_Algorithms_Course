@@ -10,26 +10,31 @@ template <typename T> struct Elemento {
 
 template <typename T> class Diccionario {
  private:
-  Elemento* primero;
-  Elemento* ultimo;
+  Elemento<T>* primero;
+  Elemento<T>* ultimo;
   int64_t tamanno;
 
  public:
+  Diccionario() { }
+
+  ~Diccionario() { }
+
   void Iniciar() {
     this->primero = nullptr;
+    this->ultimo = nullptr;
     this->tamanno = 0;
   }
 
   void Destruir() { this->Vaciar(); }
 
   void Vaciar() {
-    Elemento* aux = this->primero;
+    Elemento<T>* aux = this->primero;
     while (aux != nullptr) {
-      Elemento* borrar = aux;
+      Elemento<T>* borrar = aux;
       aux = aux->siguiente;
       delete borrar;
     }
-    dicc->tamanno = 0;
+    this->tamanno = 0;
     this->primero = nullptr;
     this->ultimo = nullptr;
   }
@@ -37,7 +42,7 @@ template <typename T> class Diccionario {
   bool Vacio() { return this->tamanno == 0; }
 
   void Agregar(T valor) {
-    Elemento* nuevo = new Elemento();
+    Elemento<T>* nuevo = new Elemento<T>();
     nuevo->valor = valor;
     nuevo->siguiente = nullptr;
     nuevo->previo = nullptr;
@@ -54,7 +59,7 @@ template <typename T> class Diccionario {
   }
 
   T Borrar(T valor) {
-    Elemento* aux = this->primero;
+    Elemento<T>* aux = this->primero;
     while (aux != nullptr && aux->valor != valor) {
       aux = aux->siguiente;
     }
@@ -71,14 +76,14 @@ template <typename T> class Diccionario {
       aux->previo->siguiente = aux->siguiente;
       aux->siguiente->previo = aux->previo;
     }
-    T valor = aux->valor;
+    T val = aux->valor;
     delete aux;
     this->tamanno--;
-    return valor;
+    return val;
   }
 
   bool Pertenece(T valor) {
-    Elemento* aux = this->primero;
+    Elemento<T>* aux = this->primero;
     while (aux != nullptr && aux->valor != valor) {
       aux = aux->siguiente;
     }

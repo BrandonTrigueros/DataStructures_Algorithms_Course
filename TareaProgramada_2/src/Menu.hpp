@@ -7,7 +7,7 @@
 #include <map>
 #include <set>
 #include <string>
-#include <map>
+#include <vector>
 
 #include "ListasDeAdyacencia.hpp"
 // #include "MatrizDeAdyacencia.hpp"
@@ -53,6 +53,16 @@
   "║ Brandon Trigueros Lara      ║\n"                                                           \
   "╚═════════════════════════════╝\n"
 
+struct pivote {
+  Vertice* vertice;  // vertice pivote
+  int64_t indice;  // indice del pivote dentro del arreglo D
+};
+
+struct ResultadoDijkstra {
+  std::vector<Vertice*> P;
+  std::vector<double> D;
+};
+
 class Menu {
  private:
   GRAFO* grafo;
@@ -97,10 +107,13 @@ class Menu {
 
   // Parámetros:
   // Efecto:
-  // Retorna:
+
+  // Retorna: Un vector de vertices, cada uno representa el vertice anterior
+  // del camino más corto del i-esimo
+
   // Requiere:
   // Modifica: N/A
-  std::map<Vertice, int64_t>  Dijkstra(GRAFO* g, Vertice* origen);
+  ResultadoDijkstra* Dijkstra(GRAFO* G, Vertice* origen);
 
   // Parámetros:
   // Efecto:

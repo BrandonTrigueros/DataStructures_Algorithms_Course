@@ -1,12 +1,17 @@
 #include "Menu.hpp"
 
+#include <algorithm>
 #include <cmath>
 #include <cstdint>
 #include <ctime>
+#include <limits>
 #include <ostream>
 #include <sched.h>
 #include <time.h>
 #include <unistd.h>
+
+#include "Aux/ColaPrioridad.hpp"
+#include "Aux/Diccionario.hpp"
 
 Menu::Menu() { this->grafo = nullptr; }
 
@@ -231,9 +236,9 @@ void Menu::runGrafo() {
         vertice = this->grafo->SiguienteVerticeAdyacente(vertice, vertice1);
         if (vertice != nullptr) {
           std::cout << "Siguiente vertice adyacente: " << vertice->etiqueta
-            << std::endl;
+                    << std::endl;
         } else {
-          std::cout << "Siguiente vertice adyacente es nulo " << std::endl; 
+          std::cout << "Siguiente vertice adyacente es nulo " << std::endl;
         }
       }
       break;
@@ -249,9 +254,9 @@ void Menu::runGrafo() {
     case 18: {
       int64_t aristas = this->numAristas(this->grafo);
       std::cout << "Numero de aristas es: " << aristas << std::endl;
-      }
+    }
 
-      break;
+    break;
     case 19:
 
       break;
@@ -274,7 +279,7 @@ void Menu::runGrafo() {
 
       break;
     case 26:
-      salir = true; 
+      salir = true;
       std::cout << "Saliendo" << std::endl;
       this->grafo->Destruir();
       break;
@@ -334,5 +339,67 @@ int64_t Menu::numAristas(GRAFO* g) {
       v = g->SiguienteVertice(v);
     }
   }
-  return count/2;
+  return count / 2;
+}
+
+pivote encontrarPivoteDijkstra(
+    GRAFO* G, Diccionario<Vertice*>* dicc, std::vector<double>& D) {
+  int64_t i = 0;
+  double min = std::numeric_limits<double>::max();
+  Vertice* p = nullptr;
+  Vertice* v = G->PrimerVertice();
+  while (v != nullptr) {
+    if (!dicc->Pertenece(v)) {
+      if (D[i] < min) {
+        min = D[i];
+        p = v;
+      }
+    }
+    ++i;
+    v = G->SiguienteVertice(v);
+  }
+  pivote piv;
+  piv.vertice = p;
+  piv.indice = i;
+  return piv;
+}
+
+ResultadoDijkstra* Menu::Dijkstra(GRAFO* G, Vertice* origen) {
+  // Variables
+  int64_t n = G->NumVertices();
+  Vertice* v = nullptr;
+  Vertice* sv = nullptr;
+  std::vector<Vertice*> P(n);
+  std::vector<double> D(n);
+  Diccionario<Vertice*> dicc;
+  dicc.Iniciar();
+
+  // Inicializacion
+  dicc.Agregar(origen);
+  sv = G->SiguienteVertice(origen);
+  for (int64_t i = 0; i < n; ++i) {
+    P[i] = origen;
+    D[i] = G->Peso(origen, sv);
+    sv = G->SiguienteVertice(sv);
+  }
+
+  // Iteracion
+  for (int64_t i = 0; i < n - 2; ++i) {
+    pivote p = encontrarPivoteDijkstra(G, &dicc, D);
+    dicc.Agregar(p.vertice);
+    v = G->PrimerVertice();
+    for (int64_t j = 0; j < n; ++j) {
+      if (!dicc.Pertenece(v)) {
+        if (D[p.indice] + G->Peso(p.vertice, v) < D[j]) {
+          P[j] = p.vertice;
+          D[j] = D[j] + G->Peso(p.vertice, v);
+        }
+      }
+      v = G->SiguienteVertice(v);
+    }
+  }
+  ResultadoDijkstra* resultado = new ResultadoDijkstra;
+  resultado->P = P;
+  resultado->D = D;
+  return resultado;
 }
