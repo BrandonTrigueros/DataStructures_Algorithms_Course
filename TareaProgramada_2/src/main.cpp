@@ -1,3 +1,4 @@
+#if 0
 #include "Menu.hpp"
 
 int main() {
@@ -6,3 +7,5 @@ int main() {
   delete menu;
   return 0;
 }
+
+#endif
