@@ -7,6 +7,7 @@
 #include <limits>
 #include <ostream>
 #include <sched.h>
+#include <system_error>
 #include <time.h>
 #include <unistd.h>
 
@@ -22,6 +23,9 @@ Menu::~Menu() {
 }
 
 double log(double base, double x) { return std::log(x) / std::log(base); }
+
+int64_t profPrimR(
+    GRAFO* g, Vertice* vertAct, std::set<Vertice*>& dicVertVis, int64_t& count);
 
 // void Menu::crearGrafoAuto() { }
 
@@ -257,12 +261,26 @@ void Menu::runGrafo() {
     }
 
     break;
-    case 19:
+    case 19: {
+      bool result = this->ConexoProfundidad(this->grafo);
+      if (result) {
+        std::cout << "El grafo es conexo" << std::endl;
+      } else {
+        std::cout << "El grafo no es conexo" << std::endl;
+      }
+    }
 
-      break;
-    case 20:
+    break;
+    case 20: {
+      bool result = this->ConexoAncho(this->grafo);
+      if (result) {
+        std::cout << "El grafo es conexo" << std::endl;
+      } else {
+        std::cout << "El grafo no es conexo" << std::endl;
+      }
+    }
 
-      break;
+    break;
     case 21:
 
       break;
@@ -342,64 +360,62 @@ int64_t Menu::numAristas(GRAFO* g) {
   return count / 2;
 }
 
-pivote encontrarPivoteDijkstra(
-    GRAFO* G, Diccionario<Vertice*>* dicc, std::vector<double>& D) {
-  int64_t i = 0;
-  double min = std::numeric_limits<double>::max();
-  Vertice* p = nullptr;
-  Vertice* v = G->PrimerVertice();
-  while (v != nullptr) {
-    if (!dicc->Pertenece(v)) {
-      if (D[i] < min) {
-        min = D[i];
-        p = v;
-      }
+int64_t profPrimR(GRAFO* g, Vertice* vertAct, std::set<Vertice*>& dicVertVis,
+    int64_t& count) {
+  dicVertVis.insert(vertAct);
+  count++;
+  Vertice* vertAdy = g->PrimerVerticeAdyacente(vertAct);
+  while (vertAdy != NULL) {
+    if (dicVertVis.find(vertAdy) == dicVertVis.end()) {
+      dicVertVis.insert(vertAdy);
+      count = profPrimR(g, vertAdy, dicVertVis, count);
     }
-    ++i;
-    v = G->SiguienteVertice(v);
+    vertAdy = g->SiguienteVerticeAdyacente(vertAct, vertAdy);
   }
-  pivote piv;
-  piv.vertice = p;
-  piv.indice = i;
-  return piv;
+  return count;
 }
 
-ResultadoDijkstra* Menu::Dijkstra(GRAFO* G, Vertice* origen) {
-  // Variables
-  int64_t n = G->NumVertices();
-  Vertice* v = nullptr;
-  Vertice* sv = nullptr;
-  std::vector<Vertice*> P(n);
-  std::vector<double> D(n);
-  Diccionario<Vertice*> dicc;
-  dicc.Iniciar();
-
-  // Inicializacion
-  dicc.Agregar(origen);
-  sv = G->SiguienteVertice(origen);
-  for (int64_t i = 0; i < n; ++i) {
-    P[i] = origen;
-    D[i] = G->Peso(origen, sv);
-    sv = G->SiguienteVertice(sv);
-  }
-
-  // Iteracion
-  for (int64_t i = 0; i < n - 2; ++i) {
-    pivote p = encontrarPivoteDijkstra(G, &dicc, D);
-    dicc.Agregar(p.vertice);
-    v = G->PrimerVertice();
-    for (int64_t j = 0; j < n; ++j) {
-      if (!dicc.Pertenece(v)) {
-        if (D[p.indice] + G->Peso(p.vertice, v) < D[j]) {
-          P[j] = p.vertice;
-          D[j] = D[j] + G->Peso(p.vertice, v);
-        }
-      }
-      v = G->SiguienteVertice(v);
+bool Menu::ConexoProfundidad(GRAFO* g) {
+  int64_t count = 0;
+  std::set<Vertice*> dicVertVis;
+  if (!g->Vacio()) {
+    Vertice* vertAct = g->PrimerVertice();
+    if (dicVertVis.find(vertAct) == dicVertVis.end()) {
+      profPrimR(g, vertAct, dicVertVis, count);
     }
   }
-  ResultadoDijkstra* resultado = new ResultadoDijkstra;
-  resultado->P = P;
-  resultado->D = D;
-  return resultado;
+
+  if (count != g->NumVertices()) {
+    return false;
+  }
+  return true;
+}
+
+bool Menu::ConexoAncho(GRAFO* g) {
+  int64_t count = 0;
+  if (!g->Vacio()) {
+    std::queue<Vertice*> colaVert;
+    std::set<Vertice*> dicVertVis;
+    Vertice* v = g->PrimerVertice();
+    if (dicVertVis.find(v) == dicVertVis.end()) {
+      colaVert.push(v);
+      while (!colaVert.empty()) {
+        ++count;
+        v = colaVert.back();
+        colaVert.pop();
+        dicVertVis.insert(v);
+        Vertice* va = g->PrimerVerticeAdyacente(v);
+        while (va != nullptr) {
+          if (dicVertVis.find(va) == dicVertVis.end()) {
+            colaVert.push(va);
+          }
+          va = g->SiguienteVerticeAdyacente(v, va);
+        }
+      }
+    }
+  }
+  if (count == g->NumVertices()) {
+    return true;
+  }
+  return false;
 }

@@ -1,5 +1,4 @@
-#if 1
-
+#if 0
 #include "Menu.hpp"
 
 int main() {
