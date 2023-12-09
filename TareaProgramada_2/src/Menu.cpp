@@ -606,6 +606,8 @@ int64_t profPrimR(GRAFO* g, Vertice* vertAct, std::set<Vertice*>& dicVertVis,
 }
 
 bool Menu::ConexoProfundidad(GRAFO* g) {
+  struct std::timespec before;
+  clock_gettime(CLOCK_MONOTONIC, &before);
   int64_t count = 0;
   std::set<Vertice*> dicVertVis;
   if (!g->Vacio()) {
@@ -614,7 +616,15 @@ bool Menu::ConexoProfundidad(GRAFO* g) {
       profPrimR(g, vertAct, dicVertVis, count);
     }
   }
+  struct std::timespec after;
+  clock_gettime(CLOCK_MONOTONIC, &after);
 
+  uint64_t before_ns = (before.tv_sec * 1000000000) + before.tv_nsec;
+  uint64_t after_ns = (after.tv_sec * 1000000000) + after.tv_nsec;
+
+  int64_t elapsed = after_ns - before_ns;
+  std::cout << "Time sec: " << after.tv_sec - before.tv_sec << std::endl;
+  std::cout << "Time: 0." << elapsed << std::endl;
   if (count != g->NumVertices()) {
     return false;
   }
@@ -622,6 +632,8 @@ bool Menu::ConexoProfundidad(GRAFO* g) {
 }
 
 bool Menu::ConexoAncho(GRAFO* g) {
+  struct std::timespec before;
+  clock_gettime(CLOCK_MONOTONIC, &before);
   int64_t count = 0;
   if (!g->Vacio()) {
     std::queue<Vertice*> colaVert;
@@ -644,6 +656,15 @@ bool Menu::ConexoAncho(GRAFO* g) {
       }
     }
   }
+  struct std::timespec after;
+  clock_gettime(CLOCK_MONOTONIC, &after);
+
+  uint64_t before_ns = (before.tv_sec * 1000000000) + before.tv_nsec;
+  uint64_t after_ns = (after.tv_sec * 1000000000) + after.tv_nsec;
+
+  int64_t elapsed = after_ns - before_ns;
+  std::cout << "Time sec: " << after.tv_sec - before.tv_sec << std::endl;
+  std::cout << "Time: 0." << elapsed << std::endl;
   if (count == g->NumVertices()) {
     return true;
   }
@@ -651,6 +672,8 @@ bool Menu::ConexoAncho(GRAFO* g) {
 }
 
 ResultadoDijkstra* Menu::Dijkstra(GRAFO* G, Vertice* origen) {
+  struct std::timespec before;
+  clock_gettime(CLOCK_MONOTONIC, &before);
   int64_t n = G->NumVertices();
   Vertice* v = nullptr;
 
@@ -692,10 +715,21 @@ ResultadoDijkstra* Menu::Dijkstra(GRAFO* G, Vertice* origen) {
   ResultadoDijkstra* resultado = new ResultadoDijkstra;
   resultado->P = P;
   resultado->D = D;
+  struct std::timespec after;
+  clock_gettime(CLOCK_MONOTONIC, &after);
+
+  uint64_t before_ns = (before.tv_sec * 1000000000) + before.tv_nsec;
+  uint64_t after_ns = (after.tv_sec * 1000000000) + after.tv_nsec;
+
+  int64_t elapsed = after_ns - before_ns;
+  std::cout << "Time sec: " << after.tv_sec - before.tv_sec << std::endl;
+  std::cout << "Time: 0." << elapsed << std::endl;
   return resultado;
 }
 
 ResultadoFloyd* Menu::Floyd(GRAFO* g) {
+  struct std::timespec before;
+  clock_gettime(CLOCK_MONOTONIC, &before);
   std::vector<std::vector<double>> A(g->NumVertices());
   std::vector<std::vector<int64_t>> P(g->NumVertices());
   for (int64_t i = 0; i < g->NumVertices(); ++i) {
@@ -734,6 +768,15 @@ ResultadoFloyd* Menu::Floyd(GRAFO* g) {
   ResultadoFloyd* resultado = new ResultadoFloyd;
   resultado->A = A;
   resultado->P = P;
+  struct std::timespec after;
+  clock_gettime(CLOCK_MONOTONIC, &after);
+
+  uint64_t before_ns = (before.tv_sec * 1000000000) + before.tv_nsec;
+  uint64_t after_ns = (after.tv_sec * 1000000000) + after.tv_nsec;
+
+  int64_t elapsed = after_ns - before_ns;
+  std::cout << "Time sec: " << after.tv_sec - before.tv_sec << std::endl;
+  std::cout << "Time: 0." << elapsed << std::endl;
   return resultado;
 }
 
@@ -773,6 +816,8 @@ ResultadoFloyd* Menu::Floyd(GRAFO* g) {
 // }
 
 ResultadoPrim* Menu::Prim(GRAFO* grafo) {
+  struct std::timespec before;
+  clock_gettime(CLOCK_MONOTONIC, &before);
   std::unordered_map<Vertice*, int> indice;
   std::vector<Vertice*> vertices;
 
@@ -820,11 +865,21 @@ ResultadoPrim* Menu::Prim(GRAFO* grafo) {
   resultado->vertices = vertices;
   resultado->costos = minCosto;
   resultado->previo = previo;
+  struct std::timespec after;
+  clock_gettime(CLOCK_MONOTONIC, &after);
 
+  uint64_t before_ns = (before.tv_sec * 1000000000) + before.tv_nsec;
+  uint64_t after_ns = (after.tv_sec * 1000000000) + after.tv_nsec;
+
+  int64_t elapsed = after_ns - before_ns;
+  std::cout << "Time sec: " << after.tv_sec - before.tv_sec << std::endl;
+  std::cout << "Time: 0." << elapsed << std::endl;
   return resultado;
 }
 
 std::vector<AristaKruskal> Menu::Kruskal(GRAFO* g) {
+  struct std::timespec before;
+  clock_gettime(CLOCK_MONOTONIC, &before);
   std::vector<AristaKruskal> aristas;
   ColaPrioridad<AristaKruskal> APO;
   std::set<std::set<Vertice*>> CC;
@@ -876,6 +931,15 @@ std::vector<AristaKruskal> Menu::Kruskal(GRAFO* g) {
       aristas.push_back(a);
     }
   }
+  struct std::timespec after;
+  clock_gettime(CLOCK_MONOTONIC, &after);
+
+  uint64_t before_ns = (before.tv_sec * 1000000000) + before.tv_nsec;
+  uint64_t after_ns = (after.tv_sec * 1000000000) + after.tv_nsec;
+
+  int64_t elapsed = after_ns - before_ns;
+  std::cout << "Time sec: " << after.tv_sec - before.tv_sec << std::endl;
+  std::cout << "Time: 0." << elapsed << std::endl;
   return aristas;
 }
 
@@ -909,6 +973,8 @@ void CircuitoHamiltonMC_BEP_i(GRAFO* g, int64_t i, int64_t& costoAct,
 }
 
 Vertice** Menu::CircuitoHamiltonMC_BEP(GRAFO* g) {
+  struct std::timespec before;
+  clock_gettime(CLOCK_MONOTONIC, &before);
   std::set<Vertice*> dicVertVis;
   std::map<int64_t, Vertice*> rel1a1;
   Vertice** lowestHamiltonianPath = new Vertice*[g->NumVertices() + 1];
@@ -923,7 +989,15 @@ Vertice** Menu::CircuitoHamiltonMC_BEP(GRAFO* g) {
       lowestHamiltonianPath, dicVertVis, solucionAct);
 
   lowestHamiltonianPath[g->NumVertices()] = g->PrimerVertice();
+  struct std::timespec after;
+  clock_gettime(CLOCK_MONOTONIC, &after);
 
+  uint64_t before_ns = (before.tv_sec * 1000000000) + before.tv_nsec;
+  uint64_t after_ns = (after.tv_sec * 1000000000) + after.tv_nsec;
+
+  int64_t elapsed = after_ns - before_ns;
+  std::cout << "Time sec: " << after.tv_sec - before.tv_sec << std::endl;
+  std::cout << "Time: 0." << elapsed << std::endl;
   return lowestHamiltonianPath;
 }
 
