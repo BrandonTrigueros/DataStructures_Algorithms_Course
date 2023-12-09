@@ -20,6 +20,7 @@ template <typename TypeData> class ColaPrioridad {
 
  public:
   void push(const TypeData& item, int priority) {
+    // std::cout << "pushing with priority " << priority << std::endl;
     this->pq.push(QueueNode(item, priority));
   }
 
@@ -34,4 +35,19 @@ template <typename TypeData> class ColaPrioridad {
   bool empty() const { return this->pq.empty(); }
 
   size_t size() const { return this->pq.size(); }
+
+  bool existe(TypeData& item) {
+    std::priority_queue<QueueNode> copiaPQ
+        = pq;  // Realizar una copia de la cola de prioridad
+
+    // Buscar el elemento en la copia de la cola de prioridad
+    while (!copiaPQ.empty()) {
+      if (copiaPQ.top().data == item) {
+        return true;  // Elemento encontrado
+      }
+      copiaPQ.pop();
+    }
+
+    return false;  // Elemento no encontrado
+  }
 };
