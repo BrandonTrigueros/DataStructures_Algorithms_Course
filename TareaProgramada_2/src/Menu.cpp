@@ -820,24 +820,18 @@ std::vector<AristaKruskal> Menu::Kruskal(GRAFO* g) {
   std::vector<AristaKruskal> aristas;
   ColaPrioridad<AristaKruskal> APO;
   std::set<std::set<Vertice*>> CC;
-
   Vertice* v = g->PrimerVertice();
-  int64_t i = 0;
   while (v != nullptr) {
+    std::cout << v->etiqueta << std::endl;
     std::set<Vertice*> s;
     s.insert(v);
     CC.insert(s);
-    v = g->SiguienteVertice(v);
-    ++i;
-
     Vertice* va = g->PrimerVerticeAdyacente(v);
     while (va != nullptr) {
       AristaKruskal a;
       a.vertice1 = v;
       a.vertice2 = va;
       a.peso = g->Peso(v, va);
-      std::cout << a.vertice1->etiqueta << " " << a.vertice2->etiqueta << " "
-                << a.peso << std::endl;
       if (!APO.existe(a)) {
         APO.push(a, a.peso);
       }
@@ -845,18 +839,13 @@ std::vector<AristaKruskal> Menu::Kruskal(GRAFO* g) {
     }
     v = g->SiguienteVertice(v);
   }
-
   int64_t n = g->NumVertices();
   int64_t totalAristasEscogidas = 0;
-
   while (totalAristasEscogidas < n - 1) {
     AristaKruskal a = APO.top();
-    // std::cout << a.vertice1->etiqueta << " " << a.vertice2->etiqueta << " "
-    //           << a.peso << std::endl;
     APO.pop();
     std::set<Vertice*> s1;
     std::set<Vertice*> s2;
-
     for (auto it = CC.begin(); it != CC.end(); ++it) {
       if (it->find(a.vertice1) != it->end()) {
         s1 = *it;
@@ -865,7 +854,6 @@ std::vector<AristaKruskal> Menu::Kruskal(GRAFO* g) {
         s2 = *it;
       }
     }
-
     if (s1 != s2) {
       std::set<Vertice*> s3;
       for (auto it = s1.begin(); it != s1.end(); ++it) {
