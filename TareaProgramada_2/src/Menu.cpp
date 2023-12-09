@@ -69,7 +69,7 @@ void Menu::run() {
 // ----------MENU GRAFO----------
 // ------------------------------
 void Menu::runGrafo() {
-    
+
   this->crearGrafoAuto(3, 3);
 
   int opcion;
@@ -824,7 +824,6 @@ std::vector<AristaKruskal> Menu::Kruskal(GRAFO* g) {
   std::set<std::set<Vertice*>> CC;
   Vertice* v = g->PrimerVertice();
   while (v != nullptr) {
-    std::cout << v->etiqueta << std::endl;
     std::set<Vertice*> s;
     s.insert(v);
     CC.insert(s);
@@ -931,16 +930,16 @@ void Menu::crearGrafoAuto(int64_t vertices, int64_t numAristas) {
   for (int i = 0; i < vertices; ++i) {
     matriz[i].resize(vertices);
   }
-  
+
   for (int i = 0; i < numAristas; ++i) {
     char string[10];
     if (i > 26) {
       string[0] = i % 26;
       string[1] = i % 26;
-      listaEtiquetas.at(i) = string; 
+      listaEtiquetas.at(i) = string;
     } else {
       string[0] = 97 + i;
-      listaEtiquetas.at(i) = string; 
+      listaEtiquetas.at(i) = string;
       for (int i = 0; i < 10; ++i) {
         string[i] = '\0';
       }
@@ -951,7 +950,7 @@ void Menu::crearGrafoAuto(int64_t vertices, int64_t numAristas) {
   }
   std::cout << std::endl;
 
-  for(int i = 0; i < vertices; ++i) {
+  for (int i = 0; i < vertices; ++i) {
     for (int j = 0; j < vertices; ++j) {
       if (i == j) {
         matriz[i][j] = std::numeric_limits<double>::max();
@@ -984,7 +983,8 @@ void Menu::crearGrafoAuto(int64_t vertices, int64_t numAristas) {
       if (v != vs) {
         if (count > 0 && !ExisteArista(this->grafo, v, vs)) {
           this->grafo->AgregarArista(v, vs, weight);
-          std::cout << "Arista: " << v->etiqueta << " " << vs->etiqueta << std::endl;
+          std::cout << "Arista: " << v->etiqueta << " " << vs->etiqueta
+                    << std::endl;
           ++weight;
           --count;
         }
@@ -993,7 +993,6 @@ void Menu::crearGrafoAuto(int64_t vertices, int64_t numAristas) {
     }
     v = this->grafo->SiguienteVertice(v);
   }
-
 }
 void Menu::crearGrafoManual() {
   this->grafo = new GRAFO;

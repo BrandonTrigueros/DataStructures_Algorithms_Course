@@ -104,8 +104,6 @@ class Menu {
   void crearGrafoAuto(int64_t vertices, int64_t numAristas);
   void crearGrafoManual();
 
-
-
   // ----------ALGORITMOS----------
 
   // Parámetros:
