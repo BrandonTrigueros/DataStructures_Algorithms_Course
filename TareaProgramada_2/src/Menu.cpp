@@ -70,8 +70,8 @@ void Menu::run() {
 // ------------------------------
 void Menu::runGrafo() {
 
-  // this->crearGrafoAuto(3, 3);
-  this->crearGrafoManual();
+  this->crearGrafoAuto(40, 780);
+  //  this->crearGrafoManual();
 
   int opcion;
   bool salir = false;
@@ -937,21 +937,12 @@ void Menu::crearGrafoAuto(int64_t vertices, int64_t numAristas) {
     matriz[i].resize(vertices);
   }
 
-  for (int i = 0; i < numAristas; ++i) {
-    char string[10];
-    if (i > 26) {
-      string[0] = i % 26;
-      string[1] = i % 26;
-      listaEtiquetas.at(i) = string;
-    } else {
-      string[0] = 97 + i;
-      listaEtiquetas.at(i) = string;
-      for (int i = 0; i < 10; ++i) {
-        string[i] = '\0';
-      }
-    }
+  for (int i = 0; i < vertices; ++i) {
+    std::string toAdd = "v" + std::to_string(i);
+    listaEtiquetas.at(i) = toAdd;
   }
-  for (int i = 0; i < numAristas; ++i) {
+
+  for (int i = 0; i < vertices; ++i) {
     std::cout << listaEtiquetas.at(i) << " ";
   }
   std::cout << std::endl;
@@ -1000,6 +991,7 @@ void Menu::crearGrafoAuto(int64_t vertices, int64_t numAristas) {
     v = this->grafo->SiguienteVertice(v);
   }
 }
+
 void Menu::crearGrafoManual() {
   this->grafo = new GRAFO;
   this->grafo->Iniciar();
