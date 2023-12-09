@@ -374,9 +374,45 @@ void Menu::runGrafo() {
     }
 
     break;
-    case 23:
+    case 23: {
+      ResultadoPrim* resultado = this->Prim(this->grafo);
 
-      break;
+      std::cout << "-------------------------" << std::endl;
+      Vertice* v = this->grafo->PrimerVertice();
+      v = this->grafo->SiguienteVertice(v);
+      while (v != nullptr) {
+        // Set width to 3 characters for each output
+        std::cout << std::setw(3) << this->grafo->Etiqueta(v);
+        v = this->grafo->SiguienteVertice(v);
+      }
+
+      std::cout << std::endl;
+      std::cout << "-------------------------" << std::endl;
+
+      for (size_t i = 0; i < resultado->costos.size(); ++i) {
+        if (resultado->costos[i] > 100000) {
+          // Set width to 3 characters for each output
+          std::cout << std::setw(3) << "-";
+        } else {
+          // Set width to 3 characters for each output
+          std::cout << std::setw(3) << resultado->costos[i];
+        }
+      }
+
+      std::cout << std::endl;
+      std::cout << "-------------------------" << std::endl;
+
+      for (size_t i = 0; i < resultado->vertices.size(); i++) {
+        // Set width to 3 characters for each output
+        std::cout << std::setw(3)
+                  << this->grafo->Etiqueta(resultado->vertices[i]);
+      }
+
+      std::cout << std::endl;
+      std::cout << "-------------------------" << std::endl;
+    }
+
+    break;
     case 24:
 
       break;
@@ -474,7 +510,7 @@ int64_t EncontrarPivotePrim(
   double min = std::numeric_limits<double>::max();
   for (auto it = costos.begin(); it != costos.end(); ++it) {
     if (!dicc.Pertenece(i)) {
-      if (*it < min) {
+      if (*it < min) {  // Aquí está el cambio
         min = *it;
         pivIndice = i;
       }
@@ -672,41 +708,79 @@ ResultadoFloyd* Menu::Floyd(GRAFO* g) {
   return resultado;
 }
 
-ResultadoPrim* Menu::Prim(GRAFO* g, Vertice* origen) {
+// Prim(Grago g, Matrices Vertices, Matrices Costos, R1a1) {
+//   vRaiz = G.PV()
+//   R1a1.AgRel(0,vRaiz)
+//   v = G.SV(vRaiz); i = 1
+//   while v !- vertNulo {
+//     R1a1.AgRel(i,v)
+//     if G.ExisteArista(vRaizm v) {
+//       Costos[i] = G.Peso(vRaiz, v)
+//     } else {
+//       Costos[i] = Infinito
+//     }
+//     Vertices[i] = 0
+//     v = G.SV(v)
+//   }
+
+//   DiccPiv.Iniciar()
+
+//   for i = 1.. G.NumVert() - 2 {
+//     indPivote = BuscarPivote(Costos, DiccPiv)
+//     DiccPiv.Ag(indPivote)
+//     vertPivote = R1a1.Imag(indPivote)
+//     for j = 1.. G.NumVert()-1 {
+//       vertJ = R1a1.Imag(j)
+//       if !DiccPiv.Pert(j) {
+//         if G.ExisteArista(vertJ, vertPivote) {
+//           if Peso(vertJ, vertPivote) < Costos[j] {
+//             Costos[j] = G.Peso(vertJ, vertPivote)
+//             Vertices[j] = indPivote
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
+
+ResultadoPrim* Menu::Prim(GRAFO* g) {
   std::map<int64_t, Vertice*> map;
   std::vector<double> costos(g->NumVertices());
   std::vector<int64_t> vertices(g->NumVertices());
-  std::vector<Vertice*> verticesR1a1(g->NumVertices());
-  map[0] = origen;
-  Vertice* sv = g->SiguienteVertice(origen);
-  int64_t i = 0;
+
+  Vertice* raiz = g->PrimerVertice();
+  map[0] = raiz;
+  Vertice* sv = g->SiguienteVertice(raiz);
+  int64_t k = 0;
   while (sv != nullptr) {
-    map[i + 1] = sv;
-    if (ExisteArista(g, origen, sv)) {
-      costos[i] = g->Peso(origen, sv);
+    map[k + 1] = sv;
+    if (ExisteArista(g, raiz, sv)) {
+      costos[k] = g->Peso(raiz, sv);
     } else {
-      costos[i] = std::numeric_limits<double>::max();
+      costos[k] = std::numeric_limits<double>::max();
     }
-    vertices[i] = 0;
-    verticesR1a1[i] = origen;
+    vertices[k] = 0;
     sv = g->SiguienteVertice(sv);
-    ++i;
+    ++k;
   }
 
   Diccionario<int64_t> diccPiv;
   diccPiv.Iniciar();
-  for (int64_t i = 0; i < g->NumVertices() - 2; ++i) {
+  for (int64_t i = 0; i < g->NumVertices() - 1; ++i) {
     int64_t piv = EncontrarPivotePrim(costos, diccPiv);
     diccPiv.Agregar(piv);
     Vertice* vertPivote = Imagen(map, piv);
-    for (int64_t j = 0; j < g->NumVertices() - 1; ++j) {
-      Vertice* vertJ = Imagen(map, j);
+    for (int64_t j = 0; j < g->NumVertices(); ++j) {
+      Vertice* vertJ = map[j];
       if (!diccPiv.Pertenece(j)) {
         if (ExisteArista(g, vertJ, vertPivote)) {
           if (g->Peso(vertJ, vertPivote) < costos[j]) {
+            if (costos[j] == 3) {
+              std::cout << g->Etiqueta(vertJ) << " " << g->Etiqueta(vertPivote)
+                        << std::endl;
+            }
             costos[j] = g->Peso(vertJ, vertPivote);
-            vertices[j] = piv;
-            verticesR1a1[j] = vertPivote;
+            vertices[j] = piv;  // Aquí está el cambio
           }
         }
       }
@@ -714,7 +788,9 @@ ResultadoPrim* Menu::Prim(GRAFO* g, Vertice* origen) {
   }
   ResultadoPrim* resultado = new ResultadoPrim;
   resultado->costos = costos;
-  resultado->vertices = verticesR1a1;
+  for (size_t i = 0; i < vertices.size(); ++i) {
+    resultado->vertices.push_back(Imagen(map, vertices[i]));
+  }
   return resultado;
 }
 
@@ -773,13 +849,16 @@ void Menu::crearGrafoManual() {
   Vertice* verticeE = this->grafo->AgregarVert("E");
   Vertice* verticeF = this->grafo->AgregarVert("F");
 
-  this->grafo->AgregarArista(verticeA, verticeE, 1);
-  this->grafo->AgregarArista(verticeB, verticeA, 2);
-  this->grafo->AgregarArista(verticeC, verticeA, 10);
-  this->grafo->AgregarArista(verticeC, verticeB, 4);
-  this->grafo->AgregarArista(verticeC, verticeF, 20);
-  this->grafo->AgregarArista(verticeE, verticeC, 8);
-  this->grafo->AgregarArista(verticeE, verticeD, 6);
-  this->grafo->AgregarArista(verticeE, verticeF, 12);
-  this->grafo->AgregarArista(verticeD, verticeF, 5);
+  this->grafo->AgregarArista(verticeA, verticeB, 2);
+  this->grafo->AgregarArista(verticeA, verticeC, 8);
+  this->grafo->AgregarArista(verticeA, verticeE, 7);
+  this->grafo->AgregarArista(verticeA, verticeD, 6);
+  this->grafo->AgregarArista(verticeA, verticeF, 3);
+  this->grafo->AgregarArista(verticeB, verticeC, 3);
+  this->grafo->AgregarArista(verticeB, verticeD, 9);
+  this->grafo->AgregarArista(verticeB, verticeF, 5);
+  this->grafo->AgregarArista(verticeC, verticeE, 1);
+  this->grafo->AgregarArista(verticeC, verticeF, 6);
+  this->grafo->AgregarArista(verticeD, verticeF, 9);
+  this->grafo->AgregarArista(verticeE, verticeF, 4);
 }

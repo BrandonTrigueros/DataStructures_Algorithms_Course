@@ -139,7 +139,7 @@ class Menu {
   // Retorna:
   // Requiere:
   // Modifica: N/A
-  ResultadoPrim* Prim(GRAFO* g, Vertice* origen);
+  ResultadoPrim* Prim(GRAFO* g);
 
   // Parámetros:
   // Efecto:
