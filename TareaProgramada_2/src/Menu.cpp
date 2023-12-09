@@ -70,7 +70,8 @@ void Menu::run() {
 // ------------------------------
 void Menu::runGrafo() {
 
-  this->crearGrafoAuto(3, 3);
+  // this->crearGrafoAuto(3, 3);
+  this->crearGrafoManual();
 
   int opcion;
   bool salir = false;
@@ -314,7 +315,11 @@ void Menu::runGrafo() {
 
       for (size_t i = 0; i < resultado->P.size(); i++) {
         // Set width to 3 characters for each output
-        std::cout << std::setw(3) << this->grafo->Etiqueta(resultado->P[i]);
+        if (resultado->P[i] != nullptr) {
+          std::cout << std::setw(3) << this->grafo->Etiqueta(resultado->P[i]);
+        } else {
+          std::cout << std::setw(3) << "-";
+        }
       }
 
       std::cout << std::endl;
