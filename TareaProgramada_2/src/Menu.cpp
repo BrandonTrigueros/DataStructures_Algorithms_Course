@@ -392,7 +392,7 @@ void Menu::runGrafo() {
       std::cout << std::endl;
       std::cout << "-------------------------" << std::endl;
 
-      for (size_t i = 0; i < resultado->costos.size(); ++i) {
+      for (size_t i = 1; i < resultado->costos.size(); ++i) {
         if (resultado->costos[i] > 100000) {
           // Set width to 3 characters for each output
           std::cout << std::setw(3) << "-";
@@ -405,10 +405,10 @@ void Menu::runGrafo() {
       std::cout << std::endl;
       std::cout << "-------------------------" << std::endl;
 
-      for (size_t i = 0; i < resultado->vertices.size(); i++) {
+      for (size_t i = 1; i < resultado->previo.size(); i++) {
         // Set width to 3 characters for each output
         std::cout << std::setw(3)
-                  << this->grafo->Etiqueta(resultado->vertices[i]);
+                  << this->grafo->Etiqueta(resultado->previo[i]);
       }
 
       std::cout << std::endl;
@@ -767,54 +767,55 @@ ResultadoFloyd* Menu::Floyd(GRAFO* g) {
 //   }
 // }
 
-ResultadoPrim* Menu::Prim(GRAFO* g) {
-  std::map<int64_t, Vertice*> map;
-  std::vector<double> costos(g->NumVertices());
-  std::vector<int64_t> vertices(g->NumVertices());
+ResultadoPrim* Menu::Prim(GRAFO* grafo) {
+  std::unordered_map<Vertice*, int> indice;
+  std::vector<Vertice*> vertices;
 
-  Vertice* raiz = g->PrimerVertice();
-  map[0] = raiz;
-  Vertice* sv = g->SiguienteVertice(raiz);
-  int64_t k = 0;
-  while (sv != nullptr) {
-    map[k + 1] = sv;
-    if (ExisteArista(g, raiz, sv)) {
-      costos[k] = g->Peso(raiz, sv);
-    } else {
-      costos[k] = std::numeric_limits<double>::max();
-    }
-    vertices[k] = 0;
-    sv = g->SiguienteVertice(sv);
-    ++k;
+  int numVertices = 0;
+  for (Vertice* v = grafo->PrimerVertice(); v != nullptr;
+       v = grafo->SiguienteVertice(v)) {
+    vertices.push_back(v);
+    indice[v] = numVertices++;
   }
 
-  Diccionario<int64_t> diccPiv;
-  diccPiv.Iniciar();
-  for (int64_t i = 0; i < g->NumVertices() - 1; ++i) {
-    int64_t piv = EncontrarPivotePrim(costos, diccPiv);
-    diccPiv.Agregar(piv);
-    Vertice* vertPivote = Imagen(map, piv);
-    for (int64_t j = 0; j < g->NumVertices(); ++j) {
-      Vertice* vertJ = map[j];
-      if (!diccPiv.Pertenece(j)) {
-        if (ExisteArista(g, vertJ, vertPivote)) {
-          if (g->Peso(vertJ, vertPivote) < costos[j]) {
-            if (costos[j] == 3) {
-              std::cout << g->Etiqueta(vertJ) << " " << g->Etiqueta(vertPivote)
-                        << std::endl;
-            }
-            costos[j] = g->Peso(vertJ, vertPivote);
-            vertices[j] = piv;  // Aquí está el cambio
-          }
-        }
+  std::vector<bool> visitado(numVertices, false);
+  std::vector<double> minCosto(numVertices, std::numeric_limits<double>::max());
+  std::vector<Vertice*> previo(numVertices, nullptr);
+
+  std::priority_queue<std::pair<double, Vertice*>,
+      std::vector<std::pair<double, Vertice*>>,
+      std::greater<std::pair<double, Vertice*>>>
+      cola;
+
+  Vertice* inicio = vertices[0];
+  cola.push({ 0.0, inicio });
+  minCosto[indice[inicio]] = 0.0;
+
+  while (!cola.empty()) {
+    Vertice* vertice = cola.top().second;
+    cola.pop();
+
+    if (visitado[indice[vertice]])
+      continue;
+    visitado[indice[vertice]] = true;
+
+    for (Vertice* adyacente = grafo->PrimerVerticeAdyacente(vertice);
+         adyacente != nullptr;
+         adyacente = grafo->SiguienteVerticeAdyacente(vertice, adyacente)) {
+      double peso = grafo->Peso(vertice, adyacente);
+      if (!visitado[indice[adyacente]] && peso < minCosto[indice[adyacente]]) {
+        previo[indice[adyacente]] = vertice;
+        minCosto[indice[adyacente]] = peso;
+        cola.push({ peso, adyacente });
       }
     }
   }
+
   ResultadoPrim* resultado = new ResultadoPrim;
-  resultado->costos = costos;
-  for (size_t i = 0; i < vertices.size(); ++i) {
-    resultado->vertices.push_back(Imagen(map, vertices[i]));
-  }
+  resultado->vertices = vertices;
+  resultado->costos = minCosto;
+  resultado->previo = previo;
+
   return resultado;
 }
 

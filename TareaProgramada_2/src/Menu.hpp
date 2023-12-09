@@ -9,6 +9,7 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 // #include "ListasDeAdyacencia.hpp"
 #include "MatrizDeAdyacencia.hpp"
@@ -72,6 +73,7 @@ struct ResultadoFloyd {
 struct ResultadoPrim {
   std::vector<Vertice*> vertices;
   std::vector<double> costos;
+  std::vector<Vertice*> previo;
 };
 
 struct AristaKruskal {
