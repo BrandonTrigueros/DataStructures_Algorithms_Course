@@ -70,8 +70,7 @@ void Menu::run() {
 // ------------------------------
 void Menu::runGrafo() {
 
-  this->crearGrafoAuto(40, 780);
-  //  this->crearGrafoManual();
+  this->crearGrafoAuto(20, 190);
 
   int opcion;
   bool salir = false;
@@ -958,6 +957,11 @@ void CircuitoHamiltonMC_BEP_i(GRAFO* g, int64_t i, int64_t& costoAct,
             menorCosto = costoAct + g->Peso(va, solucionAct[0]);
           }
           for (int j = 0; j < g->NumVertices(); ++j) {
+            for (int k = 0; k < g->NumVertices(); k++) {
+              std::cout << solucionAct[k]->etiqueta << " ";
+            } 
+            std::cout << std::endl;
+
             lowestHamiltonianPath[j] = solucionAct[j];
           }
         }
