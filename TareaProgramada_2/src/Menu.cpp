@@ -76,6 +76,7 @@ void Menu::runGrafo() {
   std::string etiq1;
   Vertice* vertice = nullptr;
   Vertice* vertice1 = nullptr;
+  Vertice** result = nullptr;
   double peso;
   do {
     opcion = mostrarOperadoresGrafo();
@@ -381,6 +382,15 @@ void Menu::runGrafo() {
 
       break;
     case 25:
+      result = this->CircuitoHamiltonMC_BEP(this->grafo);
+      std::cout << "El circuito de hamilton es el siguiente: " << std::endl;
+      std::cout << "-------------------------" << std::endl;
+
+      for (int64_t i = 0; i <= this->grafo->NumVertices(); i++) {
+        std::cout << std::setw(3) << this->grafo->Etiqueta(result[i]);
+      }
+      std::cout << std::endl;
+      std::cout << "-------------------------" << std::endl;
 
       break;
     case 26:
@@ -721,18 +731,19 @@ ResultadoPrim* Menu::Prim(GRAFO* g, Vertice* origen) {
 void CircuitoHamiltonMC_BEP_i(GRAFO* g, int64_t i, int64_t& costoAct,
     int64_t& menorCosto, Vertice** lowestHamiltonianPath,
     std::set<Vertice*>& dicVertVis, Vertice** solucionAct) {
-  Vertice* va = g->PrimerVerticeAdyacente(lowestHamiltonianPath[i - 2]);
+  Vertice* va = g->PrimerVerticeAdyacente(solucionAct[i - 2]);
   while (va != nullptr) {
     if (dicVertVis.find(va) == dicVertVis.end()) {
-      lowestHamiltonianPath[i - 1] = va;
-      dicVertVis.insert(va);
-      int64_t costoAct = g->Peso(lowestHamiltonianPath[i - 1], va);
+      solucionAct[i-1] = va;
+      dicVertVis.insert(va); 
+      costoAct += g->Peso(solucionAct[i-2], va);
       if (i == g->NumVertices()) {
-        if (ExisteArista(g, va, lowestHamiltonianPath[0])) {
-          if (costoAct + g->Peso(va, lowestHamiltonianPath[0]) < menorCosto) {
-            menorCosto = costoAct + g->Peso(va, lowestHamiltonianPath[i - 1]);
-            lowestHamiltonianPath = solucionAct;
-            delete solucionAct;
+        if (ExisteArista(g, va, solucionAct[0])) {
+          if (costoAct + g->Peso(va, solucionAct[0]) < menorCosto) {
+            menorCosto = costoAct + g->Peso(va, solucionAct[0]);
+          }
+          for (int j = 0; j < g->NumVertices(); ++j) {
+            lowestHamiltonianPath[j] = solucionAct[j]; 
           }
         }
       } else {
@@ -740,13 +751,13 @@ void CircuitoHamiltonMC_BEP_i(GRAFO* g, int64_t i, int64_t& costoAct,
             lowestHamiltonianPath, dicVertVis, solucionAct);
       }
       dicVertVis.erase(va);
-      costoAct -= g->Peso(lowestHamiltonianPath[i - 1], va);
+      costoAct -= g->Peso(solucionAct[i - 2], va);
     }
-    va = g->SiguienteVerticeAdyacente(lowestHamiltonianPath[i - 2], va);
+    va = g->SiguienteVerticeAdyacente(solucionAct[i - 2], va);
   }
 }
 
-Vertice** CircuitoHamiltonMC_BEP(GRAFO* g) {
+Vertice** Menu::CircuitoHamiltonMC_BEP(GRAFO* g) {
   std::set<Vertice*> dicVertVis;
   std::map<int64_t, Vertice*> rel1a1;
   Vertice** lowestHamiltonianPath = new Vertice*[g->NumVertices() + 1];
@@ -754,11 +765,13 @@ Vertice** CircuitoHamiltonMC_BEP(GRAFO* g) {
   int64_t costoActFinal = 0;
   int64_t menorCostoInit = 0;
 
-  lowestHamiltonianPath[0] = g->PrimerVertice();
+  solucionAct[0] = g->PrimerVertice();
   dicVertVis.insert(g->PrimerVertice());
 
   CircuitoHamiltonMC_BEP_i(g, 2, costoActFinal, menorCostoInit,
       lowestHamiltonianPath, dicVertVis, solucionAct);
+
+  lowestHamiltonianPath[g->NumVertices()] = g->PrimerVertice();
 
   return lowestHamiltonianPath;
 }
