@@ -6,11 +6,14 @@
 #include <ctime>
 #include <iomanip>
 #include <limits>
+#include <list>
 #include <ostream>
 #include <sched.h>
+#include <string>
 #include <system_error>
 #include <time.h>
 #include <unistd.h>
+#include <vector>
 
 #include "Aux/ColaPrioridad.hpp"
 #include "Aux/Diccionario.hpp"
@@ -37,13 +40,10 @@ void CircuitoHamiltonMC_BEP_i(GRAFO* g, int64_t i, int64_t& costoAct,
     int64_t& menorCosto, Vertice** lowestHamiltonianPath,
     std::set<Vertice*>& dicVertVis, Vertice** solucionAct);
 
-// void Menu::crearGrafoAuto() { }
-
 // ----------------------------------
 // ----------MENU PRINCIPAL----------
 // ----------------------------------
 void Menu::run() {
-  // crearGrafoAuto(10, 3);
 
   int opcion;
   do {
@@ -69,7 +69,10 @@ void Menu::run() {
 // ----------MENU GRAFO----------
 // ------------------------------
 void Menu::runGrafo() {
-  this->crearGrafoManual();
+  
+  
+  this->crearGrafoAuto(3, 3);
+
   int opcion;
   bool salir = false;
   std::string etiq;
@@ -852,26 +855,76 @@ Vertice** Menu::CircuitoHamiltonMC_BEP(GRAFO* g) {
   return lowestHamiltonianPath;
 }
 
-void Menu::crearGrafoManual() {
+void Menu::crearGrafoAuto(int64_t vertices, int64_t numAristas) {
+  std::vector<std::string> listaEtiquetas;
+  listaEtiquetas.resize(vertices);
+
+  std::vector<std::vector<double>> matriz;
+  matriz.resize(vertices);
+  for (int i = 0; i < vertices; ++i) {
+    matriz[i].resize(vertices);
+  }
+  
+  for (int i = 0; i < numAristas; ++i) {
+    char string[10];
+    if (i > 26) {
+      string[0] = i % 26;
+      string[1] = i % 26;
+      listaEtiquetas.at(i) = string; 
+    } else {
+      string[0] = 97 + i;
+      listaEtiquetas.at(i) = string; 
+      for (int i = 0; i < 10; ++i) {
+        string[i] = '\0';
+      }
+    }
+  }
+  for (int i = 0; i < numAristas; ++i) {
+    std::cout << listaEtiquetas.at(i) << " ";
+  }
+  std::cout << std::endl;
+
+  for(int i = 0; i < vertices; ++i) {
+    for (int j = 0; j < vertices; ++j) {
+      if (i == j) {
+        matriz[i][j] = std::numeric_limits<double>::max();
+      } else {
+        matriz[i][j] = 1;
+      }
+    }
+  }
+
+  std::map<Vertice*, int64_t> vertMap;
+  std::map<int64_t, Vertice*> vertMap1;
+
+  std::set<Vertice*> dicVertVis;
+
   this->grafo = new GRAFO;
   this->grafo->Iniciar();
-  Vertice* verticeA = this->grafo->AgregarVert("A");
-  Vertice* verticeB = this->grafo->AgregarVert("B");
-  Vertice* verticeC = this->grafo->AgregarVert("C");
-  Vertice* verticeD = this->grafo->AgregarVert("D");
-  Vertice* verticeE = this->grafo->AgregarVert("E");
-  Vertice* verticeF = this->grafo->AgregarVert("F");
+  for (int64_t i = 0; i < (int64_t)listaEtiquetas.size(); ++i) {
+    Vertice* v = this->grafo->AgregarVert(listaEtiquetas[i]);
+    vertMap[v] = i;
+    vertMap1[i] = v;
+  }
 
-  this->grafo->AgregarArista(verticeA, verticeB, 2);
-  this->grafo->AgregarArista(verticeA, verticeC, 8);
-  this->grafo->AgregarArista(verticeA, verticeE, 7);
-  this->grafo->AgregarArista(verticeA, verticeD, 6);
-  this->grafo->AgregarArista(verticeA, verticeF, 3);
-  this->grafo->AgregarArista(verticeB, verticeC, 3);
-  this->grafo->AgregarArista(verticeB, verticeD, 9);
-  this->grafo->AgregarArista(verticeB, verticeF, 5);
-  this->grafo->AgregarArista(verticeC, verticeE, 1);
-  this->grafo->AgregarArista(verticeC, verticeF, 6);
-  this->grafo->AgregarArista(verticeD, verticeF, 9);
-  this->grafo->AgregarArista(verticeE, verticeF, 4);
+  int64_t count = numAristas;
+  double weight = 1;
+
+  Vertice* v = this->grafo->PrimerVertice();
+  while (v != nullptr) {
+    Vertice* vs = this->grafo->PrimerVertice();
+    while (vs != nullptr) {
+      if (v != vs) {
+        if (count > 0 && !ExisteArista(this->grafo, v, vs)) {
+          this->grafo->AgregarArista(v, vs, weight);
+          std::cout << "Arista: " << v->etiqueta << " " << vs->etiqueta << std::endl;
+          ++weight;
+          --count;
+        }
+      }
+      vs = this->grafo->SiguienteVertice(vs);
+    }
+    v = this->grafo->SiguienteVertice(v);
+  }
+
 }

@@ -10,8 +10,8 @@
 #include <string>
 #include <vector>
 
-#include "ListasDeAdyacencia.hpp"
-//#include "MatrizDeAdyacencia.hpp"
+// #include "ListasDeAdyacencia.hpp"
+#include "MatrizDeAdyacencia.hpp"
 
 #define OPCIONES_PRINCIPAL                                                        \
   "╔═══════════════════════╗\n" \
@@ -90,7 +90,7 @@ class Menu {
   int mostrarOperadoresGrafo();
   void mostrarCreditos();
   Vertice* BuscarVertice(std::string etiq);
-  void crearGrafoManual();
+  void crearGrafoAuto(int64_t vertices, int64_t numAristas);
 
   // void crearGrafoAuto();
 
