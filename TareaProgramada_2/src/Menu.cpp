@@ -414,9 +414,21 @@ void Menu::runGrafo() {
     }
 
     break;
-    case 24:
+    case 24: {
+      std::vector<AristaKruskal> resultado = this->Kruskal(this->grafo);
 
-      break;
+      std::cout << "-------------------------" << std::endl;
+      for (size_t i = 0; i < resultado.size(); ++i) {
+        std::cout << std::setw(3)
+                  << this->grafo->Etiqueta(resultado[i].vertice1) << " - "
+                  << std::setw(3)
+                  << this->grafo->Etiqueta(resultado[i].vertice2) << " |"
+                  << std::setw(3) << resultado[i].peso << std::endl;
+      }
+      std::cout << "-------------------------" << std::endl;
+    }
+
+    break;
     case 25:
       result = this->CircuitoHamiltonMC_BEP(this->grafo);
       std::cout << "El circuito de hamilton es el siguiente: " << std::endl;
@@ -804,22 +816,90 @@ ResultadoPrim* Menu::Prim(GRAFO* g) {
   return resultado;
 }
 
+std::vector<AristaKruskal> Menu::Kruskal(GRAFO* g) {
+  std::vector<AristaKruskal> aristas;
+  ColaPrioridad<AristaKruskal> APO;
+  std::set<std::set<Vertice*>> CC;
+
+  Vertice* v = g->PrimerVertice();
+  int64_t i = 0;
+  while (v != nullptr) {
+    std::set<Vertice*> s;
+    s.insert(v);
+    CC.insert(s);
+    v = g->SiguienteVertice(v);
+    ++i;
+
+    Vertice* va = g->PrimerVerticeAdyacente(v);
+    while (va != nullptr) {
+      AristaKruskal a;
+      a.vertice1 = v;
+      a.vertice2 = va;
+      a.peso = g->Peso(v, va);
+      std::cout << a.vertice1->etiqueta << " " << a.vertice2->etiqueta << " "
+                << a.peso << std::endl;
+      if (!APO.existe(a)) {
+        APO.push(a, a.peso);
+      }
+      va = g->SiguienteVerticeAdyacente(v, va);
+    }
+    v = g->SiguienteVertice(v);
+  }
+
+  int64_t n = g->NumVertices();
+  int64_t totalAristasEscogidas = 0;
+
+  while (totalAristasEscogidas < n - 1) {
+    AristaKruskal a = APO.top();
+    // std::cout << a.vertice1->etiqueta << " " << a.vertice2->etiqueta << " "
+    //           << a.peso << std::endl;
+    APO.pop();
+    std::set<Vertice*> s1;
+    std::set<Vertice*> s2;
+
+    for (auto it = CC.begin(); it != CC.end(); ++it) {
+      if (it->find(a.vertice1) != it->end()) {
+        s1 = *it;
+      }
+      if (it->find(a.vertice2) != it->end()) {
+        s2 = *it;
+      }
+    }
+
+    if (s1 != s2) {
+      std::set<Vertice*> s3;
+      for (auto it = s1.begin(); it != s1.end(); ++it) {
+        s3.insert(*it);
+      }
+      for (auto it = s2.begin(); it != s2.end(); ++it) {
+        s3.insert(*it);
+      }
+      CC.erase(s1);
+      CC.erase(s2);
+      CC.insert(s3);
+      totalAristasEscogidas++;
+      aristas.push_back(a);
+    }
+  }
+  return aristas;
+}
+
 void CircuitoHamiltonMC_BEP_i(GRAFO* g, int64_t i, int64_t& costoAct,
     int64_t& menorCosto, Vertice** lowestHamiltonianPath,
     std::set<Vertice*>& dicVertVis, Vertice** solucionAct) {
   Vertice* va = g->PrimerVerticeAdyacente(solucionAct[i - 2]);
   while (va != nullptr) {
     if (dicVertVis.find(va) == dicVertVis.end()) {
-      solucionAct[i-1] = va;
-      dicVertVis.insert(va); 
-      costoAct += g->Peso(solucionAct[i-2], va);
+      solucionAct[i - 1] = va;
+      dicVertVis.insert(va);
+      costoAct += g->Peso(solucionAct[i - 2], va);
       if (i == g->NumVertices()) {
         if (ExisteArista(g, va, solucionAct[0])) {
           if (costoAct + g->Peso(va, solucionAct[0]) < menorCosto) {
             menorCosto = costoAct + g->Peso(va, solucionAct[0]);
           }
           for (int j = 0; j < g->NumVertices(); ++j) {
-            lowestHamiltonianPath[j] = solucionAct[j]; 
+            lowestHamiltonianPath[j] = solucionAct[j];
           }
         }
       } else {

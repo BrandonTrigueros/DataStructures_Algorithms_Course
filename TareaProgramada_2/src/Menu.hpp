@@ -10,8 +10,8 @@
 #include <string>
 #include <vector>
 
-#include "ListasDeAdyacencia.hpp"
-//#include "MatrizDeAdyacencia.hpp"
+// #include "ListasDeAdyacencia.hpp"
+#include "MatrizDeAdyacencia.hpp"
 
 #define OPCIONES_PRINCIPAL                                                        \
   "╔═══════════════════════╗\n" \
@@ -72,6 +72,17 @@ struct ResultadoFloyd {
 struct ResultadoPrim {
   std::vector<Vertice*> vertices;
   std::vector<double> costos;
+};
+
+struct AristaKruskal {
+  Vertice* vertice1;
+  Vertice* vertice2;
+  double peso;
+
+  inline bool operator==(const AristaKruskal& rhs) const {
+    return (this->vertice1 == rhs.vertice1 && this->vertice2 == rhs.vertice2)
+        || (this->vertice1 == rhs.vertice2 && this->vertice2 == rhs.vertice1);
+  }
 };
 
 class Menu {
@@ -146,7 +157,7 @@ class Menu {
   // Retorna:
   // Requiere:
   // Modifica: N/A
-  Arista* Kruskal(GRAFO* g);
+  std::vector<AristaKruskal> Kruskal(GRAFO* g);
 
   // CircuitoHamiltonMC-BEP
   // Parámetros:
