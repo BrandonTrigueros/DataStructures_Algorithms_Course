@@ -102,8 +102,9 @@ class Menu {
   void mostrarCreditos();
   Vertice* BuscarVertice(std::string etiq);
   void crearGrafoAuto(int64_t vertices, int64_t numAristas);
+  void crearGrafoManual();
 
-  // void crearGrafoAuto();
+
 
   // ----------ALGORITMOS----------
 

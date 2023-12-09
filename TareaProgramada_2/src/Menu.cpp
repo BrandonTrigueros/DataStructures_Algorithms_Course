@@ -69,8 +69,7 @@ void Menu::run() {
 // ----------MENU GRAFO----------
 // ------------------------------
 void Menu::runGrafo() {
-  
-  
+    
   this->crearGrafoAuto(3, 3);
 
   int opcion;
@@ -995,4 +994,27 @@ void Menu::crearGrafoAuto(int64_t vertices, int64_t numAristas) {
     v = this->grafo->SiguienteVertice(v);
   }
 
+}
+void Menu::crearGrafoManual() {
+  this->grafo = new GRAFO;
+  this->grafo->Iniciar();
+  Vertice* verticeA = this->grafo->AgregarVert("A");
+  Vertice* verticeB = this->grafo->AgregarVert("B");
+  Vertice* verticeC = this->grafo->AgregarVert("C");
+  Vertice* verticeD = this->grafo->AgregarVert("D");
+  Vertice* verticeE = this->grafo->AgregarVert("E");
+  Vertice* verticeF = this->grafo->AgregarVert("F");
+
+  this->grafo->AgregarArista(verticeA, verticeB, 2);
+  this->grafo->AgregarArista(verticeA, verticeC, 8);
+  this->grafo->AgregarArista(verticeA, verticeE, 7);
+  this->grafo->AgregarArista(verticeA, verticeD, 6);
+  this->grafo->AgregarArista(verticeA, verticeF, 3);
+  this->grafo->AgregarArista(verticeB, verticeC, 3);
+  this->grafo->AgregarArista(verticeB, verticeD, 9);
+  this->grafo->AgregarArista(verticeB, verticeF, 5);
+  this->grafo->AgregarArista(verticeC, verticeE, 1);
+  this->grafo->AgregarArista(verticeC, verticeF, 6);
+  this->grafo->AgregarArista(verticeD, verticeF, 9);
+  this->grafo->AgregarArista(verticeE, verticeF, 4);
 }
